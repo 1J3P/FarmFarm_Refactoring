@@ -35,10 +35,10 @@ jobs:
 
       # DockerHub Login (3)
       - name: docker login
-        uses: docker/login-action@v2
+        uses: docker/login-action@v3.0.0
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }} #토큰으로
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       # Docker Hub push (4)
       - name: docker Hub push
