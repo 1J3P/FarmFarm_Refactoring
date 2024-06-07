@@ -39,7 +39,7 @@ jobs:
 #        with:
 #          username: ${{ secrets.DOCKERHUB_USERNAME }}
 #          password: ${{ secrets.DOCKERHUB_PW }}
-        run: echo ${{ secrets.DOCKER_PW }} | docker login -u ${{ secrets.DOCKER_USERNAME }} --password-stdin
+        run: echo ${{ secrets.DOCKERHUB_PW }} | docker login -u ${{ secrets.DOCKERHUB_USERNAME }} --password-stdin
 
       # Docker Hub push (4)
       - name: docker Hub push
