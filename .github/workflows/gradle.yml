@@ -43,4 +43,4 @@ jobs:
 
       # Docker Hub push (4)
       - name: docker Hub push
-        run: docker push lucaskang134/boot-prac-ci
+        run: docker push farmfarm1234/farmfarm-img
