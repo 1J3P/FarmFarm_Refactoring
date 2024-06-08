@@ -61,8 +61,7 @@ jobs:
       # Check process using port 9000 and stop it (10)
       - name: Check process using port 9000 and stop it
         run: |
-          PORT=9000
-          PROCESS=$(sudo lsof -t -i:$PORT)
+          PORT=9000          PROCESS=$(sudo lsof -t -i:$PORT)
           if [ -n "$PROCESS" ]; then
             echo "Process using port $PORT found with PID $PID. Stopping..."
             kill $PROCESS
