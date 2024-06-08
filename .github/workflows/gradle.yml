@@ -64,7 +64,7 @@ jobs:
           PORT=9000
           PROCESS=$(sudo lsof -t -i:$PORT)
           if [ -n "$PROCESS" ]; then
-            echo "Process using port $PORT found with PID $PID. Stopping..."
+            echo "Process using port $PORT found with PID $PROCESS. Stopping..."
             kill $PROCESS
           else
             echo "No process found using port $PORT"
