@@ -62,11 +62,10 @@ jobs:
       - name: Check process using port 9000 and stop it
         run: |
           PORT=9000
-          PROCESS=$(sudo netstat -tuln | grep ":$PORT ")
+          PROCESS=$(sudo lsof -t -i:$PORT)
           if [ -n "$PROCESS" ]; then
-            PID=$(echo $PROCESS | awk '{print $7}' | cut -d '/' -f 1)
             echo "Process using port $PORT found with PID $PID. Stopping..."
-            sudo kill $PID
+            kill $PROCESS
           else
             echo "No process found using port $PORT"
           fi
