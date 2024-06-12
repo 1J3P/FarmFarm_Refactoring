@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.security.Timestamp;
+import java.util.List;
 
 @Getter
 public class FarmResponseDto {
@@ -37,6 +38,23 @@ public class FarmResponseDto {
         private boolean auction;
         private Timestamp created_at;
         private String status;
+    }
+
+    @Getter
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class FarmListDto {
+        private Long fId;
+        private String name;
+    }
+
+    @Getter
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class FarmListResponseDto {
+        private List<FarmListDto> farmList;
     }
 
 }

@@ -40,6 +40,30 @@ public class FarmService {
     }
 
     //농장 전체 조회 및 정렬 (rating: 인기순 , old: 오래된 순, new: 신규순), Default: rating
+    public FarmResponseDto.FarmListResponseDto getFarmsOrderBy(String criteria) {
+        List<FarmEntity> farmList =
+                switch (criteria) {
+                    case "old" -> farmRepository.findAllByStatusLike(Sort.by(Sort.Direction.ASC, "fId"), "yes");
+                    case "new" -> farmRepository.findAllByStatusLike(Sort.by(Sort.Direction.DESC, "fId"), "yes");
+                    default -> farmRepository.findAllByStatusLike(Sort.by(Sort.Direction.DESC, "rating"), "yes");
+                };
+
+        return FarmConverter.toFarmList(farmList);
+    }
+
+    //농장 검색, 농장 정렬 같이
+    public FarmResponseDto.FarmListResponseDto searchSortFarms(String keyword, String criteria) {
+        List<FarmEntity> farmList =
+                switch (criteria) {
+                    case "old" -> farmRepository.findAllByNameContainingAndStatusLike(keyword, Sort.by(Sort.Direction.ASC, "fId"), "yes");
+                    case "new" -> farmRepository.findAllByNameContainingAndStatusLike(keyword, Sort.by(Sort.Direction.DESC, "fId"), "yes");
+                    default -> farmRepository.findAllByNameContainingAndStatusLike(keyword, Sort.by(Sort.Direction.DESC, "rating"), "yes");
+                };
+
+        return FarmConverter.toFarmList(farmList);
+    }
+
+    //농장 전체 조회 및 정렬 (rating: 인기순 , old: 오래된 순, new: 신규순), Default: rating
 //    public List<FarmEntity> getFarmsOrderBy(String criteria) {
 //        switch (criteria) {
 //            case "old":

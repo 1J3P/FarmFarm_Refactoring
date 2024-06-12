@@ -6,6 +6,9 @@ import com.example.farmfarm_refact.dto.FarmResponseDto;
 import com.example.farmfarm_refact.entity.FarmEntity;
 import org.springframework.data.repository.config.FragmentMetadata;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 
 public class FarmConverter {
 
@@ -42,4 +45,23 @@ public class FarmConverter {
               .image(farm.getImage())
               .build();
   }
+    // FarmEntity를 FarmListDto로 변환하는 메서드
+    public static FarmResponseDto.FarmListDto toFarmDto(FarmEntity farmEntity) {
+        return FarmResponseDto.FarmListDto.builder()
+                .fId(farmEntity.getFId())
+                .name(farmEntity.getName())
+                .build();
+    }
+
+    // FarmEntity 리스트를 FarmListResponseDto로 변환하는 메서드
+    public static FarmResponseDto.FarmListResponseDto toFarmList(List<FarmEntity> farmList) {
+        List<FarmResponseDto.FarmListDto> farmDtoList = farmList.stream()
+                .map(FarmConverter::toFarmDto)
+                .collect(Collectors.toList());
+
+        return FarmResponseDto.FarmListResponseDto.builder()
+                .farmList(farmDtoList)
+                .build();
+    }
+
 }

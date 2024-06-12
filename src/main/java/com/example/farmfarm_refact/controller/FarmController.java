@@ -44,5 +44,15 @@ public class FarmController {
         return ApiResponse.onSuccess(farmService.getFarm(fId));
     }
 
-    
+    // 농장 전체 조회, 농장 정렬
+    @GetMapping("/list")
+    public ApiResponse<FarmResponseDto.FarmListResponseDto> getFarmList(@RequestParam(required = false, defaultValue = "rating", value = "sort") String criteria,
+                                                                        @RequestParam(required = false, defaultValue = "", value = "keyword") String keyword) {
+        if (keyword.equals("")) {
+            return ApiResponse.onSuccess(farmService.getFarmsOrderBy(criteria));
+        }
+        else {
+            return ApiResponse.onSuccess(farmService.searchSortFarms(keyword, criteria));
+        }
+    }
 }
