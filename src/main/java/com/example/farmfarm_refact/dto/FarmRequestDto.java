@@ -16,18 +16,13 @@ public class FarmRequestDto {
     public static class FarmCreateRequestDto {
         private String name;
         private String locationCity;
-
         private String locationGu;
-
         private String locationFull;
-
         private String locationDetail;
-
         private String detail;
-
         private String image;
-
         private int auction_time;
     }
+
 
 }
