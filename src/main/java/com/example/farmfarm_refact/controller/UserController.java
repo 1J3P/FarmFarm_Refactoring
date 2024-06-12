@@ -4,6 +4,7 @@ package com.example.farmfarm_refact.controller;
 import com.example.farmfarm_refact.apiPayload.ApiResponse;
 
 import com.example.farmfarm_refact.dto.LoginResponseDto;
+import com.example.farmfarm_refact.dto.UserRequestDto;
 import com.example.farmfarm_refact.dto.UserResponseDto;
 import com.example.farmfarm_refact.entity.UserEntity;
 import com.example.farmfarm_refact.entity.oauth.OauthToken;
@@ -73,15 +74,10 @@ public class UserController {
     }
 
     @GetMapping("/me")
-    public ApiResponse<UserResponseDto> getCurrentUser(@AuthenticationPrincipal UserEntity user) {
-        return ApiResponse.onSuccess(new UserResponseDto(user.getUId(), user.getNickname(), user.getEmail(), user.getImage()));
+    public ApiResponse<UserResponseDto.UserGetResponseDto> getCurrentUser(@AuthenticationPrincipal UserEntity user) {
+        return ApiResponse.onSuccess(new UserResponseDto.UserGetResponseDto(user.getUId(), user.getNickname(), user.getEmail(), user.getImage()));
     }
-//    @GetMapping("/me")
-//    public ResponseEntity<Object> getCurrentUser(HttpServletRequest request) {
-//        UserEntity user = userService.getUser(request);
-//        return ResponseEntity.ok().body(user);
-//    }
-//
+
 //    @DeleteMapping("/")
 //    public ResponseEntity<Object> deleteUser(HttpServletRequest request) {
 //        UserEntity user = userService.getUser(request);
@@ -89,16 +85,11 @@ public class UserController {
 //        return ResponseEntity.ok().body(newUser);
 //    }
 
-
-
-//    @GetMapping("/nickname/create")
-//    public String setNickname(HttpServletRequest request, @RequestParam String nickname, Model model) {
-//        //UserEntity user = (UserEntity)session.getAttribute("user");
-//        System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!" + nickname);
-//        UserEntity newUser = userService.setNickname(userService.getUser(request), request.getParameter("nickname"));
-//        model.addAttribute("user", newUser);
-//        return "redirect:/";
-//    }
+    @PostMapping("/nickname")
+    public ApiResponse<UserResponseDto.UserGetResponseDto> setNickname(@AuthenticationPrincipal UserEntity user, @RequestBody UserRequestDto.UserSetNicknameRequestDto userSetNicknameRequestDto) {
+        UserEntity changeUser = userService.changeNickname(user, userSetNicknameRequestDto);
+        return ApiResponse.onSuccess(new UserResponseDto.UserGetResponseDto(changeUser.getUId(), changeUser.getNickname(), changeUser.getEmail(), changeUser.getImage()));
+    }
 
 
 //    @PostMapping("/profile")

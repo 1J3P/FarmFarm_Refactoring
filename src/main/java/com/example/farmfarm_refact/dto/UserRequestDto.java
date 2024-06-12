@@ -4,18 +4,15 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
 @Getter
-public class UserResponseDto {
+public class UserRequestDto {
 
     @Builder
     @Getter
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class UserGetResponseDto {
-
-        private Long uId;
+    public static class UserSetNicknameRequestDto {
         private String nickname;
-        private String email;
-        private String image;
     }
 }

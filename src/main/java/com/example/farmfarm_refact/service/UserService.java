@@ -6,6 +6,7 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.example.farmfarm_refact.apiPayload.ExceptionHandler;
 import com.example.farmfarm_refact.dto.LoginResponseDto;
 import com.example.farmfarm_refact.dto.TokenDto;
+import com.example.farmfarm_refact.dto.UserRequestDto;
 import com.example.farmfarm_refact.entity.UserEntity;
 import com.example.farmfarm_refact.entity.oauth.KakaoProfile;
 import com.example.farmfarm_refact.entity.oauth.OauthToken;
@@ -142,7 +143,7 @@ public LoginResponseDto createToken(UserEntity user) {
 
     System.out.println("user nickname : " + user.getNickname());
 
-    LoginResponseDto responseDto = new LoginResponseDto(newAccessToken, newRefreshToken, user.getEmail());
+    LoginResponseDto responseDto = new LoginResponseDto(newAccessToken, newRefreshToken, user.getEmail(), user.getNickname());
     System.out.println(responseDto.getAccessToken() + responseDto.getRefreshToken() + responseDto.getEmail());
     return responseDto;
 
@@ -191,9 +192,9 @@ public LoginResponseDto createToken(UserEntity user) {
         return user;
     }
 
-    public UserEntity setNickname(UserEntity user, String nickname) {
-        if (user.getNickname()== null && !nickname.equals("")) {
-            user.setNickname(nickname);
+    public UserEntity changeNickname(UserEntity user, UserRequestDto.UserSetNicknameRequestDto userSetNicknameRequestDto) {
+        if (user.getNickname()== null && (!userSetNicknameRequestDto.getNickname().equals(""))) {
+            user.setNickname(userSetNicknameRequestDto.getNickname());
         }
         return userRepository.save(user);
     }
@@ -225,7 +226,7 @@ public LoginResponseDto createToken(UserEntity user) {
 
         System.out.println("user nickname : " + user.getNickname());
 
-        return new LoginResponseDto(newAccessToken, newRefreshToken, user.getNickname());
+        return new LoginResponseDto(newAccessToken, newRefreshToken, user.getNickname(), user.getNickname());
     }
 
     // 로그아웃
