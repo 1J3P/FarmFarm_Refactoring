@@ -27,7 +27,9 @@ public class FarmService {
 
     // 농장 등록
     public FarmResponseDto.FarmCreateResponseDto saveFarm(UserEntity user, FarmRequestDto.FarmCreateRequestDto farmCreateRequestDto) {
-        FarmEntity farm = farmRepository.save(FarmConverter.toFarmEntity(farmCreateRequestDto));
+        FarmEntity newFarm = FarmConverter.toFarmEntity(farmCreateRequestDto);
+        newFarm.setUser(user);
+        FarmEntity farm = farmRepository.save(newFarm);
         return FarmConverter.toFarmCreateResponseDto(farm);
     }
 
