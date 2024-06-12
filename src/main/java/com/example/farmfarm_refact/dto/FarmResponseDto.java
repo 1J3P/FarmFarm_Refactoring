@@ -11,11 +11,12 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class FarmResponseDto {
 
-    @Builder
+
     @Getter
+    @Builder
     @NoArgsConstructor
     @AllArgsConstructor
-    public class FarmCreateResponseDto {
+    public static class FarmCreateResponseDto {
         private Long fId;
     }
 

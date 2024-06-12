@@ -15,7 +15,6 @@ import java.sql.Timestamp;
 @Table(name="farm")
 @Getter
 @Setter
-@Builder
 public class FarmEntity {
     @Id
     @GeneratedValue

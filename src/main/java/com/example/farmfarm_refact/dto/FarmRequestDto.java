@@ -15,7 +15,7 @@ public class FarmRequestDto {
     @Getter
     @NoArgsConstructor
     @AllArgsConstructor
-    public class FarmCreateRequestDto {
+    public static class FarmCreateRequestDto {
         private String name;
         private String locationCity;
 
