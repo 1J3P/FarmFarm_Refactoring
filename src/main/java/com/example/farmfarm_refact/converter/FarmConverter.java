@@ -4,6 +4,7 @@ package com.example.farmfarm_refact.converter;
 import com.example.farmfarm_refact.dto.FarmRequestDto;
 import com.example.farmfarm_refact.dto.FarmResponseDto;
 import com.example.farmfarm_refact.entity.FarmEntity;
+import org.springframework.data.repository.config.FragmentMetadata;
 
 
 public class FarmConverter {
@@ -25,6 +26,20 @@ public class FarmConverter {
   public static FarmResponseDto.FarmCreateResponseDto toFarmCreateResponseDto(FarmEntity farm) {
       return FarmResponseDto.FarmCreateResponseDto.builder()
               .fId(farm.getFId())
+              .build();
+  }
+
+  public static FarmResponseDto.FarmReadResponseDto toFarmReadResponseDto(FarmEntity farm) {
+      return FarmResponseDto.FarmReadResponseDto.builder()
+              .fId(farm.getFId())
+              .name(farm.getName())
+              .locationCity(farm.getLocationCity())
+              .locationGu(farm.getLocationGu())
+              .locationFull(farm.getLocationFull())
+              .locationDetail(farm.getLocationDetail())
+              .detail(farm.getDetail())
+              .rating(farm.getRating())
+              .image(farm.getImage())
               .build();
   }
 }

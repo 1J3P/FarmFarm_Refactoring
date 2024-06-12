@@ -33,6 +33,12 @@ public class FarmService {
         return FarmConverter.toFarmCreateResponseDto(farm);
     }
 
+    // 농장 조회
+    public FarmResponseDto.FarmReadResponseDto getFarm(Long fId) {
+        FarmEntity farm = farmRepository.findByfIdAndStatusLike(fId, "yes");
+        return FarmConverter.toFarmReadResponseDto(farm);
+    }
+
     //농장 전체 조회 및 정렬 (rating: 인기순 , old: 오래된 순, new: 신규순), Default: rating
 //    public List<FarmEntity> getFarmsOrderBy(String criteria) {
 //        switch (criteria) {

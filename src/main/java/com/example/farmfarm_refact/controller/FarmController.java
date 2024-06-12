@@ -32,9 +32,17 @@ public class FarmController {
     @Autowired
     private FarmService farmService;
 
+    // 농장 개설
     @PostMapping("")
     public ApiResponse<FarmResponseDto.FarmCreateResponseDto> createFarm(@AuthenticationPrincipal UserEntity user, @RequestBody FarmRequestDto.FarmCreateRequestDto farm) {
         return ApiResponse.onSuccess(farmService.saveFarm(user, farm));
     }
 
+    // 농장 조회
+    @GetMapping("/{fId}")
+    public ApiResponse<FarmResponseDto.FarmReadResponseDto> getFarm(@PathVariable("fId") long fId) {
+        return ApiResponse.onSuccess(farmService.getFarm(fId));
+    }
+
+    
 }
