@@ -16,6 +16,7 @@ import com.example.farmfarm_refact.service.FarmService;
 import com.example.farmfarm_refact.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
@@ -67,14 +68,19 @@ public class FarmController {
 
 
     // 농장 정보 수정
-
-
-    // 농장 삭제
-    @DeleteMapping("/{fId}")
-    public ApiResponse deleteFarm(@AuthenticationPrincipal UserEntity user, @PathVariable("fId") long fId)  {
-        farmService.deleteFarm(user, fId);
-        return ApiResponse.onSuccess(SuccessStatus.LIMJANG_DELETE);
+    @PatchMapping("")
+    public ApiResponse updateFarm(@AuthenticationPrincipal UserEntity user, @RequestBody @Valid FarmRequestDto.FarmUpdateRequestDto updateFarm) {
+        farmService.updateFarm(updateFarm);
+        return ApiResponse.onSuccess(SuccessStatus.LIMJANG_UPDATE);
     }
+
+
+//    // 농장 삭제 *추후에 productService 구현 후 주석 해제 할 것. 절대 지우지 마시오!!*
+//    @DeleteMapping("/{fId}")
+//    public ApiResponse deleteFarm(@AuthenticationPrincipal UserEntity user, @PathVariable("fId") long fId)  {
+//        farmService.deleteFarm(user, fId);
+//        return ApiResponse.onSuccess(SuccessStatus.LIMJANG_DELETE);
+//    }
 
 
     // gugun ??

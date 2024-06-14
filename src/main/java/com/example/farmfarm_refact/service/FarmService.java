@@ -7,6 +7,7 @@ import com.example.farmfarm_refact.dto.FarmResponseDto;
 import com.example.farmfarm_refact.entity.FarmEntity;
 import com.example.farmfarm_refact.entity.UserEntity;
 import com.example.farmfarm_refact.repository.FarmRepository;
+import com.example.farmfarm_refact.repository.UserRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -85,31 +86,13 @@ public class FarmService {
 //        return myFarm;
 //    }
 //
-//    // 농장 수정
-//    public FarmEntity updateFarm(HttpServletRequest request, Long fId, FarmEntity farm) {
-//        UserEntity user = userService.getUser(request);
-//        FarmEntity newFarm = farmRepository.findByfIdAndStatusLike(fId, "yes");
-//
-//        if (Objects.equals(user.getUId(), newFarm.getUser().getUId())) {
-//            // 수정되는 것들  (농장 이름, 위치-시, 위치-구, 상세, 이미지, 경매시간, 경매 참여 여부, 생성 시간?)
-//            newFarm.setName(farm.getName());
-//            newFarm.setLocationCity(farm.getLocationCity());
-//            newFarm.setLocationGu(farm.getLocationGu());
-//            newFarm.setLocationFull(farm.getLocationFull());
-//            newFarm.setLocationDetail(farm.getLocationDetail());
-//            newFarm.setDetail(farm.getDetail());
-//            newFarm.setImage(farm.getImage());
-//            newFarm.setAuction_time(farm.getAuction_time());
-//            newFarm.setAuction(farm.isAuction()); // 이게 왜 이런걸까요 ?
-//            newFarm.setCreated_at(farm.getCreated_at());
-//            newFarm.setDetail(farm.getDetail());
-//            farmRepository.save(newFarm);
-//            return newFarm;
-//        } else {
-//            return null;
-//        }
-//    }
-//
+    // 농장 수정
+    public void updateFarm(FarmRequestDto.FarmUpdateRequestDto updateFarm) {
+        FarmEntity oldFarm = farmRepository.findByfIdAndStatusLike(updateFarm.getFId(), "yes");
+        FarmEntity newFarm = FarmConverter.toNewFarm(updateFarm);
+        oldFarm.updateFarm(newFarm);
+    }
+
     // 농장 삭제 *추후에 productService 구현 후 주석 해제 할 것. 절대 지우지 마시오!!*
 //    public void deleteFarm(UserEntity user, Long fId) throws Exception {
 //        FarmEntity farm = farmRepository.findByfIdAndStatusLike(fId, "yes");

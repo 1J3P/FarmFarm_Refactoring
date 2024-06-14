@@ -57,4 +57,12 @@ public class FarmResponseDto {
         private List<FarmListDto> farmList;
     }
 
+    @Getter
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class FarmUpdateResponseDto {
+        private String name;
+    }
+
 }

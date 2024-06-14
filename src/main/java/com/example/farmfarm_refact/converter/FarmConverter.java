@@ -64,4 +64,17 @@ public class FarmConverter {
                 .build();
     }
 
+    //
+    public static FarmEntity toNewFarm(FarmRequestDto.FarmUpdateRequestDto updateDto) {
+      return FarmEntity.builder()
+              .name(updateDto.getName())
+              .locationCity(updateDto.getLocationCity())
+              .locationGu(updateDto.getLocationGu())
+              .locationFull(updateDto.getLocationFull())
+              .locationDetail(updateDto.getLocationDetail())
+              .detail(updateDto.getDetail())
+              .image(updateDto.getImage())
+              .build();
+    }
+
 }
