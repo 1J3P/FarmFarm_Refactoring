@@ -63,7 +63,15 @@ public class FarmEntity {
         this.auction_time = auction_time;
     }
 
-
+    public void updateFarm(FarmEntity newFarm) {
+        this.name = name;
+        this.locationCity = locationCity;
+        this.locationGu = locationGu;
+        this.locationFull = locationFull;
+        this.locationDetail = locationDetail;
+        this.detail = detail;
+        this.image = image;
+    }
 
 }
 

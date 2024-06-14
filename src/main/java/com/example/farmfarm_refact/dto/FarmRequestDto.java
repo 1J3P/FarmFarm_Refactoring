@@ -1,5 +1,7 @@
 package com.example.farmfarm_refact.dto;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -24,5 +26,25 @@ public class FarmRequestDto {
         private int auction_time;
     }
 
-
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class FarmUpdateRequestDto {
+        @NotNull
+        private long fId;
+        @NotBlank
+        private String name;
+        @NotNull
+        private String locationCity;
+        @NotNull
+        private String locationGu;
+        @NotNull
+        private String locationFull;
+        @NotNull
+        private String locationDetail;
+        @NotNull
+        private String detail;
+        private String image;
+    }
 }
