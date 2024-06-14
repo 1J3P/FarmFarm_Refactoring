@@ -24,8 +24,8 @@ public class FarmService {
     private FarmRepository farmRepository;
     @Autowired
     private UserService userService;
-    @Autowired
-    private ProductService productService;
+//    @Autowired
+//    private ProductService productService;
 
     // 농장 등록
     public FarmResponseDto.FarmCreateResponseDto saveFarm(UserEntity user, FarmRequestDto.FarmCreateRequestDto farmCreateRequestDto) {
