@@ -11,6 +11,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -22,8 +23,8 @@ public class FarmService {
     private FarmRepository farmRepository;
     @Autowired
     private UserService userService;
-//    @Autowired
-//    private ProductService productService;
+    @Autowired
+    private ProductService productService;
 
     // 농장 등록
     public FarmResponseDto.FarmCreateResponseDto saveFarm(UserEntity user, FarmRequestDto.FarmCreateRequestDto farmCreateRequestDto) {
@@ -63,47 +64,17 @@ public class FarmService {
         return FarmConverter.toFarmList(farmList);
     }
 
-    //농장 전체 조회 및 정렬 (rating: 인기순 , old: 오래된 순, new: 신규순), Default: rating
-//    public List<FarmEntity> getFarmsOrderBy(String criteria) {
-//        switch (criteria) {
-//            case "old":
-//                return farmRepository.findAllByStatusLike(Sort.by(Sort.Direction.ASC, "fId"), "yes");
-//            case "new":
-//                return farmRepository.findAllByStatusLike(Sort.by(Sort.Direction.DESC, "fId"), "yes");
-//            default:
-//                return farmRepository.findAllByStatusLike(Sort.by(Sort.Direction.DESC, "rating"), "yes");
-//        }
-//    }
+    //농장 검색
+    public List<FarmEntity> searchFarms(String keyword) {
+        return farmRepository.findAllByNameContainingAndStatusLike(keyword, "yes");
+    }
 //
-//    //농장 검색
-//    public List<FarmEntity> searchFarms(String keyword) {
-//        return farmRepository.findAllByNameContainingAndStatusLike(keyword, "yes");
-//    }
-//
-//    //농장 검색, 농장 정렬 같이
-//    public List<FarmEntity> searchSortFarms(String keyword, String criteria) {
-//        switch (criteria) {
-//            case "old":
-//                return farmRepository.findAllByNameContainingAndStatusLike(keyword, Sort.by(Sort.Direction.ASC, "fId"), "yes");
-//            case "new":
-//                return farmRepository.findAllByNameContainingAndStatusLike(keyword, Sort.by(Sort.Direction.DESC, "fId"), "yes");
-//            default:
-//                return farmRepository.findAllByNameContainingAndStatusLike(keyword, Sort.by(Sort.Direction.DESC, "rating"), "yes");
-//        }
-//    }
 //
 //
 //    public List<FarmEntity> searchByLocation(String locationCity, String locationGu) {
 //        return farmRepository.findAllByLocationCityAndLocationGu(locationCity, locationGu);
 //    }
 //
-//    // 농장 상세 조회
-//    public FarmEntity getFarm(Long fId) {
-//        FarmEntity fa = farmRepository.findByfIdAndStatusLike(fId, "yes");
-//        if (fa.getStatus().equals("no"))
-//            return null;
-//        return fa;
-//    }
 //
 //    //나의 농장 조회
 //    public FarmEntity getMyFarm(UserEntity user) {
@@ -139,23 +110,22 @@ public class FarmService {
 //        }
 //    }
 //
-//    // 농장 삭제
-//    public void deleteFarm(HttpSession session, Long fId) throws Exception {
-//        UserEntity user = (UserEntity) session.getAttribute("user");
+    // 농장 삭제 *추후에 productService 구현 후 주석 해제 할 것. 절대 지우지 마시오!!*
+//    public void deleteFarm(UserEntity user, Long fId) throws Exception {
 //        FarmEntity farm = farmRepository.findByfIdAndStatusLike(fId, "yes");
-//        if (Objects.equals(user.getUId(), farm.getUser().getUId())) {
-//            if (productService.getFarmProduct(farm) == null || productService.getFarmProduct(farm).isEmpty()) {  // 농장에 상품이 없으면
-//                System.out.println("농장에 상품 없음!!!");
+//        if (user == farm.getUser()) {
+//            if (productService.getFarmProduct(farm) == null || productService.getFarmProduct(farm).isEmpty()) { // 농장에 상품이 없으면
+//                System.out.println("농장에 상품이 없으므로 농장을 삭제합니다.");
 //                farm.setStatus("no");
 //                farmRepository.save(farm);
 //            }
 //            else {
-//                System.out.println("농장에 상품 있음!!!");
-//                System.out.println("상품이 등록되어 있어 삭제할 수 없습니다.");
+//                System.out.println("농장에 상품이 등록되어 있어 농장을 삭제할 수 없습니다.");
 //                throw new Exception();
 //            }
-//        } else {
-//            System.out.println("유저가 달라 삭제할 수 없습니다.");
+//        }
+//        else {
+//            System.out.println("현재 로그인 한 사용자와 농장 주인이 달라 농장을 삭제할 수 없습니다.");
 //            throw new Exception();
 //        }
 //    }
