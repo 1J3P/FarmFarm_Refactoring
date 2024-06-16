@@ -77,15 +77,12 @@ public class FarmService {
 //    }
 //
 //
-//    //나의 농장 조회
-//    public FarmEntity getMyFarm(UserEntity user) {
-//        FarmEntity myFarm = farmRepository.findByUserAndStatusLike(user, "yes");
-//        if (myFarm != null) {
-//            System.out.println(myFarm.getStatus());
-//        }
-//        return myFarm;
-//    }
-//
+    //나의 농장 조회
+    public FarmResponseDto.FarmReadResponseDto getMyFarm(UserEntity user) {
+        FarmEntity myFarm = farmRepository.findByUserAndStatusLike(user, "yes");
+        return FarmConverter.toFarmReadResponseDto(myFarm);
+    }
+
     // 농장 수정
     public void updateFarm(FarmRequestDto.FarmUpdateRequestDto updateFarm) {
         FarmEntity oldFarm = farmRepository.findByfIdAndStatusLike(updateFarm.getFId(), "yes");

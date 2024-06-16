@@ -17,6 +17,7 @@ import com.example.farmfarm_refact.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
+import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
@@ -59,6 +60,10 @@ public class FarmController {
     }
 
     // 나의 농장 조회
+    @GetMapping("/my")
+    public ApiResponse<FarmResponseDto.FarmReadResponseDto> getMyFarm(@AuthenticationPrincipal UserEntity user) {
+        return ApiResponse.onSuccess(farmService.getMyFarm(user));
+    }
 
 
     // 주문 내역 상태 변경
