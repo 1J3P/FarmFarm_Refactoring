@@ -1,6 +1,9 @@
 package com.example.farmfarm_refact.service;
 
 
+import ch.qos.logback.core.net.SyslogOutputStream;
+import com.example.farmfarm_refact.apiPayload.ExceptionHandler;
+import com.example.farmfarm_refact.apiPayload.code.status.ErrorStatus;
 import com.example.farmfarm_refact.converter.FarmConverter;
 import com.example.farmfarm_refact.dto.FarmRequestDto;
 import com.example.farmfarm_refact.dto.FarmResponseDto;
@@ -17,6 +20,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 @Service
 public class FarmService {
@@ -31,13 +35,15 @@ public class FarmService {
     public FarmResponseDto.FarmCreateResponseDto saveFarm(UserEntity user, FarmRequestDto.FarmCreateRequestDto farmCreateRequestDto) {
         FarmEntity newFarm = FarmConverter.toFarmEntity(farmCreateRequestDto);
         newFarm.setUser(user);
+        newFarm.setStatus("yes");
         FarmEntity farm = farmRepository.save(newFarm);
         return FarmConverter.toFarmCreateResponseDto(farm);
     }
 
     // 농장 조회
     public FarmResponseDto.FarmReadResponseDto getFarm(Long fId) {
-        FarmEntity farm = farmRepository.findByfIdAndStatusLike(fId, "yes");
+        FarmEntity farm = farmRepository.findByfIdAndStatusLike(fId, "yes")
+                .orElseThrow(() -> new ExceptionHandler(ErrorStatus.FARM_NOT_FOUND));;
         return FarmConverter.toFarmReadResponseDto(farm);
     }
 
@@ -77,18 +83,17 @@ public class FarmService {
 //    }
 //
 //
-//    //나의 농장 조회
-//    public FarmEntity getMyFarm(UserEntity user) {
-//        FarmEntity myFarm = farmRepository.findByUserAndStatusLike(user, "yes");
-//        if (myFarm != null) {
-//            System.out.println(myFarm.getStatus());
-//        }
-//        return myFarm;
-//    }
-//
+    //나의 농장 조회
+    public FarmResponseDto.FarmReadResponseDto getMyFarm(UserEntity user) {
+        FarmEntity myFarm = farmRepository.findByUserAndStatusLike(user, "yes")
+                .orElseThrow(() -> new ExceptionHandler(ErrorStatus.FARM_NOT_FOUND));;
+        return FarmConverter.toFarmReadResponseDto(myFarm);
+    }
+
     // 농장 수정
     public void updateFarm(FarmRequestDto.FarmUpdateRequestDto updateFarm) {
-        FarmEntity oldFarm = farmRepository.findByfIdAndStatusLike(updateFarm.getFId(), "yes");
+        FarmEntity oldFarm = farmRepository.findByfIdAndStatusLike(updateFarm.getFId(), "yes")
+                .orElseThrow(() -> new ExceptionHandler(ErrorStatus.FARM_NOT_FOUND));
         FarmEntity newFarm = FarmConverter.toNewFarm(updateFarm);
         oldFarm.updateFarm(newFarm);
     }

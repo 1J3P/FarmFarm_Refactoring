@@ -62,7 +62,7 @@ public class FarmResponseDto {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class FarmUpdateResponseDto {
-        private String name;
+        private Long fId;
     }
 
 }
