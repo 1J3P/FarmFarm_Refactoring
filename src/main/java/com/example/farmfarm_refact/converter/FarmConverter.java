@@ -24,7 +24,7 @@ public class FarmConverter {
               .detail(farmCreateRequestDto.getDetail())
               .image(farmCreateRequestDto.getImage())
               .auction_time(farmCreateRequestDto.getAuction_time())
-        .build();
+              .build();
   }
   public static FarmResponseDto.FarmCreateResponseDto toFarmCreateResponseDto(FarmEntity farm) {
       return FarmResponseDto.FarmCreateResponseDto.builder()

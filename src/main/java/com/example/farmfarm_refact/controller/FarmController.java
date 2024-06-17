@@ -3,6 +3,7 @@ package com.example.farmfarm_refact.controller;
 
 import com.example.farmfarm_refact.apiPayload.ApiResponse;
 import com.example.farmfarm_refact.apiPayload.ExceptionHandler;
+import com.example.farmfarm_refact.apiPayload.code.status.ErrorStatus;
 import com.example.farmfarm_refact.apiPayload.code.status.SuccessStatus;
 import com.example.farmfarm_refact.dto.FarmRequestDto;
 import com.example.farmfarm_refact.dto.FarmResponseDto;
@@ -26,6 +27,7 @@ import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
+import static com.example.farmfarm_refact.apiPayload.code.status.ErrorStatus.MEMBER_NOT_FOUND;
 import static com.example.farmfarm_refact.apiPayload.code.status.ErrorStatus.TOKEN_EMPTY;
 
 @RestController
@@ -73,9 +75,10 @@ public class FarmController {
 
 
     // 농장 정보 수정
-    @PatchMapping("")
-    public ApiResponse updateFarm(@AuthenticationPrincipal UserEntity user, @RequestBody @Valid FarmRequestDto.FarmUpdateRequestDto updateFarm) {
-        farmService.updateFarm(updateFarm);
+    @PatchMapping("/{fId}")
+    public ApiResponse updateFarm(@PathVariable Long fId, @RequestBody @Valid FarmRequestDto.FarmUpdateRequestDto uFarm) {
+        uFarm.setFId(fId);
+        farmService.updateFarm(uFarm);
         return ApiResponse.onSuccess(SuccessStatus.LIMJANG_UPDATE);
     }
 

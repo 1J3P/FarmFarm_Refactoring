@@ -1,6 +1,7 @@
 package com.example.farmfarm_refact.service;
 
 
+import ch.qos.logback.core.net.SyslogOutputStream;
 import com.example.farmfarm_refact.converter.FarmConverter;
 import com.example.farmfarm_refact.dto.FarmRequestDto;
 import com.example.farmfarm_refact.dto.FarmResponseDto;
@@ -31,6 +32,7 @@ public class FarmService {
     public FarmResponseDto.FarmCreateResponseDto saveFarm(UserEntity user, FarmRequestDto.FarmCreateRequestDto farmCreateRequestDto) {
         FarmEntity newFarm = FarmConverter.toFarmEntity(farmCreateRequestDto);
         newFarm.setUser(user);
+        newFarm.setStatus("yes");
         FarmEntity farm = farmRepository.save(newFarm);
         return FarmConverter.toFarmCreateResponseDto(farm);
     }
