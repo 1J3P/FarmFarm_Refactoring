@@ -81,7 +81,10 @@ public enum ErrorStatus implements BaseErrorCode {
     S3_DELTE_FAILED(HttpStatus.NOT_FOUND, "S34000", "해당 file이 s3에 존재하지 않습니다. 백엔드 팀에 문의바랍니다."),
 
     //record 에러
-    RECORD_NOT_FOUND(HttpStatus.NOT_FOUND, "RECORD400", "record가 존재하지 않습니다");
+    RECORD_NOT_FOUND(HttpStatus.NOT_FOUND, "RECORD400", "record가 존재하지 않습니다"),
+
+    //farm 에러
+    FARM_NOT_FOUND(HttpStatus.NOT_FOUND, "FARM4001", "farm이 존재하지 않습니다");
 
     private final HttpStatus httpStatus;
     private final String code;
