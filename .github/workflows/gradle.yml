@@ -21,6 +21,10 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
+      - name: Make sure the target directory exists
+        run: |
+          mkdir -p ./src/main/resources
+
       - name: make application.yml
         run: |
           cd ./src/main/resources
