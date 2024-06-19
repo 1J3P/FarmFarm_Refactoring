@@ -59,14 +59,14 @@ jobs:
         run: |
           aws ec2 authorize-security-group-ingress --group-id ${{ secrets.AWS_SG_ID }} --protocol tcp --port 22 --cidr ${{ steps.ip.outputs.ipv4 }}/32
 
-      # Upload application.yml to EC2
-      - name: Upload application.yml to EC2
-        uses: appleboy/scp-action@v0.1.0
-        with:
-          source: "src/main/resources/application.yml"
-          target: "ubuntu@${{ secrets.EC2_HOST }}:/home/ubuntu/config/application.yml"
-          key: ${{ secrets.EC2_KEY }}
-          port: ${{ secrets.EC2_SSH_PORT }}
+#      # Upload application.yml to EC2
+#      - name: Upload application.yml to EC2
+#        uses: appleboy/scp-action@v0.1.0
+#        with:
+#          source: "src/main/resources/application.yml"
+#          target: "ubuntu@${{ secrets.EC2_HOST }}:/home/ubuntu/config/application.yml"
+#          key: ${{ secrets.EC2_KEY }}
+#          port: ${{ secrets.EC2_SSH_PORT }}
 
       # AWS EC2 Server Connect & Docker 명령어 실행 (8)
       - name: AWS EC2 Connection
