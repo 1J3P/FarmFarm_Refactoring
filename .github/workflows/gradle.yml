@@ -80,7 +80,9 @@ jobs:
           script: |
             sudo docker stop farmfarm-img || true
             sudo docker rm farmfarm-img || true
-            sudo docker run -d -p 9000:9000 --name farmfarm-img farmfarm1234/farmfarm-img
+#            sudo docker run -d -p 9000:9000  --name farmfarm-img farmfarm1234/farmfarm-img
+            sudo docker run -d -p 9000:9000 -v /home/ubuntu/config/application.yml:/app/config/application.yml --name farmfarm-img farmfarm1234/farmfarm-img
+
 
       # REMOVE GitHub IP FROM security group (9)
       - name: Remove IP FROM security group
