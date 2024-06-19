@@ -43,7 +43,7 @@ public class FarmService {
     // 농장 조회
     public FarmResponseDto.FarmReadResponseDto getFarm(Long fId) {
         FarmEntity farm = farmRepository.findByfIdAndStatusLike(fId, "yes")
-                .orElseThrow(() -> new ExceptionHandler(ErrorStatus.FARM_NOT_FOUND));;
+                .orElseThrow(() -> new ExceptionHandler(ErrorStatus.FARM_NOT_FOUND));
         return FarmConverter.toFarmReadResponseDto(farm);
     }
 
