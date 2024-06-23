@@ -28,8 +28,8 @@ public class FarmService {
     private FarmRepository farmRepository;
     @Autowired
     private UserService userService;
-//    @Autowired
-//    private ProductService productService;
+    @Autowired
+    private ProductService productService;
 
     // 농장 등록
     public FarmResponseDto.FarmCreateResponseDto saveFarm(UserEntity user, FarmRequestDto.FarmCreateRequestDto farmCreateRequestDto) {
@@ -99,22 +99,18 @@ public class FarmService {
     }
 
     // 농장 삭제 *추후에 productService 구현 후 주석 해제 할 것. 절대 지우지 마시오!!*
-//    public void deleteFarm(UserEntity user, Long fId) throws Exception {
-//        FarmEntity farm = farmRepository.findByfIdAndStatusLike(fId, "yes");
-//        if (user == farm.getUser()) {
-//            if (productService.getFarmProduct(farm) == null || productService.getFarmProduct(farm).isEmpty()) { // 농장에 상품이 없으면
-//                System.out.println("농장에 상품이 없으므로 농장을 삭제합니다.");
-//                farm.setStatus("no");
-//                farmRepository.save(farm);
-//            }
-//            else {
-//                System.out.println("농장에 상품이 등록되어 있어 농장을 삭제할 수 없습니다.");
-//                throw new Exception();
-//            }
-//        }
-//        else {
-//            System.out.println("현재 로그인 한 사용자와 농장 주인이 달라 농장을 삭제할 수 없습니다.");
-//            throw new Exception();
-//        }
-//    }
+    public void deleteFarm(UserEntity user, Long fId) {
+        FarmEntity farm = farmRepository.findByfIdAndStatusLike(fId, "yes").orElseThrow(() -> new ExceptionHandler(ErrorStatus.FARM_NOT_FOUND));
+        if (user.equals(farm.getUser())) {
+            if (productService.getFarmProduct(farm) == null || productService.getFarmProduct(farm).getProductList().isEmpty()) { // 농장에 상품이 없으면
+                System.out.println("농장에 상품이 없으므로 농장을 삭제합니다.");
+                farm.setStatus("no");
+                farmRepository.save(farm);
+            }
+            else
+                throw new ExceptionHandler(ErrorStatus.FARM_HAS_PRODUCT);
+        }
+        else
+            throw new ExceptionHandler(ErrorStatus.FARM_USER_NOT_EQUAL);
+    }
 }
