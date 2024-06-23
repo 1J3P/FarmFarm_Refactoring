@@ -3,6 +3,8 @@ package com.example.farmfarm_refact.controller;
 
 import com.example.farmfarm_refact.apiPayload.ApiResponse;
 import com.example.farmfarm_refact.apiPayload.ExceptionHandler;
+import com.example.farmfarm_refact.apiPayload.code.status.ErrorStatus;
+import com.example.farmfarm_refact.apiPayload.code.status.SuccessStatus;
 import com.example.farmfarm_refact.dto.FarmRequestDto;
 import com.example.farmfarm_refact.dto.FarmResponseDto;
 import com.example.farmfarm_refact.dto.LoginResponseDto;
@@ -15,6 +17,8 @@ import com.example.farmfarm_refact.service.FarmService;
 import com.example.farmfarm_refact.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
+import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
@@ -23,6 +27,7 @@ import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
+import static com.example.farmfarm_refact.apiPayload.code.status.ErrorStatus.MEMBER_NOT_FOUND;
 import static com.example.farmfarm_refact.apiPayload.code.status.ErrorStatus.TOKEN_EMPTY;
 
 @RestController
@@ -32,9 +37,60 @@ public class FarmController {
     @Autowired
     private FarmService farmService;
 
+    // 농장 개설
     @PostMapping("")
     public ApiResponse<FarmResponseDto.FarmCreateResponseDto> createFarm(@AuthenticationPrincipal UserEntity user, @RequestBody FarmRequestDto.FarmCreateRequestDto farm) {
         return ApiResponse.onSuccess(farmService.saveFarm(user, farm));
     }
+
+    // 농장 전체 조회, 농장 정렬
+    @GetMapping("/list")
+    public ApiResponse<FarmResponseDto.FarmListResponseDto> getFarmList(@RequestParam(required = false, defaultValue = "rating", value = "sort") String criteria,
+                                                                        @RequestParam(required = false, defaultValue = "", value = "keyword") String keyword) {
+        if (keyword.equals("")) {
+            return ApiResponse.onSuccess(farmService.getFarmsOrderBy(criteria));
+        }
+        else {
+            return ApiResponse.onSuccess(farmService.searchSortFarms(keyword, criteria));
+        }
+    }
+
+    // 농장 조회 (전체 농장 리스트에서 클릭 시 해당 농장 페이지로 이동)
+    @GetMapping("/{fId}")
+    public ApiResponse<FarmResponseDto.FarmReadResponseDto> getFarm(@PathVariable("fId") long fId) {
+        return ApiResponse.onSuccess(farmService.getFarm(fId));
+    }
+
+    // 나의 농장 조회
+    @GetMapping("/my")
+    public ApiResponse<FarmResponseDto.FarmReadResponseDto> getMyFarm(@AuthenticationPrincipal UserEntity user) {
+        return ApiResponse.onSuccess(farmService.getMyFarm(user));
+    }
+
+
+    // 주문 내역 상태 변경
+
+
+    // 농장별 상품 보기
+
+
+    // 농장 정보 수정
+    @PatchMapping("/{fId}")
+    public ApiResponse updateFarm(@PathVariable Long fId, @RequestBody @Valid FarmRequestDto.FarmUpdateRequestDto uFarm) {
+        uFarm.setFId(fId);
+        farmService.updateFarm(uFarm);
+        return ApiResponse.onSuccess(SuccessStatus.LIMJANG_UPDATE);
+    }
+
+
+//    // 농장 삭제 *추후에 productService 구현 후 주석 해제 할 것. 절대 지우지 마시오!!*
+//    @DeleteMapping("/{fId}")
+//    public ApiResponse deleteFarm(@AuthenticationPrincipal UserEntity user, @PathVariable("fId") long fId)  {
+//        farmService.deleteFarm(user, fId);
+//        return ApiResponse.onSuccess(SuccessStatus.LIMJANG_DELETE);
+//    }
+
+
+    // gugun ??
 
 }

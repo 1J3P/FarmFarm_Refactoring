@@ -82,7 +82,10 @@ public enum ErrorStatus implements BaseErrorCode {
     S3_FAIL_UPLOAD_FILE(HttpStatus.BAD_REQUEST, "S34001", "파일 업로드에 실패하였습니다"),
 
     //record 에러
-    RECORD_NOT_FOUND(HttpStatus.NOT_FOUND, "RECORD400", "record가 존재하지 않습니다");
+    RECORD_NOT_FOUND(HttpStatus.NOT_FOUND, "RECORD400", "record가 존재하지 않습니다"),
+
+    //farm 에러
+    FARM_NOT_FOUND(HttpStatus.NOT_FOUND, "FARM4001", "farm이 존재하지 않습니다");
 
     private final HttpStatus httpStatus;
     private final String code;
