@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.List;
 
 import static com.example.farmfarm_refact.apiPayload.code.status.ErrorStatus.*;
 
@@ -62,6 +63,12 @@ public class ProductService {
             }
         }
         return ProductConverter.toProductCreateResponseDto(product);
+    }
+
+    // 농장별 상품 리스트 조회
+    public ProductResponseDto.ProductListResponseDto getFarmProduct(FarmEntity farm) {
+        List<ProductEntity> productList = productRepository.findAllByFarmAndStatusLike(farm, "yes");
+        return ProductConverter.toProductList(productList);
     }
 
     //농장 전체 조회 및 정렬 (rating: 인기순 , old: 오래된 순, new: 신규순), Default: rating

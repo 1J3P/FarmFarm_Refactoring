@@ -11,5 +11,5 @@ import org.springframework.web.bind.annotation.RequestParam;
 import java.util.List;
 
 public interface ProductRepository extends CrudRepository<ProductEntity, Integer> {
-
+    public List<ProductEntity> findAllByFarmAndStatusLike(FarmEntity farm, String status);
 }
