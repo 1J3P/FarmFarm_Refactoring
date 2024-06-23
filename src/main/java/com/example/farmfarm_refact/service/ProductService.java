@@ -1,6 +1,7 @@
 package com.example.farmfarm_refact.service;
 
 import com.example.farmfarm_refact.apiPayload.ExceptionHandler;
+import com.example.farmfarm_refact.apiPayload.code.status.ErrorStatus;
 import com.example.farmfarm_refact.controller.ProductController;
 import com.example.farmfarm_refact.converter.FarmConverter;
 import com.example.farmfarm_refact.converter.ProductConverter;
@@ -26,10 +27,10 @@ public class ProductService {
     @Autowired
     private FileRepository fileRepository;
 
-    // 농장 등록
+    // 상품 등록
     public ProductResponseDto.ProductCreateResponseDto saveProduct(UserEntity user, ProductRequestDto.ProductCreateRequestDto productCreateRequestDto) {
         ProductEntity newProduct = new ProductEntity(productCreateRequestDto.getName(), productCreateRequestDto.getDetail(), productCreateRequestDto.getProductType(), productCreateRequestDto.getProductCategory(), productCreateRequestDto.getShippingMethod(), "yes");
-        FarmEntity myFarm = farmRepository.findByUserAndStatusLike(user, "yes");
+        FarmEntity myFarm = farmRepository.findByUserAndStatusLike(user, "yes").orElseThrow(() -> new ExceptionHandler(ErrorStatus.FARM_NOT_FOUND));
         newProduct.setFarm(myFarm);
         if (newProduct.getType() == 2) { //경매 상품이면
             if (myFarm.isAuction()) {
@@ -51,12 +52,14 @@ public class ProductService {
             newProduct.setDirectLocation(productCreateRequestDto.getDirectLocation());
         }
         ProductEntity product = productRepository.save(newProduct);
-        for (Long imageId : productCreateRequestDto.getImages()) {
-            FileEntity file = fileRepository.findById(imageId.intValue())
-                    .orElseThrow(() -> new ExceptionHandler(S3_NOT_FOUND));
-            file.setFileType(FileType.PRODUCT);
-            file.setProduct(product);
-            fileRepository.save(file);
+        if (productCreateRequestDto.getImages() != null) {
+            for (Long imageId : productCreateRequestDto.getImages()) {
+                FileEntity file = fileRepository.findById(imageId.intValue())
+                        .orElseThrow(() -> new ExceptionHandler(S3_NOT_FOUND));
+                file.setFileType(FileType.PRODUCT);
+                file.setProduct(product);
+                fileRepository.save(file);
+            }
         }
         return ProductConverter.toProductCreateResponseDto(product);
     }

@@ -8,7 +8,6 @@ import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.DynamicUpdate;
 import java.sql.Timestamp;
-import java.util.Date;
 
 @Data
 @Entity
@@ -50,7 +49,7 @@ public class ProductEntity {
 
     private int openStatus; //0이면 아직 안열림, 1이면 열려있음, 2이면 열렸다가 닫힘 -> 처음값은 무조건 0
 
-    private int type;
+    private int type; // 0: 일반 상품, 1: 공동구매 상품, 2: 경매 상품
 
     @ManyToOne
     @JoinColumn(name="farm")
