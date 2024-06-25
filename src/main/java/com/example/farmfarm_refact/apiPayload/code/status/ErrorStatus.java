@@ -87,7 +87,10 @@ public enum ErrorStatus implements BaseErrorCode {
     //farm 에러
     FARM_NOT_FOUND(HttpStatus.NOT_FOUND, "FARM4001", "farm이 존재하지 않습니다"),
     FARM_USER_NOT_EQUAL(HttpStatus.NOT_FOUND, "FARM4002", "현재 로그인 한 사용자와 농장 주인이 일치하지 않습니다."),
-    FARM_HAS_PRODUCT(HttpStatus.NOT_FOUND, "FARM4003", "농장에 상품이 등록되어 있어 농장을 삭제할 수 없습니다.");
+    FARM_HAS_PRODUCT(HttpStatus.NOT_FOUND, "FARM4003", "농장에 상품이 등록되어 있어 농장을 삭제할 수 없습니다."),
+
+    //product 에러
+    PRODUCT_NOT_FOUND(HttpStatus.NOT_FOUND, "PRODUCT4001", "product가 존재하지 않습니다");
 
     private final HttpStatus httpStatus;
     private final String code;
