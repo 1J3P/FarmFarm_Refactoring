@@ -33,11 +33,10 @@ public class FarmResponseDto {
         private String locationDetail;
         private String detail;
         private Double rating;
-        private String image;
         private int auction_time;
         private boolean auction;
         private Timestamp created_at;
-        private String status;
+        private List<FileResponseDto.FileCreateResponseDto> images;
     }
 
     @Getter

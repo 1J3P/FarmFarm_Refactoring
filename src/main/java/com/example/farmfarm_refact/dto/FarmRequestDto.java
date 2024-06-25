@@ -4,6 +4,8 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
+import java.util.List;
+
 
 @Getter
 public class FarmRequestDto {
@@ -19,7 +21,7 @@ public class FarmRequestDto {
         private String locationFull;
         private String locationDetail;
         private String detail;
-        private String image;
+        private List<Long> images;
         private int auction_time;
     }
 
@@ -43,6 +45,6 @@ public class FarmRequestDto {
         private String locationDetail;
         @NotNull
         private String detail;
-        private String image;
+        private List<Long> images;
     }
 }
