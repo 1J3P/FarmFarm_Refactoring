@@ -8,6 +8,8 @@ import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.DynamicUpdate;
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @Entity
@@ -58,6 +60,9 @@ public class ProductEntity {
     private ProductCategory productCategory;
 
     private String status;
+
+    @OneToMany(mappedBy = "product")
+    private List<FileEntity> files = new ArrayList<>();
 
     public ProductEntity(String name, String detail, int type, ProductCategory productCategory, ShippingMethod shippingMethod, String status) {
         this.name = name;

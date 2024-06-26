@@ -11,10 +11,11 @@ import com.example.farmfarm_refact.service.FarmService;
 import com.example.farmfarm_refact.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 @RequestMapping("/product")
@@ -28,4 +29,21 @@ public class ProductController {
         return ApiResponse.onSuccess(productService.saveProduct(user, product));
     }
 
+    // 상품 조회
+    @GetMapping("/{pId}")
+    public ApiResponse<ProductResponseDto.ProductReadResponseDto> getProduct(@PathVariable("pId") long pId) {
+        return ApiResponse.onSuccess(productService.getProduct(pId));
+    }
+
+//    // 상품 리스트 조회, 검색, 정렬(신상품순-기본, 인기순, 낮은 가격순, 높은 가격순)
+//    @GetMapping("/list")
+//    public ApiResponse<ProductResponseDto.ProductListResponseDto> getProductList(@RequestParam(required = false, value = "sort") String criteria,
+//                                                                        @RequestParam(required = false, value = "keyword") String keyword) {
+//        if (keyword.equals("")) {
+//            return ApiResponse.onSuccess(productService.getFarmsOrderBy(criteria));
+//        }
+//        else {
+//            return ApiResponse.onSuccess(productService.searchSortFarms(keyword, criteria));
+//        }
+//    }
 }
