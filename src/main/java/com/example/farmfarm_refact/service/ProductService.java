@@ -11,6 +11,7 @@ import com.example.farmfarm_refact.repository.FarmRepository;
 import com.example.farmfarm_refact.repository.FileRepository;
 import com.example.farmfarm_refact.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.text.SimpleDateFormat;
@@ -78,7 +79,28 @@ public class ProductService {
         return ProductConverter.toProductReadResponseDto(product);
     }
 
-//    // 상품 전체 조회
-//    public ProductResponseDto.ProductList
+    // 상품 전체 조회(정렬만)
+    public ProductResponseDto.ProductListResponseDto getProductsOrderBy(String criteria) {
+        List<ProductEntity> productList =
+                switch (criteria) {
+                    case "rating" -> productRepository.findAllByStatusLikeOrderByRatingDesc("yes");
+                    case "lowPrice" -> productRepository.findAllByStatusLikeOrderByPriceAsc("yes");
+                    case "highPrice" -> productRepository.findAllByStatusLikeOrderByPriceDesc("yes");
+                    default -> productRepository.findAllByStatusLike(Sort.by(Sort.Direction.DESC, "pId"), "yes");
+                };
+        return ProductConverter.toProductList(productList);
+    }
+
+    // 상품 전체 조회(정렬, 검색 같이)
+    public ProductResponseDto.ProductListResponseDto searchSortProducts(String keyword, String criteria) {
+        List<ProductEntity> productList =
+                switch (criteria) {
+                    case "rating" -> productRepository.findAllByNameContainingAndStatusLike(keyword, Sort.by(Sort.Direction.DESC, "rating"), "yes");
+                    case "lowPrice" -> productRepository.findAllByNameContainingAndStatusLike(keyword, Sort.by(Sort.Direction.ASC, "price"), "yes");
+                    case "highPrice" -> productRepository.findAllByNameContainingAndStatusLike(keyword, Sort.by(Sort.Direction.DESC, "price"), "yes");
+                    default -> productRepository.findAllByNameContainingAndStatusLike(keyword, Sort.by(Sort.Direction.DESC, "pId"),"yes");
+                };
+        return ProductConverter.toProductList(productList);
+    }
 
 }

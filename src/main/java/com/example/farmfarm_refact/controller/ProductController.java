@@ -35,15 +35,15 @@ public class ProductController {
         return ApiResponse.onSuccess(productService.getProduct(pId));
     }
 
-//    // 상품 리스트 조회, 검색, 정렬(신상품순-기본, 인기순, 낮은 가격순, 높은 가격순)
-//    @GetMapping("/list")
-//    public ApiResponse<ProductResponseDto.ProductListResponseDto> getProductList(@RequestParam(required = false, value = "sort") String criteria,
-//                                                                        @RequestParam(required = false, value = "keyword") String keyword) {
-//        if (keyword.equals("")) {
-//            return ApiResponse.onSuccess(productService.getFarmsOrderBy(criteria));
-//        }
-//        else {
-//            return ApiResponse.onSuccess(productService.searchSortFarms(keyword, criteria));
-//        }
-//    }
+    // 상품 리스트 조회, 검색, 정렬(신상품순-default, 인기순, 낮은 가격순, 높은 가격순)
+    @GetMapping("/list")
+    public ApiResponse<ProductResponseDto.ProductListResponseDto> getProductList(@RequestParam(required = false, value = "sort", defaultValue = "") String criteria,
+                                                                        @RequestParam(required = false, value = "keyword", defaultValue = "") String keyword) {
+        if (keyword.equals("")) {
+            return ApiResponse.onSuccess(productService.getProductsOrderBy(criteria));
+        }
+        else {
+            return ApiResponse.onSuccess(productService.searchSortProducts(keyword, criteria));
+        }
+    }
 }
