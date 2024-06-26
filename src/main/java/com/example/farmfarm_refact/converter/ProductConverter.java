@@ -38,6 +38,10 @@ public class ProductConverter {
   public static ProductResponseDto.ProductListDto toProductDto(ProductEntity product) {
       return ProductResponseDto.ProductListDto.builder()
               .pId(product.getPId())
+              .name(product.getName())
+              .price(product.getPrice())
+              .images(FileConverter.toFileCreateResponseDtoList(product.getFiles()))
+              .farm(product.getFarm())
               .build();
   }
 

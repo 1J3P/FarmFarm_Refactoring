@@ -26,6 +26,10 @@ public class ProductResponseDto {
     @AllArgsConstructor
     public static class ProductListDto {
         private Long pId;
+        private String name;
+        private int price;
+        private List<FileResponseDto.FileCreateResponseDto> images;
+        private FarmEntity farm;
     }
 
     @Getter

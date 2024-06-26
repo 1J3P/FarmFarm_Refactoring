@@ -102,7 +102,7 @@ public class FarmService {
     public void deleteFarm(UserEntity user, Long fId) {
         FarmEntity farm = farmRepository.findByfIdAndStatusLike(fId, "yes").orElseThrow(() -> new ExceptionHandler(ErrorStatus.FARM_NOT_FOUND));
         if (user.equals(farm.getUser())) {
-            if (productService.getFarmProduct(farm) == null || productService.getFarmProduct(farm).getProductList().isEmpty()) { // 농장에 상품이 없으면
+            if (productService.getFarmProduct(FarmConverter.toFarmReadResponseDto(farm)) == null || productService.getFarmProduct(FarmConverter.toFarmReadResponseDto(farm)).getProductList().isEmpty()) { // 농장에 상품이 없으면
                 System.out.println("농장에 상품이 없으므로 농장을 삭제합니다.");
                 farm.setStatus("no");
                 farmRepository.save(farm);

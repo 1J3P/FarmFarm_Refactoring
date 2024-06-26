@@ -66,7 +66,7 @@ public class ProductService {
     }
 
     // 농장별 상품 리스트 조회
-    public ProductResponseDto.ProductListResponseDto getFarmProduct(FarmEntity farm) {
+    public ProductResponseDto.ProductListResponseDto getFarmProduct(FarmResponseDto.FarmReadResponseDto farm) {
         List<ProductEntity> productList = productRepository.findAllByFarmAndStatusLike(farm, "yes");
         return ProductConverter.toProductList(productList);
     }
@@ -77,5 +77,8 @@ public class ProductService {
                 .orElseThrow(() -> new ExceptionHandler(ErrorStatus.PRODUCT_NOT_FOUND));
         return ProductConverter.toProductReadResponseDto(product);
     }
+
+//    // 상품 전체 조회
+//    public ProductResponseDto.ProductList
 
 }
