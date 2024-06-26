@@ -2,6 +2,7 @@ package com.example.farmfarm_refact.controller;
 
 
 import com.example.farmfarm_refact.apiPayload.ApiResponse;
+import com.example.farmfarm_refact.apiPayload.code.status.SuccessStatus;
 import com.example.farmfarm_refact.dto.FarmRequestDto;
 import com.example.farmfarm_refact.dto.FarmResponseDto;
 import com.example.farmfarm_refact.dto.ProductRequestDto;
@@ -46,4 +47,14 @@ public class ProductController {
             return ApiResponse.onSuccess(productService.searchSortProducts(keyword, criteria));
         }
     }
+
+    // 상품 삭제
+    @DeleteMapping("/{pId}")
+    public ApiResponse deleteProduct(@AuthenticationPrincipal UserEntity user, @PathVariable("pId") Long pId) {
+        productService.deleteProduct(user, pId);
+        return ApiResponse.onSuccess(SuccessStatus.LIMJANG_DELETE);
+    }
+
+
+    // 상품 수정
 }

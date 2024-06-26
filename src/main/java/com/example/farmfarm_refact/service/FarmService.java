@@ -98,7 +98,7 @@ public class FarmService {
         oldFarm.updateFarm(newFarm);
     }
 
-    // 농장 삭제 *추후에 productService 구현 후 주석 해제 할 것. 절대 지우지 마시오!!*
+    // 농장 삭제
     public void deleteFarm(UserEntity user, Long fId) {
         FarmEntity farm = farmRepository.findByfIdAndStatusLike(fId, "yes").orElseThrow(() -> new ExceptionHandler(ErrorStatus.FARM_NOT_FOUND));
         if (user.equals(farm.getUser())) {
