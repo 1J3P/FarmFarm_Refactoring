@@ -8,8 +8,11 @@ import com.example.farmfarm_refact.converter.FarmConverter;
 import com.example.farmfarm_refact.dto.FarmRequestDto;
 import com.example.farmfarm_refact.dto.FarmResponseDto;
 import com.example.farmfarm_refact.entity.FarmEntity;
+import com.example.farmfarm_refact.entity.FileEntity;
+import com.example.farmfarm_refact.entity.FileType;
 import com.example.farmfarm_refact.entity.UserEntity;
 import com.example.farmfarm_refact.repository.FarmRepository;
+import com.example.farmfarm_refact.repository.FileRepository;
 import com.example.farmfarm_refact.repository.UserRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -22,6 +25,8 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
+import static com.example.farmfarm_refact.apiPayload.code.status.ErrorStatus.S3_NOT_FOUND;
+
 @Service
 public class FarmService {
     @Autowired
@@ -30,6 +35,8 @@ public class FarmService {
     private UserService userService;
     @Autowired
     private ProductService productService;
+    @Autowired
+    private FileRepository fileRepository;
 
     // 농장 등록
     public FarmResponseDto.FarmCreateResponseDto saveFarm(UserEntity user, FarmRequestDto.FarmCreateRequestDto farmCreateRequestDto) {
@@ -37,6 +44,15 @@ public class FarmService {
         newFarm.setUser(user);
         newFarm.setStatus("yes");
         FarmEntity farm = farmRepository.save(newFarm);
+        if (farmCreateRequestDto.getImages() != null) {
+            for (Long imageId : farmCreateRequestDto.getImages()) {
+                FileEntity file = fileRepository.findById(imageId.intValue())
+                        .orElseThrow(() -> new ExceptionHandler(S3_NOT_FOUND));
+                file.setFileType(FileType.FARM);
+                file.setFarm(farm);
+                fileRepository.save(file);
+            }
+        }
         return FarmConverter.toFarmCreateResponseDto(farm);
     }
 

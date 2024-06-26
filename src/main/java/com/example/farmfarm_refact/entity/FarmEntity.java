@@ -6,6 +6,8 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.DynamicUpdate;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
 
 
 @Data
@@ -35,8 +37,6 @@ public class FarmEntity {
 
     private Double rating;
 
-    private String image;
-
     private int auction_time;
 
     @Column(name="is_auction")
@@ -51,15 +51,17 @@ public class FarmEntity {
 
     private String status;
 
+    @OneToMany(mappedBy = "farm")
+    private List<FileEntity> files = new ArrayList<>();
+
     @Builder
-    public FarmEntity(String name, String locationCity, String locationGu, String locationFull, String locationDetail, String detail, String image, int auction_time) {
+    public FarmEntity(String name, String locationCity, String locationGu, String locationFull, String locationDetail, String detail, int auction_time) {
         this.name = name;
         this.locationCity = locationCity;
         this.locationGu = locationGu;
         this.locationFull = locationFull;
         this.locationDetail = locationDetail;
         this.detail = detail;
-        this.image = image;
         this.auction_time = auction_time;
     }
 
@@ -70,7 +72,6 @@ public class FarmEntity {
         this.locationFull = locationFull;
         this.locationDetail = locationDetail;
         this.detail = detail;
-        this.image = image;
     }
 
 }
