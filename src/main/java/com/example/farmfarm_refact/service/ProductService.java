@@ -116,4 +116,13 @@ public class ProductService {
             throw new ExceptionHandler(FARM_USER_NOT_EQUAL);
     }
 
+    // 상품 수정
+    public void updateProduct(ProductRequestDto.ProductUpdateRequestDto updateProduct) {
+        ProductEntity oldProduct = productRepository.findBypIdAndStatusLike(updateProduct.getPId(), "yes")
+                .orElseThrow(() -> new ExceptionHandler(PRODUCT_NOT_FOUND));
+        ProductEntity newProduct = ProductConverter.toNewProduct(updateProduct);
+        oldProduct.updateProduct(newProduct);
+        productRepository.save(oldProduct);
+    }
+
 }

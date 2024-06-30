@@ -69,4 +69,16 @@ public class ProductConverter {
                 .build();
     }
 
+    public static ProductEntity toNewProduct(ProductRequestDto.ProductUpdateRequestDto updateDto) {
+      return ProductEntity.builder()
+              .name(updateDto.getName())
+              .detail(updateDto.getDetail())
+              .quantity(updateDto.getQuantity())
+              .price((updateDto.getPrice()))
+              .shippingMethod(updateDto.getShippingMethod())
+              .directLocation(updateDto.getDirectLocation())
+              .productCategory(updateDto.getProductCategory())
+              .build();
+    }
+
 }

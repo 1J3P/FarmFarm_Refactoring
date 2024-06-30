@@ -96,6 +96,7 @@ public class FarmService {
                 .orElseThrow(() -> new ExceptionHandler(ErrorStatus.FARM_NOT_FOUND));
         FarmEntity newFarm = FarmConverter.toNewFarm(updateFarm);
         oldFarm.updateFarm(newFarm);
+        farmRepository.save(oldFarm);
     }
 
     // 농장 삭제

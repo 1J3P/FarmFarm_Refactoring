@@ -10,8 +10,10 @@ import com.example.farmfarm_refact.dto.ProductResponseDto;
 import com.example.farmfarm_refact.entity.UserEntity;
 import com.example.farmfarm_refact.service.FarmService;
 import com.example.farmfarm_refact.service.ProductService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -55,6 +57,11 @@ public class ProductController {
         return ApiResponse.onSuccess(SuccessStatus.LIMJANG_DELETE);
     }
 
-
     // 상품 수정
+    @PatchMapping("/{pId}")
+    public ApiResponse updateProduct(@PathVariable Long pId, @RequestBody @Valid ProductRequestDto.ProductUpdateRequestDto uProduct) {
+        uProduct.setPId(pId);
+        productService.updateProduct(uProduct);
+        return ApiResponse.onSuccess(SuccessStatus.LIMJANG_UPDATE);
+    }
 }
