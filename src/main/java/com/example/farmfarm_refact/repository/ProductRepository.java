@@ -15,4 +15,15 @@ import java.util.Optional;
 public interface ProductRepository extends CrudRepository<ProductEntity, Integer> {
     public List<ProductEntity> findAllByFarmAndStatusLike(FarmResponseDto.FarmReadResponseDto farm, String status);
     public Optional<ProductEntity> findBypIdAndStatusLike(Long pId, String status);
+    // 최신순
+    public List<ProductEntity> findAllByStatusLike(Sort sort, String status);
+    // 높은 가격순
+    public List<ProductEntity> findAllByStatusLikeOrderByPriceDesc(String status);
+    // 낮은 가격순
+    public List<ProductEntity> findAllByStatusLikeOrderByPriceAsc(String status);
+    // 별점순
+    public List<ProductEntity> findAllByStatusLikeOrderByRatingDesc(String status);
+    // 키워드 포함 정렬
+    public List<ProductEntity> findAllByNameContainingAndStatusLike(@RequestParam("name") String keyword, Sort sort, String status);
+
 }
