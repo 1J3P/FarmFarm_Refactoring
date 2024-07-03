@@ -3,6 +3,7 @@ package com.example.farmfarm_refact.service;
 
 import com.example.farmfarm_refact.apiPayload.ExceptionHandler;
 import com.example.farmfarm_refact.apiPayload.code.status.ErrorStatus;
+import com.example.farmfarm_refact.controller.S3Controller;
 import com.example.farmfarm_refact.converter.FarmConverter;
 import com.example.farmfarm_refact.dto.FarmRequestDto;
 import com.example.farmfarm_refact.dto.FarmResponseDto;
@@ -107,12 +108,26 @@ public class FarmService {
     }
 
     // 농장 수정
-    public void updateFarm(FarmRequestDto.FarmUpdateRequestDto updateFarm) {
-        FarmEntity oldFarm = farmRepository.findByfIdAndStatusLike(updateFarm.getFId(), "yes")
+    public void updateFarm(FarmRequestDto.FarmUpdateRequestDto farmUpdateRequestDto) {
+        FarmEntity farm = farmRepository.findByfIdAndStatusLike(farmUpdateRequestDto.getFId(), "yes")
                 .orElseThrow(() -> new ExceptionHandler(ErrorStatus.FARM_NOT_FOUND));
-        FarmEntity newFarm = FarmConverter.toNewFarm(updateFarm);
-        oldFarm.updateFarm(newFarm);
-        farmRepository.save(oldFarm);
+        FarmEntity newFarm = FarmConverter.toNewFarm(farmUpdateRequestDto);
+        farm.updateFarm(newFarm);
+        farmRepository.save(farm);
+        if (farmUpdateRequestDto.getAddImages() != null) {
+            for (Long imageId : farmUpdateRequestDto.getAddImages()) {
+                FileEntity file = fileRepository.findById(imageId.intValue())
+                        .orElseThrow(() -> new ExceptionHandler(S3_NOT_FOUND));
+                file.setFileType(FileType.FARM);
+                file.setFarm(farm);
+                fileRepository.save(file);
+            }
+        }
+        if (farmUpdateRequestDto.getDeleteImages() != null) {
+            for (Long imageId : farmUpdateRequestDto.getDeleteImages()) {
+                S3Controller.deleteFile(imageId.intValue());
+            }
+        }
     }
 
     // 농장 삭제

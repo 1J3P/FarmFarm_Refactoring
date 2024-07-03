@@ -73,7 +73,6 @@ public class FarmEntity {
         this.locationFull = newFarm.getLocationFull();
         this.locationDetail = newFarm.getLocationDetail();
         this.detail = newFarm.getDetail();
-        this.image = newFarm.getImage();
     }
 
 }

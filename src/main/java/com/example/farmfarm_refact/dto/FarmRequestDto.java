@@ -46,6 +46,7 @@ public class FarmRequestDto {
         private String locationDetail;
         @NotNull
         private String detail;
-        private List<Long> images;
+        private List<Long> addImages;
+        private List<Long> deleteImages;
     }
 }
