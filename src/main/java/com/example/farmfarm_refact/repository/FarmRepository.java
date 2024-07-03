@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface FarmRepository extends CrudRepository<FarmEntity, Integer> {
+    public FarmEntity findByfId(Long fid);
     public Optional<FarmEntity> findByfIdAndStatusLike(Long fId, String status);
     public Optional<FarmEntity> findByUserAndStatusLike(UserEntity user, String status);
     public List<FarmEntity> findAllByStatusLike(Sort sort, String status);

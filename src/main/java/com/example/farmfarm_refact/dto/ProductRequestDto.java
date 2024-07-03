@@ -2,10 +2,9 @@ package com.example.farmfarm_refact.dto;
 
 import com.example.farmfarm_refact.entity.ProductCategory;
 import com.example.farmfarm_refact.entity.ShippingMethod;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import lombok.*;
 
 import java.util.Date;
 import java.util.List;
@@ -33,5 +32,27 @@ public class ProductRequestDto {
         private List<Long> images;
     }
 
+    @Builder
+    @Getter
+    @Setter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class ProductUpdateRequestDto {
+        @NotNull
+        private long pId;
+        @NotBlank
+        private String name;
+        @NotNull
+        private String detail;
+        @NotNull
+        private Integer quantity;
+        @NotNull
+        private Integer price;
+        @NotNull
+        private ShippingMethod shippingMethod;
+        private String directLocation;
+        private ProductCategory productCategory;
+        private List<Long> images;
+    }
 
 }

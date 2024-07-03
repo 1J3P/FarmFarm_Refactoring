@@ -5,15 +5,13 @@ import com.example.farmfarm_refact.apiPayload.ApiResponse;
 import com.example.farmfarm_refact.apiPayload.ExceptionHandler;
 import com.example.farmfarm_refact.apiPayload.code.status.ErrorStatus;
 import com.example.farmfarm_refact.apiPayload.code.status.SuccessStatus;
-import com.example.farmfarm_refact.dto.FarmRequestDto;
-import com.example.farmfarm_refact.dto.FarmResponseDto;
-import com.example.farmfarm_refact.dto.LoginResponseDto;
-import com.example.farmfarm_refact.dto.UserResponseDto;
+import com.example.farmfarm_refact.dto.*;
 import com.example.farmfarm_refact.entity.FarmEntity;
 import com.example.farmfarm_refact.entity.UserEntity;
 import com.example.farmfarm_refact.entity.oauth.OauthToken;
 import com.example.farmfarm_refact.repository.UserRepository;
 import com.example.farmfarm_refact.service.FarmService;
+import com.example.farmfarm_refact.service.ProductService;
 import com.example.farmfarm_refact.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -36,6 +34,8 @@ public class FarmController {
 
     @Autowired
     private FarmService farmService;
+    @Autowired
+    private ProductService productService;
 
     // 농장 개설
     @PostMapping("")
@@ -72,6 +72,10 @@ public class FarmController {
 
 
     // 농장별 상품 보기
+    @GetMapping("/{fId}/product")
+    public ApiResponse<ProductResponseDto.ProductListResponseDto> getFarmProduct(@PathVariable("fId") long fId) {
+        return ApiResponse.onSuccess(productService.getFarmProduct(farmService.getFarm(fId)));
+    }
 
 
     // 농장 정보 수정

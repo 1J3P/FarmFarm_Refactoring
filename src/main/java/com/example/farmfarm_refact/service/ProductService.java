@@ -11,6 +11,7 @@ import com.example.farmfarm_refact.repository.FarmRepository;
 import com.example.farmfarm_refact.repository.FileRepository;
 import com.example.farmfarm_refact.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.text.SimpleDateFormat;
@@ -66,106 +67,63 @@ public class ProductService {
     }
 
     // 농장별 상품 리스트 조회
-    public ProductResponseDto.ProductListResponseDto getFarmProduct(FarmEntity farm) {
-        List<ProductEntity> productList = productRepository.findAllByFarmAndStatusLike(farm, "yes");
+    public ProductResponseDto.ProductListResponseDto getFarmProduct(FarmResponseDto.FarmReadResponseDto farm) {
+        FarmEntity farmEntity = farmRepository.findByfId(farm.getFId());
+        List<ProductEntity> productList = productRepository.findAllByFarmAndStatusLike(farmEntity, "yes");
         return ProductConverter.toProductList(productList);
     }
 
-    //농장 전체 조회 및 정렬 (rating: 인기순 , old: 오래된 순, new: 신규순), Default: rating
-//    public List<FarmEntity> getFarmsOrderBy(String criteria) {
-//        switch (criteria) {
-//            case "old":
-//                return farmRepository.findAllByStatusLike(Sort.by(Sort.Direction.ASC, "fId"), "yes");
-//            case "new":
-//                return farmRepository.findAllByStatusLike(Sort.by(Sort.Direction.DESC, "fId"), "yes");
-//            default:
-//                return farmRepository.findAllByStatusLike(Sort.by(Sort.Direction.DESC, "rating"), "yes");
-//        }
-//    }
-//
-//    //농장 검색
-//    public List<FarmEntity> searchFarms(String keyword) {
-//        return farmRepository.findAllByNameContainingAndStatusLike(keyword, "yes");
-//    }
-//
-//    //농장 검색, 농장 정렬 같이
-//    public List<FarmEntity> searchSortFarms(String keyword, String criteria) {
-//        switch (criteria) {
-//            case "old":
-//                return farmRepository.findAllByNameContainingAndStatusLike(keyword, Sort.by(Sort.Direction.ASC, "fId"), "yes");
-//            case "new":
-//                return farmRepository.findAllByNameContainingAndStatusLike(keyword, Sort.by(Sort.Direction.DESC, "fId"), "yes");
-//            default:
-//                return farmRepository.findAllByNameContainingAndStatusLike(keyword, Sort.by(Sort.Direction.DESC, "rating"), "yes");
-//        }
-//    }
-//
-//
-//    public List<FarmEntity> searchByLocation(String locationCity, String locationGu) {
-//        return farmRepository.findAllByLocationCityAndLocationGu(locationCity, locationGu);
-//    }
-//
-//    // 농장 상세 조회
-//    public FarmEntity getFarm(Long fId) {
-//        FarmEntity fa = farmRepository.findByfIdAndStatusLike(fId, "yes");
-//        if (fa.getStatus().equals("no"))
-//            return null;
-//        return fa;
-//    }
-//
-//    //나의 농장 조회
-//    public FarmEntity getMyFarm(UserEntity user) {
-//        FarmEntity myFarm = farmRepository.findByUserAndStatusLike(user, "yes");
-//        if (myFarm != null) {
-//            System.out.println(myFarm.getStatus());
-//        }
-//        return myFarm;
-//    }
-//
-//    // 농장 수정
-//    public FarmEntity updateFarm(HttpServletRequest request, Long fId, FarmEntity farm) {
-//        UserEntity user = userService.getUser(request);
-//        FarmEntity newFarm = farmRepository.findByfIdAndStatusLike(fId, "yes");
-//
-//        if (Objects.equals(user.getUId(), newFarm.getUser().getUId())) {
-//            // 수정되는 것들  (농장 이름, 위치-시, 위치-구, 상세, 이미지, 경매시간, 경매 참여 여부, 생성 시간?)
-//            newFarm.setName(farm.getName());
-//            newFarm.setLocationCity(farm.getLocationCity());
-//            newFarm.setLocationGu(farm.getLocationGu());
-//            newFarm.setLocationFull(farm.getLocationFull());
-//            newFarm.setLocationDetail(farm.getLocationDetail());
-//            newFarm.setDetail(farm.getDetail());
-//            newFarm.setImage(farm.getImage());
-//            newFarm.setAuction_time(farm.getAuction_time());
-//            newFarm.setAuction(farm.isAuction()); // 이게 왜 이런걸까요 ?
-//            newFarm.setCreated_at(farm.getCreated_at());
-//            newFarm.setDetail(farm.getDetail());
-//            farmRepository.save(newFarm);
-//            return newFarm;
-//        } else {
-//            return null;
-//        }
-//    }
-//
-//    // 농장 삭제
-//    public void deleteFarm(HttpSession session, Long fId) throws Exception {
-//        UserEntity user = (UserEntity) session.getAttribute("user");
-//        FarmEntity farm = farmRepository.findByfIdAndStatusLike(fId, "yes");
-//        if (Objects.equals(user.getUId(), farm.getUser().getUId())) {
-//            if (productService.getFarmProduct(farm) == null || productService.getFarmProduct(farm).isEmpty()) {  // 농장에 상품이 없으면
-//                System.out.println("농장에 상품 없음!!!");
-//                farm.setStatus("no");
-//                farmRepository.save(farm);
-//            }
-//            else {
-//                System.out.println("농장에 상품 있음!!!");
-//                System.out.println("상품이 등록되어 있어 삭제할 수 없습니다.");
-//                throw new Exception();
-//            }
-//        } else {
-//            System.out.println("유저가 달라 삭제할 수 없습니다.");
-//            throw new Exception();
-//        }
-//    }
+    // 상품 디테일 조회
+    public ProductResponseDto.ProductReadResponseDto getProduct(Long pId) {
+        ProductEntity product = productRepository.findBypIdAndStatusLike(pId, "yes")
+                .orElseThrow(() -> new ExceptionHandler(ErrorStatus.PRODUCT_NOT_FOUND));
+        return ProductConverter.toProductReadResponseDto(product);
+    }
+
+    // 상품 전체 조회(정렬만)
+    public ProductResponseDto.ProductListResponseDto getProductsOrderBy(String criteria) {
+        List<ProductEntity> productList =
+                switch (criteria) {
+                    case "rating" -> productRepository.findAllByStatusLikeOrderByRatingDesc("yes");
+                    case "lowPrice" -> productRepository.findAllByStatusLikeOrderByPriceAsc("yes");
+                    case "highPrice" -> productRepository.findAllByStatusLikeOrderByPriceDesc("yes");
+                    default -> productRepository.findAllByStatusLike(Sort.by(Sort.Direction.DESC, "pId"), "yes");
+                };
+        return ProductConverter.toProductList(productList);
+    }
+
+    // 상품 전체 조회(정렬, 검색 같이)
+    public ProductResponseDto.ProductListResponseDto searchSortProducts(String keyword, String criteria) {
+        List<ProductEntity> productList =
+                switch (criteria) {
+                    case "rating" -> productRepository.findAllByNameContainingAndStatusLike(keyword, Sort.by(Sort.Direction.DESC, "rating"), "yes");
+                    case "lowPrice" -> productRepository.findAllByNameContainingAndStatusLike(keyword, Sort.by(Sort.Direction.ASC, "price"), "yes");
+                    case "highPrice" -> productRepository.findAllByNameContainingAndStatusLike(keyword, Sort.by(Sort.Direction.DESC, "price"), "yes");
+                    default -> productRepository.findAllByNameContainingAndStatusLike(keyword, Sort.by(Sort.Direction.DESC, "pId"),"yes");
+                };
+        return ProductConverter.toProductList(productList);
+    }
+
+    // 상품 삭제 *일단은 그냥 조건 없이 삭제 가능하게 뒀으나 나중에 주문 로직 구현하고 수정하기*
+    public void deleteProduct(UserEntity user, Long pId) {
+        ProductEntity product = productRepository.findBypIdAndStatusLike(pId, "yes")
+                .orElseThrow(() -> new ExceptionHandler(ErrorStatus.PRODUCT_NOT_FOUND));;
+        // 농장 주인인지 확인
+        if (user.equals(product.getFarm().getUser())) {
+            product.setStatus("no");
+            productRepository.save(product);
+        }
+        else
+            throw new ExceptionHandler(FARM_USER_NOT_EQUAL);
+    }
+
+    // 상품 수정
+    public void updateProduct(ProductRequestDto.ProductUpdateRequestDto updateProduct) {
+        ProductEntity oldProduct = productRepository.findBypIdAndStatusLike(updateProduct.getPId(), "yes")
+                .orElseThrow(() -> new ExceptionHandler(PRODUCT_NOT_FOUND));
+        ProductEntity newProduct = ProductConverter.toNewProduct(updateProduct);
+        oldProduct.updateProduct(newProduct);
+        productRepository.save(oldProduct);
+    }
 
 }
