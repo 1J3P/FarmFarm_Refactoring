@@ -22,7 +22,6 @@ public class FarmConverter {
               .locationFull(farmCreateRequestDto.getLocationFull())
               .locationDetail(farmCreateRequestDto.getLocationDetail())
               .detail(farmCreateRequestDto.getDetail())
-              .image(farmCreateRequestDto.getImage())
               .auction_time(farmCreateRequestDto.getAuction_time())
               .build();
   }
@@ -42,7 +41,7 @@ public class FarmConverter {
               .locationDetail(farm.getLocationDetail())
               .detail(farm.getDetail())
               .rating(farm.getRating())
-              .image(farm.getImage())
+              .images(FileConverter.toFileCreateResponseDtoList(farm.getFiles()))
               .build();
   }
     // FarmEntity를 FarmListDto로 변환하는 메서드
@@ -73,7 +72,6 @@ public class FarmConverter {
               .locationFull(updateDto.getLocationFull())
               .locationDetail(updateDto.getLocationDetail())
               .detail(updateDto.getDetail())
-              .image(updateDto.getImage())
               .build();
     }
 
