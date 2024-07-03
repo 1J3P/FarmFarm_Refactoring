@@ -34,31 +34,8 @@ public enum ErrorStatus implements BaseErrorCode {
 
     // Limjang Error
     FARM_AUCTION_FALSE(HttpStatus.FORBIDDEN, "FARM4001", "농장의 설정을 허용해주세요."),
-    LIMJANG_POST_TYPE_ERROR(HttpStatus.BAD_REQUEST, "LIMJANG4002", "거래목적, 매물유형, 가격유형 입력값 중 하나가 정해지지 않은 값입니다. 다시 확인해주세요."),
-    LIMJANG_POST_PRICE_ERROR(HttpStatus.BAD_REQUEST, "LIMJANG4003", "전달된 가격이 잘못되었습니다. 입력값을 확인해주세요."),
-    LIMJANG_NOTFOUND_ERROR(HttpStatus.BAD_REQUEST, "LIMJANG404", "해당 임장이 존재하지 않습니다."),
-
-    LIMJANG_DELETE_NOT_FOUND(HttpStatus.BAD_REQUEST, "LIMJANG4005", "전달된 ID의 값이 DB에 존재하지 않습니다. 전달 값을 다시 확인해주세요."),
-    LIMJANG_DELETE_NOT_COMPLETE(HttpStatus.BAD_REQUEST, "LIMJANG4006", "요청한 임장 게시글이 모두 삭제되지 않아 삭제가 취소되었습니다. 다시 시도하거나 백엔드 팀에 문의바랍니다."),
-    LIMJANG_UPDATE_PRICETYPE_ERROR(HttpStatus.BAD_REQUEST, "LIMJANG4007", "가격유형 입력값이 잘못되었습니다. 다시 확인해주세요."),
-    LIMJANG_REQUEST_SORT_ERROR(HttpStatus.BAD_REQUEST, "LIMJANG4008", "요청한 정렬 방식이 지정되지 않은 값입니다. 다시 확인해주세요."),
 
 
-    // LimjangPrice Error
-    LIMJANGPRICE_NOTFOUND_ERROR(HttpStatus.BAD_REQUEST, "LIMJANGPRICE4000", "해당 임장가격 레코드가 존재하지 않습니다."),
-
-
-    // scrap
-    _SCRAP_NOT_FOUND(HttpStatus.INTERNAL_SERVER_ERROR, "SCRAP4000", "해당 게시글이 DB에 존재하지 않습니다. 관리자에게 문의 바랍니다."),
-    _SCRAP_SCRAP_FAILD(HttpStatus.INTERNAL_SERVER_ERROR, "SCRAP4001", "스크랩 등록 실패. 재시도하거나 관리자에게 문의 바랍니다."),
-    _SCRAP_UNSCRAP_FAILD(HttpStatus.INTERNAL_SERVER_ERROR, "SCRAP4002", "스크랩 취소 실패. 재시도하거나 관리자에게 문의 바랍니다."),
-    _SCRAP_ALREADY_SCRAPED(HttpStatus.INTERNAL_SERVER_ERROR, "SCRAP4003", "이미 스크랩된 게시글입니다."),
-    _SCRAP_ALREADY_UNSCRAPED(HttpStatus.INTERNAL_SERVER_ERROR, "SCRAP4004", "이미 스크랩 취소된 게시글입니다."),
-
-    CHECKLIST_TYPE_ERROR(HttpStatus.BAD_REQUEST, "CHECKLIST400", "정해지지 않은 요청값입니다. 다시 확인해주세요."),
-    CHECKLIST_NOTFOUND_ERROR(HttpStatus.BAD_REQUEST, "CHECKLIST404", "해당 체크리스트 질문 또는 답변이 존재하지 않습니다."),
-
-    REPORT_NOTFOUND_ERROR(HttpStatus.BAD_REQUEST, "REPORT404", "해당 리포트가 존재하지 않습니다."),
 
       
     //JWT 토큰 에러
@@ -81,13 +58,14 @@ public enum ErrorStatus implements BaseErrorCode {
     S3_DELTE_FAILED(HttpStatus.NOT_FOUND, "S34000", "해당 file이 s3에 존재하지 않습니다. 백엔드 팀에 문의바랍니다."),
     S3_FAIL_UPLOAD_FILE(HttpStatus.BAD_REQUEST, "S34001", "파일 업로드에 실패하였습니다"),
 
-    //record 에러
-    RECORD_NOT_FOUND(HttpStatus.NOT_FOUND, "RECORD400", "record가 존재하지 않습니다"),
 
     //farm 에러
     FARM_NOT_FOUND(HttpStatus.NOT_FOUND, "FARM4001", "farm이 존재하지 않습니다"),
     FARM_USER_NOT_EQUAL(HttpStatus.NOT_FOUND, "FARM4002", "현재 로그인 한 사용자와 농장 주인이 일치하지 않습니다."),
-    FARM_HAS_PRODUCT(HttpStatus.NOT_FOUND, "FARM4003", "농장에 상품이 등록되어 있어 농장을 삭제할 수 없습니다.");
+    FARM_HAS_PRODUCT(HttpStatus.NOT_FOUND, "FARM4003", "농장에 상품이 등록되어 있어 농장을 삭제할 수 없습니다."),
+    FARM_IS_PRESENT(HttpStatus.BAD_REQUEST, "FARM4004", "농장이 이미 존재합니다."),
+
+    ;
 
     private final HttpStatus httpStatus;
     private final String code;

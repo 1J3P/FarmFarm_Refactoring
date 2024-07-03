@@ -17,5 +17,6 @@ public class UserResponseDto {
         private String nickname;
         private String email;
         private String image;
+        private Long myFId;
     }
 }

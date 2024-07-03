@@ -22,7 +22,7 @@ public class FarmConverter {
               .locationFull(farmCreateRequestDto.getLocationFull())
               .locationDetail(farmCreateRequestDto.getLocationDetail())
               .detail(farmCreateRequestDto.getDetail())
-              .auction_time(farmCreateRequestDto.getAuction_time())
+              .auction(farmCreateRequestDto.isAuction())
               .build();
   }
   public static FarmResponseDto.FarmCreateResponseDto toFarmCreateResponseDto(FarmEntity farm) {

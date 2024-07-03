@@ -1,7 +1,6 @@
 package com.example.farmfarm_refact.service;
 
 
-import ch.qos.logback.core.net.SyslogOutputStream;
 import com.example.farmfarm_refact.apiPayload.ExceptionHandler;
 import com.example.farmfarm_refact.apiPayload.code.status.ErrorStatus;
 import com.example.farmfarm_refact.converter.FarmConverter;
@@ -13,17 +12,12 @@ import com.example.farmfarm_refact.entity.FileType;
 import com.example.farmfarm_refact.entity.UserEntity;
 import com.example.farmfarm_refact.repository.FarmRepository;
 import com.example.farmfarm_refact.repository.FileRepository;
-import com.example.farmfarm_refact.repository.UserRepository;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
 
 import static com.example.farmfarm_refact.apiPayload.code.status.ErrorStatus.S3_NOT_FOUND;
 
@@ -40,9 +34,15 @@ public class FarmService {
 
     // 농장 등록
     public FarmResponseDto.FarmCreateResponseDto saveFarm(UserEntity user, FarmRequestDto.FarmCreateRequestDto farmCreateRequestDto) {
+        if (farmRepository.findByUserAndStatusLike(user, "yes").isPresent()) {
+            throw new ExceptionHandler(ErrorStatus.FARM_IS_PRESENT);
+        }
         FarmEntity newFarm = FarmConverter.toFarmEntity(farmCreateRequestDto);
         newFarm.setUser(user);
         newFarm.setStatus("yes");
+        if (newFarm.isAuction()) {
+            newFarm.setAuction_time(farmCreateRequestDto.getAuction_time());
+        }
         FarmEntity farm = farmRepository.save(newFarm);
         if (farmCreateRequestDto.getImages() != null) {
             for (Long imageId : farmCreateRequestDto.getImages()) {
