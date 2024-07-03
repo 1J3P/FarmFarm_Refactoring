@@ -55,13 +55,14 @@ public class FarmEntity {
     private List<FileEntity> files = new ArrayList<>();
 
     @Builder
-    public FarmEntity(String name, String locationCity, String locationGu, String locationFull, String locationDetail, String detail, int auction_time) {
+    public FarmEntity(String name, String locationCity, String locationGu, String locationFull, String locationDetail, String detail, boolean auction, int auction_time) {
         this.name = name;
         this.locationCity = locationCity;
         this.locationGu = locationGu;
         this.locationFull = locationFull;
         this.locationDetail = locationDetail;
         this.detail = detail;
+        this.auction = auction;
         this.auction_time = auction_time;
     }
 

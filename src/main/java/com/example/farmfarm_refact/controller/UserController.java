@@ -75,7 +75,7 @@ public class UserController {
 
     @GetMapping("/me")
     public ApiResponse<UserResponseDto.UserGetResponseDto> getCurrentUser(@AuthenticationPrincipal UserEntity user) {
-        return ApiResponse.onSuccess(new UserResponseDto.UserGetResponseDto(user.getUId(), user.getNickname(), user.getEmail(), user.getImage()));
+        return ApiResponse.onSuccess(new UserResponseDto.UserGetResponseDto(user.getUId(), user.getNickname(), user.getEmail(), user.getImage(), user.getFarm().getFId()));
     }
 
 //    @DeleteMapping("/")
@@ -88,7 +88,7 @@ public class UserController {
     @PostMapping("/nickname")
     public ApiResponse<UserResponseDto.UserGetResponseDto> setNickname(@AuthenticationPrincipal UserEntity user, @RequestBody UserRequestDto.UserSetNicknameRequestDto userSetNicknameRequestDto) {
         UserEntity changeUser = userService.changeNickname(user, userSetNicknameRequestDto);
-        return ApiResponse.onSuccess(new UserResponseDto.UserGetResponseDto(changeUser.getUId(), changeUser.getNickname(), changeUser.getEmail(), changeUser.getImage()));
+        return ApiResponse.onSuccess(new UserResponseDto.UserGetResponseDto(changeUser.getUId(), changeUser.getNickname(), changeUser.getEmail(), changeUser.getImage(), user.getFarm().getFId()));
     }
 
 

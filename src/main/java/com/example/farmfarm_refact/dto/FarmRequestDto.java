@@ -22,6 +22,7 @@ public class FarmRequestDto {
         private String locationDetail;
         private String detail;
         private List<Long> images;
+        private boolean auction;
         private int auction_time;
     }
 

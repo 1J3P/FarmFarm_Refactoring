@@ -11,7 +11,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -47,6 +49,9 @@ public class UserEntity implements UserDetails {
     private String refreshToken;
 
     private LocalDateTime refreshTokenExpiresAt;
+
+    @OneToOne(mappedBy = "user")
+    private FarmEntity farm;
 
     @Builder
     public UserEntity(Long id, String nickname, String email, String user_role, String platform, String status, String image) {
