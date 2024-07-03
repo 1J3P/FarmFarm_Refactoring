@@ -80,9 +80,9 @@ public class FarmController {
 
     // 농장 정보 수정
     @PatchMapping("/{fId}")
-    public ApiResponse updateFarm(@PathVariable Long fId, @RequestBody @Valid FarmRequestDto.FarmUpdateRequestDto uFarm) {
-        uFarm.setFId(fId);
-        farmService.updateFarm(uFarm);
+    public ApiResponse updateFarm(@PathVariable Long fId, @RequestBody @Valid FarmRequestDto.FarmUpdateRequestDto farmUpdateRequestDto) {
+        farmUpdateRequestDto.setFId(fId);
+        farmService.updateFarm(farmUpdateRequestDto);
         return ApiResponse.onSuccess(SuccessStatus.LIMJANG_UPDATE);
     }
 

@@ -22,9 +22,9 @@ import static com.example.farmfarm_refact.apiPayload.code.status.ErrorStatus.S3_
 @RequiredArgsConstructor
 @RequestMapping("/s3")
 public class S3Controller {
-    private final S3Service S3Service;
+    private static final S3Service S3Service = null;
     @Autowired
-    FileService fileService;
+    static FileService fileService;
     @PostMapping("/file")
     public ApiResponse<List<FileResponseDto.FileCreateResponseDto>> uploadFile(@RequestPart List<MultipartFile> multipartFiles) {
         System.out.println("file 요청");
@@ -44,7 +44,7 @@ public class S3Controller {
         }
     }
     @DeleteMapping("/file/{fileIdx}")
-    public ResponseEntity<String> deleteFile(@PathVariable("fileIdx") int fileIdx) {
+    public static ResponseEntity<String> deleteFile(@PathVariable("fileIdx") int fileIdx) {
         try {
             FileEntity file = fileService.findByFileId(fileIdx);
             S3Service.deleteFile(file.getFilename());
