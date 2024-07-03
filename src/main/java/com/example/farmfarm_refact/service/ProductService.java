@@ -46,7 +46,12 @@ public class ProductService {
             else {
                 throw new ExceptionHandler(FARM_AUCTION_FALSE) ;
             }
-        } else {
+        }
+        else if (newProduct.getType() == 1) {
+            newProduct.setGroupProductQuantity(productCreateRequestDto.getGroupProductQuantity());
+            newProduct.setGroupProductDiscount(productCreateRequestDto.getGroupProductDiscount());
+        }
+        else {
             newProduct.setQuantity(productCreateRequestDto.getQuantity());
             newProduct.setPrice(productCreateRequestDto.getPrice());
         }

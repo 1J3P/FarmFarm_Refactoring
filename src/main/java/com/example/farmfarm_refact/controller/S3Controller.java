@@ -22,7 +22,8 @@ import static com.example.farmfarm_refact.apiPayload.code.status.ErrorStatus.S3_
 @RequiredArgsConstructor
 @RequestMapping("/s3")
 public class S3Controller {
-    private static final S3Service S3Service = null;
+    @Autowired
+    static S3Service S3Service;
     @Autowired
     static FileService fileService;
     @PostMapping("/file")
