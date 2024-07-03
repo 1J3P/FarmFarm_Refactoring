@@ -63,7 +63,7 @@ public class FarmConverter {
                 .build();
     }
 
-    //
+    // update 시 필요한 메서드
     public static FarmEntity toNewFarm(FarmRequestDto.FarmUpdateRequestDto updateDto) {
       return FarmEntity.builder()
               .name(updateDto.getName())

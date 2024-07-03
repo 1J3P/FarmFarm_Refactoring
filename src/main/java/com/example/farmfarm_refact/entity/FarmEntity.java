@@ -67,12 +67,13 @@ public class FarmEntity {
     }
 
     public void updateFarm(FarmEntity newFarm) {
-        this.name = name;
-        this.locationCity = locationCity;
-        this.locationGu = locationGu;
-        this.locationFull = locationFull;
-        this.locationDetail = locationDetail;
-        this.detail = detail;
+        this.name = newFarm.getName();
+        this.locationCity = newFarm.getLocationCity();
+        this.locationGu = newFarm.getLocationGu();
+        this.locationFull = newFarm.getLocationFull();
+        this.locationDetail = newFarm.getLocationDetail();
+        this.detail = newFarm.getDetail();
+        this.image = newFarm.getImage();
     }
 
 }

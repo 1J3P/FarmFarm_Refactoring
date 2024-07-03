@@ -1,13 +1,13 @@
 package com.example.farmfarm_refact.entity;
 
+import com.example.farmfarm_refact.dto.ProductRequestDto;
 import jakarta.persistence.*;
-import lombok.Data;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.DynamicUpdate;
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @Entity
@@ -59,6 +59,9 @@ public class ProductEntity {
 
     private String status;
 
+    @OneToMany(mappedBy = "product")
+    private List<FileEntity> files = new ArrayList<>();
+
     public ProductEntity(String name, String detail, int type, ProductCategory productCategory, ShippingMethod shippingMethod, String status) {
         this.name = name;
         this.detail = detail;
@@ -66,5 +69,27 @@ public class ProductEntity {
         this.productCategory = productCategory;
         this.shippingMethod = shippingMethod;
         this.status = status;
+    }
+
+    @Builder
+    public ProductEntity(String name, String detail, int quantity, int price, ShippingMethod shippingMethod, String directLocation, ProductCategory productCategory, List<FileEntity> files) {
+        this.name = name;
+        this.detail = detail;
+        this.quantity = quantity;
+        this.price = price;
+        this.shippingMethod = shippingMethod;
+        this.directLocation = directLocation;
+        this.productCategory = productCategory;
+        this.files = files;
+    }
+
+    public void updateProduct(ProductEntity product) {
+        this.name = product.getName();
+        this.detail = product.getDetail();
+        this.quantity = product.getQuantity();
+        this.price = product.getPrice();
+        this.shippingMethod = product.getShippingMethod();
+        this.directLocation = product.getDirectLocation();
+        this.productCategory = product.getProductCategory();
     }
 }
