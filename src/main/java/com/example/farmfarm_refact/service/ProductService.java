@@ -68,7 +68,8 @@ public class ProductService {
 
     // 농장별 상품 리스트 조회
     public ProductResponseDto.ProductListResponseDto getFarmProduct(FarmResponseDto.FarmReadResponseDto farm) {
-        List<ProductEntity> productList = productRepository.findAllByFarmAndStatusLike(farm, "yes");
+        FarmEntity farmEntity = farmRepository.findByfId(farm.getFId());
+        List<ProductEntity> productList = productRepository.findAllByFarmAndStatusLike(farmEntity, "yes");
         return ProductConverter.toProductList(productList);
     }
 
