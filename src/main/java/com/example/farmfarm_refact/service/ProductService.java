@@ -124,13 +124,13 @@ public class ProductService {
                 .orElseThrow(() -> new ExceptionHandler(ErrorStatus.PRODUCT_NOT_FOUND));;
         // 농장 주인인지 확인
         if (user.equals(product.getFarm().getUser())) {
-            product.setStatus("no");
-            productRepository.save(product);
             if (product.getFiles() != null) {
                 for (FileEntity file : product.getFiles()) {
                     fileService.deleteByFileId(file.getFileId().intValue());
                 }
             }
+            product.setStatus("no");
+            productRepository.save(product);
         }
         else
             throw new ExceptionHandler(FARM_USER_NOT_EQUAL);
