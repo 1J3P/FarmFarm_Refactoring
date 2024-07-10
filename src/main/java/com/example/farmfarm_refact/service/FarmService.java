@@ -143,6 +143,11 @@ public class FarmService {
                 System.out.println("농장에 상품이 없으므로 농장을 삭제합니다.");
                 farm.setStatus("no");
                 farmRepository.save(farm);
+                if (farm.getFiles() != null) {
+                    for (FileEntity file : farm.getFiles()) {
+                        fileService.deleteByFileId(file.getFileId().intValue());
+                    }
+                }
             }
             else
                 throw new ExceptionHandler(ErrorStatus.FARM_HAS_PRODUCT);

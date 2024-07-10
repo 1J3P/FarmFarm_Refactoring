@@ -87,7 +87,7 @@ public class FarmController {
     }
 
 
-    // 농장 삭제 *추후에 productService 구현 후 주석 해제 할 것. 절대 지우지 마시오!!*
+    // 농장 삭제
     @DeleteMapping("/{fId}")
     public ApiResponse deleteFarm(@AuthenticationPrincipal UserEntity user, @PathVariable("fId") long fId)  {
         farmService.deleteFarm(user, fId);

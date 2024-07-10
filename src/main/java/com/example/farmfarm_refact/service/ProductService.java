@@ -35,6 +35,8 @@ public class ProductService {
     private ProductRepository productRepository;
     @Autowired
     private FileRepository fileRepository;
+    @Autowired
+    private FileService fileService;
 
     // 상품 등록
     public ProductResponseDto.ProductCreateResponseDto saveProduct(UserEntity user, ProductRequestDto.ProductCreateRequestDto productCreateRequestDto) {
@@ -124,6 +126,11 @@ public class ProductService {
         if (user.equals(product.getFarm().getUser())) {
             product.setStatus("no");
             productRepository.save(product);
+            if (product.getFiles() != null) {
+                for (FileEntity file : product.getFiles()) {
+                    fileService.deleteByFileId(file.getFileId().intValue());
+                }
+            }
         }
         else
             throw new ExceptionHandler(FARM_USER_NOT_EQUAL);
