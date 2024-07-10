@@ -19,4 +19,16 @@ public class UserResponseDto {
         private String image;
         private Long myFId;
     }
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class UserNicknameGetResponseDto {
+
+        private Long uId;
+        private String nickname;
+        private String email;
+        private String image;
+    }
 }
