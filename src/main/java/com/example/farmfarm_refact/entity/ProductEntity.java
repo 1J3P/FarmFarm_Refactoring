@@ -63,7 +63,7 @@ public class ProductEntity {
 
     private String status;
 
-    @OneToMany(mappedBy = "product")
+    @OneToMany(mappedBy = "product", cascade = CascadeType.REMOVE)
     private List<FileEntity> files = new ArrayList<>();
 
     public ProductEntity(String name, String detail, int type, ProductCategory productCategory, ShippingMethod shippingMethod, String status) {

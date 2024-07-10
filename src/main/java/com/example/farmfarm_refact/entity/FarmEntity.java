@@ -52,7 +52,7 @@ public class FarmEntity {
 
     private String status;
 
-    @OneToMany(mappedBy = "farm")
+    @OneToMany(mappedBy = "farm", cascade = CascadeType.REMOVE)
     private List<FileEntity> files = new ArrayList<>();
 
     @Builder
