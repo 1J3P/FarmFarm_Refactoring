@@ -1,6 +1,7 @@
 package com.example.farmfarm_refact.dto;
 
 import com.example.farmfarm_refact.entity.FarmEntity;
+import com.example.farmfarm_refact.entity.ProductEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -52,6 +53,17 @@ public class ProductResponseDto {
         private String detail;
         private List<FileResponseDto.FileCreateResponseDto> images;
         private FarmEntity farm;
+    }
+
+    @Getter
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class ItemDto {
+        private long UId;
+        private long PId;
+        private int quantity;
+        private ProductEntity product;
     }
 
 }

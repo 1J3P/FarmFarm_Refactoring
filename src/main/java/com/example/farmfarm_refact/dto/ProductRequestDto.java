@@ -57,4 +57,13 @@ public class ProductRequestDto {
         private List<Long> images;
     }
 
+    @Builder
+    @Getter
+    @Setter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class ItemDto {
+        private Integer quantity;
+    }
+
 }

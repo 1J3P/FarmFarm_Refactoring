@@ -7,11 +7,16 @@ import com.example.farmfarm_refact.dto.FarmRequestDto;
 import com.example.farmfarm_refact.dto.FarmResponseDto;
 import com.example.farmfarm_refact.dto.ProductRequestDto;
 import com.example.farmfarm_refact.dto.ProductResponseDto;
+import com.example.farmfarm_refact.entity.Cart.Cart;
+import com.example.farmfarm_refact.entity.Cart.Item;
+import com.example.farmfarm_refact.entity.ProductEntity;
 import com.example.farmfarm_refact.entity.UserEntity;
 import com.example.farmfarm_refact.service.FarmService;
 import com.example.farmfarm_refact.service.ProductService;
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
@@ -19,6 +24,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/product")
@@ -63,5 +69,40 @@ public class ProductController {
         uProduct.setPId(pId);
         productService.updateProduct(uProduct);
         return ApiResponse.onSuccess(SuccessStatus.LIMJANG_UPDATE);
+    }
+
+    // 장바구니(세션)에 상품 담기
+    @PostMapping("/{pId}/cart")
+    public ApiResponse addToCart(@AuthenticationPrincipal UserEntity user, @PathVariable("pId") long pId, @RequestBody ProductRequestDto.ItemDto itemDto, HttpSession session) {
+        productService.addToCart(user, pId, itemDto.getQuantity(), session);
+        return ApiResponse.onSuccess(SuccessStatus._OK);
+    }
+
+    // 장바구니로 이동해서 담은 상품 조회하기
+    @GetMapping("/cart")
+    public ModelAndView forwardToCart(HttpSession session) {
+        ModelAndView mav = new ModelAndView("/home/product/shoppingCart");
+        List<Item> itemList = new ArrayList<>();
+        Cart cart = (Cart)session.getAttribute("cart");
+        if (cart != null) {
+            for (Item i : cart.getItemList()) {
+                itemList.add(i);
+            }
+        }
+        mav.addObject("itemList", itemList);
+        return mav;
+    }
+
+    @DeleteMapping("/cart/delete/{p_id}")
+    public ResponseEntity<Object> deleteFromCart(HttpSession session, @PathVariable("p_id") long p_id) {
+        UserEntity user = (UserEntity)session.getAttribute("user");
+        try {
+            Cart cart = (Cart)session.getAttribute("cart");
+            cart.delete(p_id);
+            session.setAttribute("cart", cart);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("exception");
+        }
+        return ResponseEntity.ok().body("장바구니 삭제 완료");
     }
 }
