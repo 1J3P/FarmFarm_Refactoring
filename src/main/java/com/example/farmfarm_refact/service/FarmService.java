@@ -141,13 +141,13 @@ public class FarmService {
         if (user.equals(farm.getUser())) {
             if (productService.getFarmProduct(FarmConverter.toFarmReadResponseDto(farm)) == null || productService.getFarmProduct(FarmConverter.toFarmReadResponseDto(farm)).getProductList().isEmpty()) { // 농장에 상품이 없으면
                 System.out.println("농장에 상품이 없으므로 농장을 삭제합니다.");
-                farm.setStatus("no");
-                farmRepository.save(farm);
                 if (farm.getFiles() != null) {
                     for (FileEntity file : farm.getFiles()) {
                         fileService.deleteByFileId(file.getFileId().intValue());
                     }
                 }
+                farm.setStatus("no");
+                farmRepository.save(farm);
             }
             else
                 throw new ExceptionHandler(ErrorStatus.FARM_HAS_PRODUCT);
