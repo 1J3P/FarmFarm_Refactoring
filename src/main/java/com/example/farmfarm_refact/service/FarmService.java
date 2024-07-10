@@ -34,6 +34,8 @@ public class FarmService {
     private FileRepository fileRepository;
     @Autowired
     private S3Controller s3Controller;
+    @Autowired
+    private FileService fileService;
 
     // 농장 등록
     public FarmResponseDto.FarmCreateResponseDto saveFarm(UserEntity user, FarmRequestDto.FarmCreateRequestDto farmCreateRequestDto) {
@@ -128,6 +130,7 @@ public class FarmService {
         if (farmUpdateRequestDto.getDeleteImages() != null) {
             for (Long imageId : farmUpdateRequestDto.getDeleteImages()) {
                 s3Controller.deleteFile(imageId.intValue());
+                fileService.deleteByFileId(imageId.intValue());
             }
         }
     }
