@@ -55,15 +55,4 @@ public class ProductResponseDto {
         private FarmEntity farm;
     }
 
-    @Getter
-    @Builder
-    @NoArgsConstructor
-    @AllArgsConstructor
-    public static class ItemDto {
-        private long UId;
-        private long PId;
-        private int quantity;
-        private ProductEntity product;
-    }
-
 }

@@ -9,8 +9,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 public class Item {
-    private Long UId;
-    private Long PId;
+    private Long uId;
     private Integer quantity;
     private ProductEntity product;
 }

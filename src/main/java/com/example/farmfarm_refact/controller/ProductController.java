@@ -3,10 +3,7 @@ package com.example.farmfarm_refact.controller;
 
 import com.example.farmfarm_refact.apiPayload.ApiResponse;
 import com.example.farmfarm_refact.apiPayload.code.status.SuccessStatus;
-import com.example.farmfarm_refact.dto.FarmRequestDto;
-import com.example.farmfarm_refact.dto.FarmResponseDto;
-import com.example.farmfarm_refact.dto.ProductRequestDto;
-import com.example.farmfarm_refact.dto.ProductResponseDto;
+import com.example.farmfarm_refact.dto.*;
 import com.example.farmfarm_refact.entity.Cart.Cart;
 import com.example.farmfarm_refact.entity.Cart.Item;
 import com.example.farmfarm_refact.entity.ProductEntity;
@@ -73,24 +70,15 @@ public class ProductController {
 
     // 장바구니(세션)에 상품 담기
     @PostMapping("/{pId}/cart")
-    public ApiResponse addToCart(@AuthenticationPrincipal UserEntity user, @PathVariable("pId") long pId, @RequestBody ProductRequestDto.ItemDto itemDto, HttpSession session) {
+    public ApiResponse addToCart(@AuthenticationPrincipal UserEntity user, @PathVariable("pId") long pId, @RequestBody CartRequestDto.ItemDto itemDto, HttpSession session) {
         productService.addToCart(user, pId, itemDto.getQuantity(), session);
         return ApiResponse.onSuccess(SuccessStatus._OK);
     }
 
     // 장바구니로 이동해서 담은 상품 조회하기
     @GetMapping("/cart")
-    public ModelAndView forwardToCart(HttpSession session) {
-        ModelAndView mav = new ModelAndView("/home/product/shoppingCart");
-        List<Item> itemList = new ArrayList<>();
-        Cart cart = (Cart)session.getAttribute("cart");
-        if (cart != null) {
-            for (Item i : cart.getItemList()) {
-                itemList.add(i);
-            }
-        }
-        mav.addObject("itemList", itemList);
-        return mav;
+    public ApiResponse<CartResponseDto.ItemListResponseDto> forwardToCart(HttpSession session) {
+        return ApiResponse.onSuccess(productService.getCartItemList(session));
     }
 
     @DeleteMapping("/cart/delete/{p_id}")

@@ -3,6 +3,7 @@ package com.example.farmfarm_refact.service;
 import com.example.farmfarm_refact.apiPayload.ExceptionHandler;
 import com.example.farmfarm_refact.apiPayload.code.status.ErrorStatus;
 import com.example.farmfarm_refact.controller.ProductController;
+import com.example.farmfarm_refact.converter.CartConverter;
 import com.example.farmfarm_refact.converter.FarmConverter;
 import com.example.farmfarm_refact.converter.ProductConverter;
 import com.example.farmfarm_refact.dto.*;
@@ -21,6 +22,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
@@ -160,11 +162,22 @@ public class ProductService {
                 throw new ExceptionHandler(PRODUCT_CART_FARM_DIFF);
         }
         item.setUId(user.getUId());
-        item.setPId(product.getPId());
         item.setQuantity(quantity);
         item.setProduct(product);
         cart.push(item);
         session.setAttribute("cart", cart);
+    }
+
+    // 장바구니로 이동해서 담은 상품 조회하기
+    public CartResponseDto.ItemListResponseDto getCartItemList(HttpSession session) {
+        Cart cart = (Cart)session.getAttribute("cart");
+        List<Item> itemList = new ArrayList<>();
+        if (cart != null) {
+            for (Item i : cart.getItemList()) {
+                itemList.add(i);
+            }
+        }
+        return CartConverter.toItemList(itemList);
     }
 
 }
