@@ -40,7 +40,7 @@ public class OrderService {
         for (Item i : cart.getItemList()) {
             OrderDetailEntity orderDetail = new OrderDetailEntity();
             orderDetail.setQuantity(i.getQuantity());
-            ProductEntity product = productRepository.findById(i.getPId())
+            ProductEntity product = productRepository.findById(i.getProduct().getPId())
                     .orElseThrow(() -> new ExceptionHandler(ErrorStatus.PRODUCT_NOT_FOUND));
             if (product.isDirect() == true) {   // 직거래만
                 isDirect = 1;
