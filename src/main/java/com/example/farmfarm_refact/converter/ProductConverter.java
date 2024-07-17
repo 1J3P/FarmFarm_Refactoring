@@ -65,7 +65,7 @@ public class ProductConverter {
                 .rating(product.getRating())
                 .detail(product.getDetail())
                 .images(FileConverter.toFileCreateResponseDtoList(product.getFiles()))
-                .farm(product.getFarm())
+                .farm(FarmConverter.toFarmReadResponseDto(product.getFarm()))
                 .build();
     }
 
