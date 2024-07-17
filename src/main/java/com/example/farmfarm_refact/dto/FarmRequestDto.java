@@ -47,6 +47,7 @@ public class FarmRequestDto {
         @NotNull
         private String detail;
         private Boolean auction;
-        private List<Long> images;
+        private List<Long> addImages;
+        private List<Long> deleteImages;
     }
 }

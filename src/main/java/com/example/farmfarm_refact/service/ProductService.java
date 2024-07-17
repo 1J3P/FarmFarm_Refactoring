@@ -7,16 +7,23 @@ import com.example.farmfarm_refact.converter.FarmConverter;
 import com.example.farmfarm_refact.converter.ProductConverter;
 import com.example.farmfarm_refact.dto.*;
 import com.example.farmfarm_refact.entity.*;
+import com.example.farmfarm_refact.entity.Cart.Cart;
+import com.example.farmfarm_refact.entity.Cart.Item;
 import com.example.farmfarm_refact.repository.FarmRepository;
 import com.example.farmfarm_refact.repository.FileRepository;
 import com.example.farmfarm_refact.repository.ProductRepository;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Map;
 
 import static com.example.farmfarm_refact.apiPayload.code.status.ErrorStatus.*;
 
@@ -28,6 +35,8 @@ public class ProductService {
     private ProductRepository productRepository;
     @Autowired
     private FileRepository fileRepository;
+    @Autowired
+    private FileService fileService;
 
     // 상품 등록
     public ProductResponseDto.ProductCreateResponseDto saveProduct(UserEntity user, ProductRequestDto.ProductCreateRequestDto productCreateRequestDto) {
@@ -46,7 +55,12 @@ public class ProductService {
             else {
                 throw new ExceptionHandler(FARM_AUCTION_FALSE) ;
             }
-        } else {
+        }
+        else if (newProduct.getType() == 1) {
+            newProduct.setGroupProductQuantity(productCreateRequestDto.getGroupProductQuantity());
+            newProduct.setGroupProductDiscount(productCreateRequestDto.getGroupProductDiscount());
+        }
+        else {
             newProduct.setQuantity(productCreateRequestDto.getQuantity());
             newProduct.setPrice(productCreateRequestDto.getPrice());
         }
@@ -110,6 +124,11 @@ public class ProductService {
                 .orElseThrow(() -> new ExceptionHandler(ErrorStatus.PRODUCT_NOT_FOUND));;
         // 농장 주인인지 확인
         if (user.equals(product.getFarm().getUser())) {
+            if (product.getFiles() != null) {
+                for (FileEntity file : product.getFiles()) {
+                    fileService.deleteByFileId(file.getFileId().intValue());
+                }
+            }
             product.setStatus("no");
             productRepository.save(product);
         }
@@ -124,6 +143,28 @@ public class ProductService {
         ProductEntity newProduct = ProductConverter.toNewProduct(updateProduct);
         oldProduct.updateProduct(newProduct);
         productRepository.save(oldProduct);
+    }
+
+    // 장바구니(세션)에 상품 담기
+    public void addToCart(UserEntity user, Long pId, Integer quantity, HttpSession session) {
+        ProductEntity product = productRepository.findBypIdAndStatusLike(pId, "yes")
+                .orElseThrow(() -> new ExceptionHandler(ErrorStatus.PRODUCT_NOT_FOUND));
+        Item item = new Item();
+        Cart cart = (Cart)session.getAttribute("cart");
+        if (cart == null) {
+            cart = new Cart();
+            session.setAttribute("cart", cart);
+        }
+        if (!(cart.getItemList().isEmpty())){
+            if (cart.getItemList().get(0).getProduct().getFarm().getFId() != product.getFarm().getFId())  // 같은 농장 상품인지 확인 필요. 다르다면 X
+                throw new ExceptionHandler(PRODUCT_CART_FARM_DIFF);
+        }
+        item.setUId(user.getUId());
+        item.setPId(product.getPId());
+        item.setQuantity(quantity);
+        item.setProduct(product);
+        cart.push(item);
+        session.setAttribute("cart", cart);
     }
 
 }

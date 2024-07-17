@@ -30,6 +30,8 @@ public class ProductRequestDto {
         private String directLocation;
         private ProductCategory productCategory;
         private List<Long> images;
+        private Integer groupProductQuantity;
+        private Integer groupProductDiscount;
     }
 
     @Builder
@@ -54,6 +56,15 @@ public class ProductRequestDto {
         private ProductCategory productCategory;
         private List<Long> addImages;
         private List<Long> deleteImages;
+    }
+
+    @Builder
+    @Getter
+    @Setter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class ItemDto {
+        private Integer quantity;
     }
 
 }

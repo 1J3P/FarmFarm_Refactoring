@@ -51,6 +51,10 @@ public class ProductEntity {
 
     private int type; // 0: 일반 상품, 1: 공동구매 상품, 2: 경매 상품
 
+    private int groupProductQuantity; // 공동구매 상품 수량
+
+    private int groupProductDiscount; // 공동구매 상품 할인율
+
     @ManyToOne
     @JoinColumn(name="farm")
     private FarmEntity farm;
@@ -59,7 +63,7 @@ public class ProductEntity {
 
     private String status;
 
-    @OneToMany(mappedBy = "product")
+    @OneToMany(mappedBy = "product", cascade = CascadeType.REMOVE)
     private List<FileEntity> files = new ArrayList<>();
 
     public ProductEntity(String name, String detail, int type, ProductCategory productCategory, ShippingMethod shippingMethod, String status) {

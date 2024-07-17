@@ -86,9 +86,9 @@ public class UserController {
 //    }
 
     @PostMapping("/nickname")
-    public ApiResponse<UserResponseDto.UserGetResponseDto> setNickname(@AuthenticationPrincipal UserEntity user, @RequestBody UserRequestDto.UserSetNicknameRequestDto userSetNicknameRequestDto) {
+    public ApiResponse<UserResponseDto.UserNicknameGetResponseDto> setNickname(@AuthenticationPrincipal UserEntity user, @RequestBody UserRequestDto.UserSetNicknameRequestDto userSetNicknameRequestDto) {
         UserEntity changeUser = userService.changeNickname(user, userSetNicknameRequestDto);
-        return ApiResponse.onSuccess(new UserResponseDto.UserGetResponseDto(changeUser.getUId(), changeUser.getNickname(), changeUser.getEmail(), changeUser.getImage(), user.getFarm().getFId()));
+        return ApiResponse.onSuccess(new UserResponseDto.UserNicknameGetResponseDto(changeUser.getUId(), changeUser.getNickname(), changeUser.getEmail(), changeUser.getImage()));
     }
 
 

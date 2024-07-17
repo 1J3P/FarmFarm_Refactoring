@@ -80,14 +80,14 @@ public class FarmController {
 
     // 농장 정보 수정
     @PatchMapping("/{fId}")
-    public ApiResponse updateFarm(@PathVariable Long fId, @RequestBody @Valid FarmRequestDto.FarmUpdateRequestDto uFarm) {
-        uFarm.setFId(fId);
-        farmService.updateFarm(uFarm);
+    public ApiResponse updateFarm(@PathVariable Long fId, @RequestBody @Valid FarmRequestDto.FarmUpdateRequestDto farmUpdateRequestDto) {
+        farmUpdateRequestDto.setFId(fId);
+        farmService.updateFarm(farmUpdateRequestDto);
         return ApiResponse.onSuccess(SuccessStatus.LIMJANG_UPDATE);
     }
 
 
-    // 농장 삭제 *추후에 productService 구현 후 주석 해제 할 것. 절대 지우지 마시오!!*
+    // 농장 삭제
     @DeleteMapping("/{fId}")
     public ApiResponse deleteFarm(@AuthenticationPrincipal UserEntity user, @PathVariable("fId") long fId)  {
         farmService.deleteFarm(user, fId);

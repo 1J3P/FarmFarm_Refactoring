@@ -1,5 +1,6 @@
 package com.example.farmfarm_refact.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -51,7 +52,7 @@ public class FarmEntity {
 
     private String status;
 
-    @OneToMany(mappedBy = "farm")
+    @OneToMany(mappedBy = "farm", cascade = CascadeType.REMOVE)
     private List<FileEntity> files = new ArrayList<>();
 
     @Builder
