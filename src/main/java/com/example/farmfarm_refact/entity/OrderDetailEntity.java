@@ -15,7 +15,7 @@ import java.util.List;
 @Entity
 @NoArgsConstructor
 @DynamicUpdate
-@Table(name="farm")
+@Table(name="order_detail")
 @Getter
 @Setter
 public class OrderDetailEntity {
