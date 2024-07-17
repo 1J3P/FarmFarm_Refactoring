@@ -20,14 +20,13 @@ public enum SuccessStatus implements BaseCode {
     LIMJANG_DELETE(HttpStatus.OK, "LIMJANG2000", "임장 게시글 삭제 성공하였습니다."),
     LIMJANG_UPDATE(HttpStatus.OK, "LIMJANG2001", "임장 게시글 수정 성공하였습니다."),
 
-
-    // 스크랩 관련 응답
-    _SCRAP_ACTION_SCRAP(HttpStatus.OK, "SCRAP2000", "스크랩 추가 성공하였습니다."),
-    _SCRAP_ACTION_UNSCRAP(HttpStatus.OK, "SCRAP2001", "스크랩 취소 성공하였습니다."),
-
     // 이미지 관련 응답
     IMAGE_UPDATE(HttpStatus.OK, "IMAGE2000", "이미지 업로드 성공하였습니다."),
-    IMAGE_DELETE(HttpStatus.OK, "IMAGE2001", "이미지 삭제 성공하였습니다.");
+    IMAGE_DELETE(HttpStatus.OK, "IMAGE2001", "이미지 삭제 성공하였습니다."),
+
+    // 상품 관련 응답
+    CART_ITEM_ADD(HttpStatus.OK, "CART2001", "장바구니에 상품이 담겼습니다."),
+    CART_ITEM_DELETE(HttpStatus.OK, "CART2001", "장바구니에 상품이 삭제되었습니다.");
 
     private final HttpStatus httpStatus;
     private final String code;
