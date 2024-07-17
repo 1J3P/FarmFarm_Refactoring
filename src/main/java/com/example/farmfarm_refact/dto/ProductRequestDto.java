@@ -52,7 +52,8 @@ public class ProductRequestDto {
         private ShippingMethod shippingMethod;
         private String directLocation;
         private ProductCategory productCategory;
-        private List<Long> images;
+        private List<Long> addImages;
+        private List<Long> deleteImages;
     }
 
 }
