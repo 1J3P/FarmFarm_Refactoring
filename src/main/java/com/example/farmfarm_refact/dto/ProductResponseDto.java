@@ -30,7 +30,7 @@ public class ProductResponseDto {
         private String name;
         private int price;
         private List<FileResponseDto.FileCreateResponseDto> images;
-        private FarmEntity farm;
+        private FarmResponseDto.FarmReadResponseDto farm;
     }
 
     @Getter
