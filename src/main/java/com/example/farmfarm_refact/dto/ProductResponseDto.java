@@ -52,7 +52,7 @@ public class ProductResponseDto {
         private Double rating;
         private String detail;
         private List<FileResponseDto.FileCreateResponseDto> images;
-        private FarmEntity farm;
+        private FarmResponseDto.FarmReadResponseDto farm;
     }
 
 }
