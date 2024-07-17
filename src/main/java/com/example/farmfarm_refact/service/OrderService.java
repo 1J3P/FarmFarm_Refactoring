@@ -3,10 +3,13 @@ package com.example.farmfarm_refact.service;
 
 import com.example.farmfarm_refact.apiPayload.ExceptionHandler;
 import com.example.farmfarm_refact.apiPayload.code.status.ErrorStatus;
+import com.example.farmfarm_refact.apiPayload.exception.GeneralException;
 import com.example.farmfarm_refact.controller.S3Controller;
 import com.example.farmfarm_refact.converter.FarmConverter;
+import com.example.farmfarm_refact.converter.OrderConverter;
 import com.example.farmfarm_refact.dto.FarmRequestDto;
 import com.example.farmfarm_refact.dto.FarmResponseDto;
+import com.example.farmfarm_refact.dto.OrderRequestDto;
 import com.example.farmfarm_refact.dto.OrderResponseDto;
 import com.example.farmfarm_refact.entity.*;
 import com.example.farmfarm_refact.entity.Cart.Cart;
@@ -32,7 +35,7 @@ public class OrderService {
     private final OrderRepository orderRepository;
     private final ProductRepository productRepository;
 
-    // 농장 등록
+
     public OrderResponseDto.OrderCartResponseDto saveOrderDetailCart(HttpSession session) {
         List<OrderDetailEntity> details = new ArrayList<>();
         Cart cart = (Cart)session.getAttribute("cart");
@@ -52,6 +55,34 @@ public class OrderService {
         }
         session.setAttribute("orderDetail", details);
         return new OrderResponseDto.OrderCartResponseDto(isDirect);
+    }
+
+    public OrderResponseDto.OrderReadResponseDto createOrder(UserEntity user, HttpSession session, OrderRequestDto.OrderCreateRequestDto dto) {
+        List<OrderDetailEntity> details = (List<OrderDetailEntity>)session.getAttribute("orderDetail");
+        OrderEntity order = OrderConverter.toOrderEntity(dto);
+        order.setUser(user);
+        int totalPrice = 0;
+        int totalQuantity = 0;
+        for (OrderDetailEntity d : details) {
+            totalPrice += d.getPrice();
+            totalQuantity += d.getQuantity();
+        }
+        if (order.isDelivery() == true) {
+            totalPrice += 3000;
+        }
+
+        order.setTotalPrice(totalPrice);
+        order.setTotalQuantity(totalQuantity);
+        order.setPaymentStatus(PaymentStatus.BEFORE_PAYMENT);
+        OrderEntity saveOrder = orderRepository.save(order);
+        OrderEntity getOrder = orderRepository.findById(saveOrder.getOId())
+                .orElseThrow(()->new ExceptionHandler(ErrorStatus.ORDER_NOT_FOUND));
+        for (OrderDetailEntity d : details) {
+            d.setOrder(getOrder);
+            orderDetailRepository.save(d);
+        }
+        session.setAttribute("cart", null);
+        return OrderConverter.toOrderReadResponseDto(getOrder);
     }
 
 }

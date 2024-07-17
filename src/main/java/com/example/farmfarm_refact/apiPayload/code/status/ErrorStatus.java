@@ -68,7 +68,15 @@ public enum ErrorStatus implements BaseErrorCode {
 
     //product 에러
     PRODUCT_NOT_FOUND(HttpStatus.NOT_FOUND, "PRODUCT4001", "product가 존재하지 않습니다"),
-    PRODUCT_CART_FARM_DIFF(HttpStatus.NO_CONTENT, "PRODUCT4002", "다른 농장의 상품은 장바구니에 담을 수 없습니다.");
+    PRODUCT_CART_FARM_DIFF(HttpStatus.NO_CONTENT, "PRODUCT4002", "다른 농장의 상품은 장바구니에 담을 수 없습니다."),
+
+    //order 에러
+    ORDER_NOT_FOUND(HttpStatus.NOT_FOUND, "ORDER4001", "order가 존재하지 않습니다"),
+
+
+
+
+    ;
 
 
     private final HttpStatus httpStatus;
