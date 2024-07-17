@@ -3,10 +3,7 @@ package com.example.farmfarm_refact.controller;
 
 import com.example.farmfarm_refact.apiPayload.ApiResponse;
 import com.example.farmfarm_refact.apiPayload.code.status.SuccessStatus;
-import com.example.farmfarm_refact.dto.FarmRequestDto;
-import com.example.farmfarm_refact.dto.FarmResponseDto;
-import com.example.farmfarm_refact.dto.OrderResponseDto;
-import com.example.farmfarm_refact.dto.ProductResponseDto;
+import com.example.farmfarm_refact.dto.*;
 import com.example.farmfarm_refact.entity.UserEntity;
 import com.example.farmfarm_refact.service.FarmService;
 import com.example.farmfarm_refact.service.OrderService;
@@ -30,5 +27,9 @@ public class OrderController {
         return ApiResponse.onSuccess(orderService.saveOrderDetailCart(session));
     }
 
+    @PostMapping("")
+    public ApiResponse<OrderResponseDto.OrderReadResponseDto> createOrder(@AuthenticationPrincipal UserEntity user, @RequestBody OrderRequestDto.OrderCreateRequestDto order, HttpSession session) {
+        return ApiResponse.onSuccess(orderService.createOrder(user, session, order));
+    }
 
 }

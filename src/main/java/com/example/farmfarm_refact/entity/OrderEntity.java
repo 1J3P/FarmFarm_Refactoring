@@ -21,14 +21,14 @@ public class OrderEntity {
     @Id
     @GeneratedValue
     @Column(name="o_id")
-    private long oId;
+    private Integer oId;
 
     private long totalPrice;
 
     private int totalQuantity;
 
     //결제에 대한 상태
-    private String status;
+    private PaymentStatus paymentStatus;
 
     @Column(name="is_delivery")
     private boolean delivery;
@@ -44,7 +44,7 @@ public class OrderEntity {
     private String deliveryMemo;
 
     @OneToMany(mappedBy = "order")
-    private List<OrderDetailEntity> orders = new ArrayList<>();
+    private List<OrderDetailEntity> orderDetails = new ArrayList<>();
 
     @ManyToOne
     @JoinColumn(name="u_id")
@@ -53,6 +53,15 @@ public class OrderEntity {
     //왜필요할지 생각해보기
     //private int type; //0 일반, 1 공동, 2 경매
 
+    @Builder
+    public OrderEntity(boolean delivery, String deliveryAddress, String deliveryAddressDetail, String deliveryName, String deliveryPhone, String deliveryMemo) {
+        this.delivery = delivery;
+        this.deliveryAddress = deliveryAddress;
+        this.deliveryAddressDetail = deliveryAddressDetail;
+        this.deliveryName = deliveryName;
+        this.deliveryPhone = deliveryPhone;
+        this.deliveryMemo = deliveryMemo;
+    }
 }
 
 

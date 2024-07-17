@@ -22,7 +22,7 @@ public class OrderDetailEntity {
     @Id
     @GeneratedValue
     @Column(name="od_id")
-    private Long odId;
+    private Integer odId;
 
     private int quantity;
 
