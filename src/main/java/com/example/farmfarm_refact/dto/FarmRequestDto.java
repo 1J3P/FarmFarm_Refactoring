@@ -46,6 +46,7 @@ public class FarmRequestDto {
         private String locationDetail;
         @NotNull
         private String detail;
+        private Boolean auction;
         private List<Long> images;
     }
 }
