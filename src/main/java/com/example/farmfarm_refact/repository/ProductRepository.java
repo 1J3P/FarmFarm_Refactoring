@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import java.util.List;
 import java.util.Optional;
 
-public interface ProductRepository extends CrudRepository<ProductEntity, Integer> {
+public interface ProductRepository extends CrudRepository<ProductEntity, Long> {
     public List<ProductEntity> findAllByFarmAndStatusLike(FarmEntity farm, String status);
     public Optional<ProductEntity> findBypIdAndStatusLike(Long pId, String status);
     // 최신순
