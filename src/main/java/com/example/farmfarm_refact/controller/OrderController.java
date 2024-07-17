@@ -14,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
 @RestController
 @RequiredArgsConstructor
@@ -30,6 +31,18 @@ public class OrderController {
     @PostMapping("")
     public ApiResponse<OrderResponseDto.OrderReadResponseDto> createOrder(@AuthenticationPrincipal UserEntity user, @RequestBody OrderRequestDto.OrderCreateRequestDto order, HttpSession session) {
         return ApiResponse.onSuccess(orderService.createOrder(user, session, order));
+    }
+
+    // 공동구매 첫 번째 참여자
+    @GetMapping("/group/{pId}")
+    public ModelAndView createGroup(HttpServletRequest request, @PathVariable("pId") long pId, HttpSession session, @RequestParam int quantity) {
+
+    }
+
+    // 공동구매 두 번째 참여자
+    @GetMapping("/group/{gId}")
+    public ModelAndView saveOrderDetailGroup(HttpSession session, HttpServletRequest request, @PathVariable("gId") long gId) {
+
     }
 
 }
