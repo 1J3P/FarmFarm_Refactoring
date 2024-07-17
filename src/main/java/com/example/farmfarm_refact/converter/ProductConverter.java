@@ -41,7 +41,7 @@ public class ProductConverter {
               .name(product.getName())
               .price(product.getPrice())
               .images(FileConverter.toFileCreateResponseDtoList(product.getFiles()))
-              .farm(product.getFarm())
+              .farm(FarmConverter.toFarmReadResponseDto(product.getFarm()))
               .build();
   }
 
