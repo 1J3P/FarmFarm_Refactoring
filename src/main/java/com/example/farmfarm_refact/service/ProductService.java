@@ -180,4 +180,10 @@ public class ProductService {
         return CartConverter.toItemList(itemList);
     }
 
+    // 장바구니에 있는 상품 삭제하기
+    public void deleteCartItem(Long pId, HttpSession session) {
+        Cart cart = (Cart)session.getAttribute("cart");
+        cart.delete(pId);
+        session.setAttribute("cart", cart);
+    }
 }

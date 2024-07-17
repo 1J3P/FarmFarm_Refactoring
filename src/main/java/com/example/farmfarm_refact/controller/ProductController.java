@@ -69,10 +69,10 @@ public class ProductController {
     }
 
     // 장바구니(세션)에 상품 담기
-    @PostMapping("/{pId}/cart")
+    @PostMapping("/cart/{pId}")
     public ApiResponse addToCart(@AuthenticationPrincipal UserEntity user, @PathVariable("pId") long pId, @RequestBody CartRequestDto.ItemDto itemDto, HttpSession session) {
         productService.addToCart(user, pId, itemDto.getQuantity(), session);
-        return ApiResponse.onSuccess(SuccessStatus._OK);
+        return ApiResponse.onSuccess(SuccessStatus.CART_ITEM_ADD);
     }
 
     // 장바구니로 이동해서 담은 상품 조회하기
@@ -81,16 +81,10 @@ public class ProductController {
         return ApiResponse.onSuccess(productService.getCartItemList(session));
     }
 
-    @DeleteMapping("/cart/delete/{p_id}")
-    public ResponseEntity<Object> deleteFromCart(HttpSession session, @PathVariable("p_id") long p_id) {
-        UserEntity user = (UserEntity)session.getAttribute("user");
-        try {
-            Cart cart = (Cart)session.getAttribute("cart");
-            cart.delete(p_id);
-            session.setAttribute("cart", cart);
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body("exception");
-        }
-        return ResponseEntity.ok().body("장바구니 삭제 완료");
+    // 장바구니에 있는 상품 삭제하기
+    @DeleteMapping("/cart/delete/{pId}")
+    public ApiResponse deleteFromCart(@PathVariable("pId") Long pId, HttpSession session) {
+        productService.deleteCartItem(pId, session);
+        return ApiResponse.onSuccess(SuccessStatus.CART_ITEM_DELETE);
     }
 }

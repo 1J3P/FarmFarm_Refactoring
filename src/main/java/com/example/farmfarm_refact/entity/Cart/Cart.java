@@ -13,7 +13,7 @@ public class Cart {
     }
     public void push(Item item) {
         for (Item i: itemList) {
-            if (item.getPId() == i.getPId()) {
+            if (item.getProduct() == i.getProduct()) {
                 i.setQuantity(i.getQuantity() + item.getQuantity());
                 return;
             }
@@ -21,9 +21,9 @@ public class Cart {
         itemList.add(item);
     }
 
-    public void delete(Long p_id) {
+    public void delete(Long pId) {
         for (Item i : itemList) {
-            if (i.getPId() == p_id) {
+            if (i.getProduct().getPId() == pId) {
                 itemList.remove(i);
                 return;
             }
