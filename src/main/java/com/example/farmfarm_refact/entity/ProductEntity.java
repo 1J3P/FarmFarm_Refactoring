@@ -43,6 +43,9 @@ public class ProductEntity {
 
     ShippingMethod shippingMethod;
 
+    @Column(name="is_direct")
+    private boolean direct;  // 변경 불가 - 직거래 여부
+
     private String directLocation;  // 직거래 장소
 
     private int lowPrice;  // 경매 최저가
