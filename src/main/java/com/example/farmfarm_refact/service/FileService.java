@@ -23,7 +23,7 @@ public class FileService {
     }
 
     public void deleteByFileId(int id) {
-        fileRepository.deleteByFileId(id);
+        fileRepository.deleteById(id);
     }
 }
 

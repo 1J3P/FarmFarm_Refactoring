@@ -14,6 +14,7 @@ import com.example.farmfarm_refact.entity.UserEntity;
 import com.example.farmfarm_refact.repository.FarmRepository;
 import com.example.farmfarm_refact.repository.FileRepository;
 
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -111,7 +112,9 @@ public class FarmService {
         return FarmConverter.toFarmReadResponseDto(myFarm);
     }
 
+
     // 농장 수정
+    @Transactional
     public void updateFarm(FarmRequestDto.FarmUpdateRequestDto farmUpdateRequestDto) {
         FarmEntity farm = farmRepository.findByfIdAndStatusLike(farmUpdateRequestDto.getFId(), "yes")
                 .orElseThrow(() -> new ExceptionHandler(ErrorStatus.FARM_NOT_FOUND));

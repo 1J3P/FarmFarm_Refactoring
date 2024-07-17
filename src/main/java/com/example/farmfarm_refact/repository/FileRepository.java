@@ -7,5 +7,5 @@ import org.springframework.data.repository.CrudRepository;
 public interface FileRepository extends CrudRepository<FileEntity, Integer> {
     FileEntity findByFileId(int fileId);
 
-    void deleteByFileId(int fileId);
+    void deleteById(int fileId);
 }
