@@ -53,6 +53,9 @@ public class ProductResponseDto {
         private String detail;
         private List<FileResponseDto.FileCreateResponseDto> images;
         private FarmResponseDto.FarmReadResponseDto farm;
+        private int quantity;
+        private int type;
+        private boolean direct;
     }
 
 }

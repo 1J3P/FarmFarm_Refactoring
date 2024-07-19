@@ -66,6 +66,9 @@ public class ProductConverter {
                 .detail(product.getDetail())
                 .images(FileConverter.toFileCreateResponseDtoList(product.getFiles()))
                 .farm(FarmConverter.toFarmReadResponseDto(product.getFarm()))
+                .quantity(product.getQuantity())
+                .type(product.getType())
+                .direct(product.isDirect())
                 .build();
     }
 

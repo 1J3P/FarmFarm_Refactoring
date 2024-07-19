@@ -15,6 +15,7 @@ public class CartResponseDto {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class ItemDto {   // 장바구니에 담긴 상품 정보를 나타내는 dto
+        private long pId;
         private String farmName;
         private String productName;
         private int price;
