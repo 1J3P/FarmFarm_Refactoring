@@ -16,6 +16,8 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.swing.*;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/order")
@@ -34,15 +36,15 @@ public class OrderController {
     }
 
     // 공동구매 첫 번째 참여자
-    @GetMapping("/group/{pId}")
-    public ModelAndView createGroup(HttpServletRequest request, @PathVariable("pId") long pId, HttpSession session, @RequestParam int quantity) {
-
+    @GetMapping("/createGroup/{pId}")
+    public ApiResponse<OrderResponseDto.OrderReadResponseDto> createGroup(@AuthenticationPrincipal UserEntity user, @PathVariable("pId") long pId, @RequestBody GroupRequestDto.GroupCreateRequestDto dto, HttpSession session) {
+        return ApiResponse.onSuccess(orderService.createGroup(user, pId, dto, session));
     }
 
     // 공동구매 두 번째 참여자
-    @GetMapping("/group/{gId}")
-    public ModelAndView saveOrderDetailGroup(HttpSession session, HttpServletRequest request, @PathVariable("gId") long gId) {
-
-    }
+//    @GetMapping("/attendGroup/{gId}")
+//    public ApiResponse<OrderResponseDto.OrderReadResponseDto> attendGroup(@PathVariable("gId") long gId, @RequestBody GroupRequestDto.GroupAttendRequestDto dto, HttpSession session) {
+//        return ApiResponse.onSuccess(orderService.attendGroup());
+//    }
 
 }
