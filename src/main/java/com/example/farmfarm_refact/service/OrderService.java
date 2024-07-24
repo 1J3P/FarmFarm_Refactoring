@@ -36,7 +36,6 @@ public class OrderService {
     private final OrderDetailRepository orderDetailRepository;
     private final OrderRepository orderRepository;
     private final ProductRepository productRepository;
-    @Autowired
     private final GroupService groupService;
     private final GroupRepository groupRepository;
 
@@ -90,7 +89,7 @@ public class OrderService {
         return OrderConverter.toOrderReadResponseDto(getOrder);
     }
 
-    public OrderResponseDto.OrderReadResponseDto createGroup(UserEntity user, Long pId, GroupRequestDto.GroupJoinRequestDto dto, HttpSession session) {
+    public OrderResponseDto.OrderReadResponseDto createGroup(UserEntity user, Long pId, GroupRequestDto.GroupJoinRequestDto dto) {
         ProductEntity product = productRepository.findBypIdAndStatusLike(pId, "yes")
                 .orElseThrow(() -> new ExceptionHandler(ErrorStatus.PRODUCT_NOT_FOUND));
         GroupEntity group = groupService.createGroup(user, product, dto.getQuantity());
@@ -128,8 +127,8 @@ public class OrderService {
         return OrderConverter.toOrderReadResponseDto(getOrder);
     }
 
-    public OrderResponseDto.OrderReadResponseDto attendGroup(UserEntity user, Long gId, GroupRequestDto.GroupJoinRequestDto dto, HttpSession session) {
-        GroupEntity group = groupService.attendGroup(gId, user);
+    public OrderResponseDto.OrderReadResponseDto attendGroup(UserEntity user, Long gId, GroupRequestDto.GroupJoinRequestDto dto) {
+        GroupEntity group = groupService.attendGroup(user, gId, dto.getQuantity());
         ProductEntity product = group.getProduct();
 
         // Order detail 생성
@@ -156,6 +155,10 @@ public class OrderService {
         orderDetail.setOrder(getOrder);
         orderDetailRepository.save(orderDetail);
         return OrderConverter.toOrderReadResponseDto(getOrder);
+    }
+
+    public void closeGroup(Long gId) {
+
     }
 
 }

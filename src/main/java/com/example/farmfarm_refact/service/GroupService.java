@@ -25,6 +25,8 @@ public class GroupService {
             group.setUser1(user);
             group.setCapacity(1);
             group.setIsClose(0);
+            if (product.getGroupProductQuantity() - quantity < 0)
+                throw new ExceptionHandler(ErrorStatus.PRODUCT_NOT_GROUP);
             group.setStock(product.getGroupProductQuantity() - quantity);
             int q = product.getQuantity() - product.getGroupProductQuantity();  // 잔여 상품 수량
             group.getProduct().setQuantity(q);
@@ -38,12 +40,14 @@ public class GroupService {
         return groupRepository.findBygId(gId);
     }
 
-    public GroupEntity attendGroup(long gId, UserEntity user) {
+    public GroupEntity attendGroup(UserEntity user, long gId, int quantity) {
         GroupEntity group = getGroup(gId);
         group.setUser2(user);
         group.setCapacity(0);
         group.setIsClose(1);
-        group.setStock();
+        if (group.getStock() - quantity != 0)
+            throw new ExceptionHandler(ErrorStatus.PRODUCT_QUANTITY_ERROR);
+        group.setStock(0);
         return groupRepository.save(group);
     }
 
