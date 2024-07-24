@@ -11,7 +11,7 @@ public class GroupRequestDto {
     @Getter
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class GroupCreateRequestDto {
+    public static class GroupJoinRequestDto {
         private String deliveryName;
         private String deliveryPhone;
         private Boolean isDelivery;
@@ -21,7 +21,4 @@ public class GroupRequestDto {
         private int quantity;   // 내가 구매할 공구 상품 수량
     }
 
-    public static class GroupAttendRequestDto {
-
-    }
 }

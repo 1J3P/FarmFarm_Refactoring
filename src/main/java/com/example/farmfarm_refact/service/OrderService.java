@@ -90,7 +90,7 @@ public class OrderService {
         return OrderConverter.toOrderReadResponseDto(getOrder);
     }
 
-    public OrderResponseDto.OrderReadResponseDto createGroup(UserEntity user, Long pId, GroupRequestDto.GroupCreateRequestDto dto, HttpSession session) {
+    public OrderResponseDto.OrderReadResponseDto createGroup(UserEntity user, Long pId, GroupRequestDto.GroupJoinRequestDto dto, HttpSession session) {
         ProductEntity product = productRepository.findBypIdAndStatusLike(pId, "yes")
                 .orElseThrow(() -> new ExceptionHandler(ErrorStatus.PRODUCT_NOT_FOUND));
         GroupEntity group = groupService.createGroup(user, product, dto.getQuantity());
@@ -104,6 +104,7 @@ public class OrderService {
 
         // Order detail 생성
         OrderDetailEntity orderDetail = new OrderDetailEntity();
+        orderDetail.setGroup(group);
         orderDetail.setProduct(group.getProduct());
         orderDetail.setType(1);
         orderDetail.setQuantity(dto.getQuantity());
@@ -127,8 +128,34 @@ public class OrderService {
         return OrderConverter.toOrderReadResponseDto(getOrder);
     }
 
-//    public OrderResponseDto.OrderReadResponseDto attendGroup() {
-//
-//    }
+    public OrderResponseDto.OrderReadResponseDto attendGroup(UserEntity user, Long gId, GroupRequestDto.GroupJoinRequestDto dto, HttpSession session) {
+        GroupEntity group = groupService.attendGroup(gId, user);
+        ProductEntity product = group.getProduct();
+
+        // Order detail 생성
+        OrderDetailEntity orderDetail = new OrderDetailEntity();
+        orderDetail.setGroup(group);
+        orderDetail.setProduct(group.getProduct());
+        orderDetail.setType(1);
+        orderDetail.setQuantity(dto.getQuantity());
+        orderDetail.setPrice(product.getPrice() * (1 - product.getGroupProductDiscount() / 100));
+
+        // Order 생성
+        OrderEntity order = OrderConverter.toGroupOrderEntity(dto);
+        order.setUser(user);
+        int totalPrice = 0;
+        if (dto.getIsDelivery() == true) {
+            totalPrice += 3000;
+        }
+        order.setTotalPrice(totalPrice);
+        order.setTotalQuantity(dto.getQuantity());
+        order.setPaymentStatus(PaymentStatus.BEFORE_PAYMENT);
+        OrderEntity saveOrder = orderRepository.save(order);
+        OrderEntity getOrder = orderRepository.findById(saveOrder.getOId())
+                .orElseThrow(()->new ExceptionHandler(ErrorStatus.ORDER_NOT_FOUND));
+        orderDetail.setOrder(getOrder);
+        orderDetailRepository.save(orderDetail);
+        return OrderConverter.toOrderReadResponseDto(getOrder);
+    }
 
 }

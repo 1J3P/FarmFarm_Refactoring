@@ -25,7 +25,7 @@ public class OrderConverter {
               .build();
   }
 
-    public static OrderEntity toGroupOrderEntity(GroupRequestDto.GroupCreateRequestDto dto) {
+    public static OrderEntity toGroupOrderEntity(GroupRequestDto.GroupJoinRequestDto dto) {
 
         return OrderEntity.builder()
                 .delivery(dto.getIsDelivery())

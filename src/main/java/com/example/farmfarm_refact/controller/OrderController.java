@@ -12,11 +12,15 @@ import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.swing.*;
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -37,14 +41,37 @@ public class OrderController {
 
     // 공동구매 첫 번째 참여자
     @GetMapping("/createGroup/{pId}")
-    public ApiResponse<OrderResponseDto.OrderReadResponseDto> createGroup(@AuthenticationPrincipal UserEntity user, @PathVariable("pId") long pId, @RequestBody GroupRequestDto.GroupCreateRequestDto dto, HttpSession session) {
+    public ApiResponse<OrderResponseDto.OrderReadResponseDto> createGroup(@AuthenticationPrincipal UserEntity user, @PathVariable("pId") long pId, @RequestBody GroupRequestDto.GroupJoinRequestDto dto, HttpSession session) {
         return ApiResponse.onSuccess(orderService.createGroup(user, pId, dto, session));
     }
 
     // 공동구매 두 번째 참여자
-//    @GetMapping("/attendGroup/{gId}")
-//    public ApiResponse<OrderResponseDto.OrderReadResponseDto> attendGroup(@PathVariable("gId") long gId, @RequestBody GroupRequestDto.GroupAttendRequestDto dto, HttpSession session) {
-//        return ApiResponse.onSuccess(orderService.attendGroup());
-//    }
+    @GetMapping("/attendGroup/{gId}")
+    public ApiResponse<OrderResponseDto.OrderReadResponseDto> attendGroup(@AuthenticationPrincipal UserEntity user, @PathVariable("gId") long gId, @RequestBody GroupRequestDto.GroupJoinRequestDto dto, HttpSession session) {
+        return ApiResponse.onSuccess(orderService.attendGroup(user, gId, dto, session));
+    }
+
+    // 공동구매 24시간 후 닫히는 메소드
+//    @DeleteMapping("/group/{gId}")
+//    public String closeGroup(HttpSession session, HttpServletRequest request, @PathVariable("gId") long gId, Model model) {
+//        UserEntity user = (UserEntity)session.getAttribute("user");
+//        GroupEntity group = groupService.getGroup(gId);
+//        System.out.println("GID : " + group.getGId());
+//        List<OrderDetailEntity> orderdetails = group.getOrderDetails();
+//        ProductEntity product = group.getProduct();
+//        System.out.println(orderdetails);
+//        OrderEntity order = orderdetails.get(0).getOrder();
+//        System.out.println("OID : " + order.getOId());
+//        ApprovePaymentEntity approvePayment = order.getPayment();
+//        System.out.println("APID : " + approvePayment.getPaId());
+//        ResponseEntity response = paymentController.refund(approvePayment.getPaId());
+//        for (OrderDetailEntity od : orderdetails) {
+//            //OrderDetailRepository.delete(od);
+//        }
+//        if (response.getStatusCode() == HttpStatus.OK) {
+//            return "redirect:/product/"+product.getPId();
+//        }
+//        return "redirect:/index";
+    }
 
 }

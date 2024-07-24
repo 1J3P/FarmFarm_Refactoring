@@ -26,6 +26,8 @@ public class GroupService {
             group.setCapacity(1);
             group.setIsClose(0);
             group.setStock(product.getGroupProductQuantity() - quantity);
+            int q = product.getQuantity() - product.getGroupProductQuantity();  // 잔여 상품 수량
+            group.getProduct().setQuantity(q);
             return groupRepository.save(group);
         }
         else
@@ -40,6 +42,8 @@ public class GroupService {
         GroupEntity group = getGroup(gId);
         group.setUser2(user);
         group.setCapacity(0);
+        group.setIsClose(1);
+        group.setStock();
         return groupRepository.save(group);
     }
 
