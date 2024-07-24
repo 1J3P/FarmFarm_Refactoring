@@ -38,7 +38,9 @@ public class OrderDetailEntity {
     @JoinColumn(name="o_id")
     private OrderEntity order;
 
-
+    @ManyToOne
+    @JoinColumn(name = "group_id")
+    private GroupEntity group;
 
 }
 

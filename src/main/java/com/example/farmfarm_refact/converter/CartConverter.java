@@ -13,6 +13,7 @@ public class CartConverter {
     // Item을 ItemListDto로 변환하는 메서드
     public static CartResponseDto.ItemDto toItemDto(Item item) {
         return CartResponseDto.ItemDto.builder()
+                .pId(item.getProduct().getPId())
                 .farmName(item.getProduct().getFarm().getName())
                 .productName(item.getProduct().getName())
                 .price(item.getProduct().getPrice())

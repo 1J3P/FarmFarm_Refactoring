@@ -1,10 +1,7 @@
 package com.example.farmfarm_refact.converter;
 
 
-import com.example.farmfarm_refact.dto.FarmRequestDto;
-import com.example.farmfarm_refact.dto.FarmResponseDto;
-import com.example.farmfarm_refact.dto.OrderRequestDto;
-import com.example.farmfarm_refact.dto.OrderResponseDto;
+import com.example.farmfarm_refact.dto.*;
 import com.example.farmfarm_refact.entity.FarmEntity;
 import com.example.farmfarm_refact.entity.OrderDetailEntity;
 import com.example.farmfarm_refact.entity.OrderEntity;
@@ -27,6 +24,19 @@ public class OrderConverter {
               .deliveryMemo(orderCreateRequestDto.getDeliveryMemo())
               .build();
   }
+
+    public static OrderEntity toGroupOrderEntity(GroupRequestDto.GroupJoinRequestDto dto) {
+
+        return OrderEntity.builder()
+                .delivery(dto.getIsDelivery())
+                .deliveryName(dto.getDeliveryName())
+                .deliveryPhone(dto.getDeliveryPhone())
+                .deliveryAddress(dto.getDeliveryAddress())
+                .deliveryAddressDetail(dto.getDeliveryAddressDetail())
+                .deliveryMemo(dto.getDeliveryMemo())
+                .build();
+    }
+
   public static OrderResponseDto.OrderReadResponseDto toOrderReadResponseDto(OrderEntity order) {
       return OrderResponseDto.OrderReadResponseDto.builder()
               .oId(order.getOId())
