@@ -11,6 +11,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import java.util.List;
 import java.util.Optional;
 
-public interface OrderDetailRepository extends CrudRepository<OrderDetailEntity, Integer> {
+public interface OrderDetailRepository extends CrudRepository<OrderDetailEntity, Long> {
 
 }

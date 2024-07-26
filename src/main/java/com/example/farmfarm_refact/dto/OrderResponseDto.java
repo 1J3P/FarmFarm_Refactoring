@@ -25,7 +25,7 @@ public class OrderResponseDto {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class OrderReadResponseDto {
-        private Integer oId;
+        private Long oId;
         private Long totalPrice;
         private Integer totalQuantity;
         private String paymentStatus;
@@ -42,7 +42,7 @@ public class OrderResponseDto {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class OrderDetailReadResponseDto {
-        private Integer odId;
+        private Long odId;
         private Long price;
         private Integer quantity;
         private Integer type;
