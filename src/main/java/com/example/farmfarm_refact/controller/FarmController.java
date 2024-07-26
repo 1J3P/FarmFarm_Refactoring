@@ -71,7 +71,7 @@ public class FarmController {
     // 주문 내역 상태 변경
 
 
-    // 농장별 상품 보기
+    // 농장별 상품 보기(일반 상품)
     @GetMapping("/{fId}/product")
     public ApiResponse<ProductResponseDto.ProductListResponseDto> getFarmProduct(@PathVariable("fId") long fId) {
         return ApiResponse.onSuccess(productService.getFarmProduct(farmService.getFarm(fId)));

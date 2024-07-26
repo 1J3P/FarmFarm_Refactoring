@@ -30,11 +30,10 @@ import java.util.List;
 @RequestMapping("/order")
 public class OrderController {
     private final OrderService orderService;
-    private final GroupService groupService;
 
     //장바구니 페이지에서 주문하기 눌렀을때 호출되는 API - 오더 디테일 객체들 만들어서 session에 저장해주고, 직거래만 되는지 표시
     @GetMapping("/cart")
-    public ApiResponse<OrderResponseDto.OrderCartResponseDto> saveOrderDetailForCart(@AuthenticationPrincipal UserEntity user, HttpSession session) {
+    public ApiResponse<OrderResponseDto.OrderCartResponseDto> saveOrderDetailForCart(HttpSession session) {
         return ApiResponse.onSuccess(orderService.saveOrderDetailCart(session));
     }
 
@@ -43,16 +42,18 @@ public class OrderController {
         return ApiResponse.onSuccess(orderService.createOrder(user, session, order));
     }
 
-    // 공동구매 첫 번째 참여자
+    // 공구 개설하기 버튼 클릭시 (배송지 입력 폼으로 이동)
     @GetMapping("/createGroup/{pId}")
-    public ApiResponse<OrderResponseDto.OrderReadResponseDto> createGroup(@AuthenticationPrincipal UserEntity user, @PathVariable("pId") long pId, @RequestBody GroupRequestDto.GroupJoinRequestDto dto) {
-        return ApiResponse.onSuccess(orderService.createGroup(user, pId, dto));
+    public ApiResponse createGroup(@AuthenticationPrincipal UserEntity user, @PathVariable("pId") long pId, HttpSession session) {
+        orderService.createGroup(user, pId, session);
+        return ApiResponse.onSuccess(SuccessStatus._OK);
     }
 
-    // 공동구매 두 번째 참여자
+    // 공구 참여하기 버튼 클릭시 (배송지 입력 폼으로 이동)
     @GetMapping("/attendGroup/{gId}")
-    public ApiResponse<OrderResponseDto.OrderReadResponseDto> attendGroup(@AuthenticationPrincipal UserEntity user, @PathVariable("gId") long gId, @RequestBody GroupRequestDto.GroupJoinRequestDto dto) {
-        return ApiResponse.onSuccess(orderService.attendGroup(user, gId, dto));
+    public ApiResponse attendGroup(@AuthenticationPrincipal UserEntity user, @PathVariable("gId") long gId, HttpSession session) {
+        orderService.attendGroup(user, gId, session);
+        return ApiResponse.onSuccess(SuccessStatus._OK);
     }
 
     // 공동구매 24시간 후 닫히는 메소드

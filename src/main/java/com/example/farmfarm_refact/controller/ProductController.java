@@ -53,6 +53,20 @@ public class ProductController {
         }
     }
 
+    // 공동구매 상품 리스트
+//    @GetMapping("/group/list")
+//    public ApiResponse<ProductResponseDto.ProductListResponseDto> getGroupProductList(@RequestParam(required = false, value = "sort", defaultValue = "") String criteria,
+//                                                                                 @RequestParam(required = false, value = "keyword", defaultValue = "") String keyword) {
+//        if (keyword.equals("")) {
+//            return ApiResponse.onSuccess(productService.getProductsOrderBy(criteria));
+//        }
+//        else {
+//            return ApiResponse.onSuccess(productService.searchSortProducts(keyword, criteria));
+//        }
+//    }
+
+    // 경매 상품 리스트
+
     // 상품 삭제
     @DeleteMapping("/{pId}")
     public ApiResponse deleteProduct(@AuthenticationPrincipal UserEntity user, @PathVariable("pId") Long pId) {
@@ -87,4 +101,14 @@ public class ProductController {
         productService.deleteCartItem(pId, session);
         return ApiResponse.onSuccess(SuccessStatus.CART_ITEM_DELETE);
     }
+
+    // 공동구매 개설하기 버튼
+
+
+    // 공동구매 참여하기 버튼
+
+
+
+    // 공동구매 참여자 목록
+//    public ApiResponse<GroupResponseDto.>
 }

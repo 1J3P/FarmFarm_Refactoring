@@ -69,6 +69,8 @@ public class ProductConverter {
                 .quantity(product.getQuantity())
                 .type(product.getType())
                 .direct(product.isDirect())
+                .groupProductQuantity(product.getGroupProductQuantity())
+                .groupProductDiscount(product.getGroupProductDiscount())
                 .build();
     }
 

@@ -56,6 +56,8 @@ public class ProductResponseDto {
         private int quantity;
         private int type;
         private boolean direct;
+        private int groupProductQuantity;
+        private int groupProductDiscount;
     }
 
 }
