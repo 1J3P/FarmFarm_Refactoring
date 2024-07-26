@@ -59,6 +59,8 @@ public class ProductService {
             }
         }
         else if (newProduct.getType() == 1) {
+            newProduct.setQuantity(productCreateRequestDto.getQuantity());
+            newProduct.setPrice(productCreateRequestDto.getPrice());
             newProduct.setGroupProductQuantity(productCreateRequestDto.getGroupProductQuantity());
             newProduct.setGroupProductDiscount(productCreateRequestDto.getGroupProductDiscount());
         }
