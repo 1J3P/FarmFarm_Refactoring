@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import java.util.List;
 import java.util.Optional;
 
-public interface FarmRepository extends CrudRepository<FarmEntity, Integer> {
+public interface FarmRepository extends CrudRepository<FarmEntity, Long> {
     public FarmEntity findByfId(Long fid);
     public Optional<FarmEntity> findByfIdAndStatusLike(Long fId, String status);
     public Optional<FarmEntity> findByUserAndStatusLike(UserEntity user, String status);

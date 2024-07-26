@@ -1,5 +1,6 @@
 package com.example.farmfarm_refact.entity;
 
+import com.example.farmfarm_refact.entity.kakaoPay.ApprovePaymentEntity;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -21,7 +22,7 @@ public class OrderEntity {
     @Id
     @GeneratedValue
     @Column(name="o_id")
-    private Integer oId;
+    private Long oId;
 
     private long totalPrice;
 
@@ -52,6 +53,10 @@ public class OrderEntity {
 
     //왜필요할지 생각해보기
     //private int type; //0 일반, 1 공동, 2 경매
+
+    @OneToOne
+    @JoinColumn(name="pa_id")
+    private ApprovePaymentEntity payment;
 
     @Builder
     public OrderEntity(boolean delivery, String deliveryAddress, String deliveryAddressDetail, String deliveryName, String deliveryPhone, String deliveryMemo) {

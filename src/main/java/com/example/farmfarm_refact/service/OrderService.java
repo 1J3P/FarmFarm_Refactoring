@@ -161,4 +161,9 @@ public class OrderService {
 
     }
 
+    public OrderEntity getOrder(Long oId){
+        return orderRepository.findById(oId)
+                .orElseThrow(()->new ExceptionHandler(ErrorStatus.ORDER_NOT_FOUND));
+    }
+
 }
