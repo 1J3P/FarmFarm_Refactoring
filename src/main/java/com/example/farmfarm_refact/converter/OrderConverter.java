@@ -25,17 +25,17 @@ public class OrderConverter {
               .build();
   }
 
-    public static OrderEntity toGroupOrderEntity(GroupRequestDto.GroupJoinRequestDto dto) {
-
-        return OrderEntity.builder()
-                .delivery(dto.getIsDelivery())
-                .deliveryName(dto.getDeliveryName())
-                .deliveryPhone(dto.getDeliveryPhone())
-                .deliveryAddress(dto.getDeliveryAddress())
-                .deliveryAddressDetail(dto.getDeliveryAddressDetail())
-                .deliveryMemo(dto.getDeliveryMemo())
-                .build();
-    }
+//    public static OrderEntity toGroupOrderEntity(GroupRequestDto.GroupJoinRequestDto dto) {
+//
+//        return OrderEntity.builder()
+//                .delivery(dto.getIsDelivery())
+//                .deliveryName(dto.getDeliveryName())
+//                .deliveryPhone(dto.getDeliveryPhone())
+//                .deliveryAddress(dto.getDeliveryAddress())
+//                .deliveryAddressDetail(dto.getDeliveryAddressDetail())
+//                .deliveryMemo(dto.getDeliveryMemo())
+//                .build();
+//    }
 
   public static OrderResponseDto.OrderReadResponseDto toOrderReadResponseDto(OrderEntity order) {
       return OrderResponseDto.OrderReadResponseDto.builder()

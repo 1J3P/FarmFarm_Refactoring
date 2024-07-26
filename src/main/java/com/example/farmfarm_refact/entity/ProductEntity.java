@@ -35,7 +35,7 @@ public class ProductEntity {
 
     private String closeCalendar;
 
-    private int quantity;
+    private int quantity;   // 공구일 시 총 공구 상품 수량
 
     private int auctionQuantity;
 

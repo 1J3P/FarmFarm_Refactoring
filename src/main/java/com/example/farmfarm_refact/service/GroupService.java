@@ -18,16 +18,16 @@ public class GroupService {
     @Autowired
     private GroupRepository groupRepository;
 
-    public GroupEntity createGroup(UserEntity user, ProductEntity product, int quantity) {
+    public GroupEntity createGroup(UserEntity user, ProductEntity product) {
         if (product.getType() == 1) {
             GroupEntity group = new GroupEntity();
             group.setProduct(product);
             group.setUser1(user);
             group.setCapacity(1);
             group.setIsClose(0);
-            if (product.getGroupProductQuantity() - quantity < 0)
-                throw new ExceptionHandler(ErrorStatus.PRODUCT_NOT_GROUP);
-            group.setStock(product.getGroupProductQuantity() - quantity);
+//            if (product.getGroupProductQuantity() - quantity < 0)
+//                throw new ExceptionHandler(ErrorStatus.PRODUCT_NOT_GROUP);
+            group.setStock(product.getGroupProductQuantity());
             int q = product.getQuantity() - product.getGroupProductQuantity();  // 잔여 상품 수량
             group.getProduct().setQuantity(q);
             return groupRepository.save(group);
@@ -40,13 +40,13 @@ public class GroupService {
         return groupRepository.findBygId(gId);
     }
 
-    public GroupEntity attendGroup(UserEntity user, long gId, int quantity) {
+    public GroupEntity attendGroup(UserEntity user, long gId) {
         GroupEntity group = getGroup(gId);
         group.setUser2(user);
         group.setCapacity(0);
         group.setIsClose(1);
-        if (group.getStock() - quantity != 0)
-            throw new ExceptionHandler(ErrorStatus.PRODUCT_QUANTITY_ERROR);
+//        if (group.getStock() - quantity != 0)
+//            throw new ExceptionHandler(ErrorStatus.PRODUCT_QUANTITY_ERROR);
         group.setStock(0);
         return groupRepository.save(group);
     }

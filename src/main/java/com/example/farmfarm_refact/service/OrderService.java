@@ -67,10 +67,26 @@ public class OrderService {
         order.setUser(user);
         int totalPrice = 0;
         int totalQuantity = 0;
-        for (OrderDetailEntity d : details) {
-            totalPrice += d.getPrice();
-            totalQuantity += d.getQuantity();
+
+        // 공구 주문일 경우 입력 받은 수량 값을 지정
+        if (details.get(0).getProduct().getType() == 1) {
+            totalQuantity = dto.getQuantity();
+            totalPrice = totalQuantity * (int)details.get(0).getPrice();
+
+            GroupEntity group = details.get(0).getGroup();
+            group.setStock(group.getStock() - totalQuantity);
+            groupRepository.save(group);
+
+            details.get(0).setGroup(group);
         }
+        // 일반 주문
+        else {
+            for (OrderDetailEntity d : details) {
+                totalPrice += d.getPrice();
+                totalQuantity += d.getQuantity();
+            }
+        }
+
         if (order.isDelivery() == true) {
             totalPrice += 3000;
         }
@@ -86,13 +102,15 @@ public class OrderService {
             orderDetailRepository.save(d);
         }
         session.setAttribute("cart", null);
+        session.setAttribute("orderDetail", null);
         return OrderConverter.toOrderReadResponseDto(getOrder);
     }
 
-    public OrderResponseDto.OrderReadResponseDto createGroup(UserEntity user, Long pId, GroupRequestDto.GroupJoinRequestDto dto) {
+    public void createGroup(UserEntity user, Long pId, HttpSession session) {
+        List<OrderDetailEntity> details = new ArrayList<>();
         ProductEntity product = productRepository.findBypIdAndStatusLike(pId, "yes")
                 .orElseThrow(() -> new ExceptionHandler(ErrorStatus.PRODUCT_NOT_FOUND));
-        GroupEntity group = groupService.createGroup(user, product, dto.getQuantity());
+        GroupEntity group = groupService.createGroup(user, product);
         // created_at 컬럼에 저장된 시간을 가져옵니다.
         Timestamp createdAt = group.getCreated_at();
         // 24시간을 추가하여 closed_at 컬럼에 설정합니다.
@@ -106,29 +124,33 @@ public class OrderService {
         orderDetail.setGroup(group);
         orderDetail.setProduct(group.getProduct());
         orderDetail.setType(1);
-        orderDetail.setQuantity(dto.getQuantity());
+//        orderDetail.setQuantity(dto.getQuantity());
         orderDetail.setPrice(product.getPrice() * (1 - product.getGroupProductDiscount() / 100));
 
-        // Order 생성
-        OrderEntity order = OrderConverter.toGroupOrderEntity(dto);
-        order.setUser(user);
-        int totalPrice = 0;
-        if (dto.getIsDelivery() == true) {
-            totalPrice += 3000;
-        }
-        order.setTotalPrice(totalPrice);
-        order.setTotalQuantity(dto.getQuantity());
-        order.setPaymentStatus(PaymentStatus.BEFORE_PAYMENT);
-        OrderEntity saveOrder = orderRepository.save(order);
-        OrderEntity getOrder = orderRepository.findById(saveOrder.getOId())
-                .orElseThrow(()->new ExceptionHandler(ErrorStatus.ORDER_NOT_FOUND));
-        orderDetail.setOrder(getOrder);
+//        // Order 생성
+//        OrderEntity order = OrderConverter.toGroupOrderEntity(dto);
+//        order.setUser(user);
+//        int totalPrice = 0;
+//        if (dto.getIsDelivery() == true) {
+//            totalPrice += 3000;
+//        }
+//        order.setTotalPrice(totalPrice);
+//        order.setTotalQuantity(dto.getQuantity());
+//        order.setPaymentStatus(PaymentStatus.BEFORE_PAYMENT);
+//        OrderEntity saveOrder = orderRepository.save(order);
+//        OrderEntity getOrder = orderRepository.findById(saveOrder.getOId())
+//                .orElseThrow(()->new ExceptionHandler(ErrorStatus.ORDER_NOT_FOUND));
+//        orderDetail.setOrder(getOrder);
         orderDetailRepository.save(orderDetail);
-        return OrderConverter.toOrderReadResponseDto(getOrder);
+
+        details.add(orderDetail);
+        session.setAttribute("orderDetail", details);
+//        return OrderConverter.toOrderReadResponseDto(getOrder);
     }
 
-    public OrderResponseDto.OrderReadResponseDto attendGroup(UserEntity user, Long gId, GroupRequestDto.GroupJoinRequestDto dto) {
-        GroupEntity group = groupService.attendGroup(user, gId, dto.getQuantity());
+    public void attendGroup(UserEntity user, Long gId, HttpSession session) {
+        List<OrderDetailEntity> details = new ArrayList<>();
+        GroupEntity group = groupService.attendGroup(user, gId);
         ProductEntity product = group.getProduct();
 
         // Order detail 생성
@@ -136,25 +158,28 @@ public class OrderService {
         orderDetail.setGroup(group);
         orderDetail.setProduct(group.getProduct());
         orderDetail.setType(1);
-        orderDetail.setQuantity(dto.getQuantity());
+        orderDetail.setQuantity(group.getStock());  // 공구 참여시에는 수량을 입력 받을 필요가 없음
         orderDetail.setPrice(product.getPrice() * (1 - product.getGroupProductDiscount() / 100));
 
-        // Order 생성
-        OrderEntity order = OrderConverter.toGroupOrderEntity(dto);
-        order.setUser(user);
-        int totalPrice = 0;
-        if (dto.getIsDelivery() == true) {
-            totalPrice += 3000;
-        }
-        order.setTotalPrice(totalPrice);
-        order.setTotalQuantity(dto.getQuantity());
-        order.setPaymentStatus(PaymentStatus.BEFORE_PAYMENT);
-        OrderEntity saveOrder = orderRepository.save(order);
-        OrderEntity getOrder = orderRepository.findById(saveOrder.getOId())
-                .orElseThrow(()->new ExceptionHandler(ErrorStatus.ORDER_NOT_FOUND));
-        orderDetail.setOrder(getOrder);
+//        // Order 생성
+//        OrderEntity order = OrderConverter.toGroupOrderEntity(dto);
+//        order.setUser(user);
+//        int totalPrice = 0;
+//        if (dto.getIsDelivery() == true) {
+//            totalPrice += 3000;
+//        }
+//        order.setTotalPrice(totalPrice);
+//        order.setTotalQuantity(dto.getQuantity());
+//        order.setPaymentStatus(PaymentStatus.BEFORE_PAYMENT);
+//        OrderEntity saveOrder = orderRepository.save(order);
+//        OrderEntity getOrder = orderRepository.findById(saveOrder.getOId())
+//                .orElseThrow(()->new ExceptionHandler(ErrorStatus.ORDER_NOT_FOUND));
+//        orderDetail.setOrder(getOrder);
         orderDetailRepository.save(orderDetail);
-        return OrderConverter.toOrderReadResponseDto(getOrder);
+
+        details.add(orderDetail);
+        session.setAttribute("orderDetail", details);
+//        return OrderConverter.toOrderReadResponseDto(getOrder);
     }
 
     public void closeGroup(Long gId) {
