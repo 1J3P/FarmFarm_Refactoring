@@ -77,6 +77,19 @@ public class FarmController {
         return ApiResponse.onSuccess(productService.getFarmProduct(farmService.getFarm(fId)));
     }
 
+    // 농장별 상품 보기(공구 상품)
+    @GetMapping("/{fId}/groupProduct")
+    public ApiResponse<ProductResponseDto.ProductListResponseDto> getFarmGroupProduct(@PathVariable("fId") long fId) {
+        return ApiResponse.onSuccess(productService.getFarmGroupProduct(farmService.getFarm(fId)));
+    }
+
+
+//    // 농장별 상품 보기(경매 상품)
+//    @GetMapping("/{fId}/auctionProduct")
+//    public ApiResponse<ProductResponseDto.ProductListResponseDto> getFarmGroupProduct(@PathVariable("fId") long fId) {
+//
+//    }
+
 
     // 농장 정보 수정
     @PatchMapping("/{fId}")

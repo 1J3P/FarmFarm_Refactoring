@@ -84,10 +84,24 @@ public class ProductService {
         return ProductConverter.toProductCreateResponseDto(product);
     }
 
-    // 농장별 상품 리스트 조회
+    // 농장별 상품 리스트 조회 (일반 상품)
     public ProductResponseDto.ProductListResponseDto getFarmProduct(FarmResponseDto.FarmReadResponseDto farm) {
         FarmEntity farmEntity = farmRepository.findByfId(farm.getFId());
         List<ProductEntity> productList = productRepository.findAllByFarmAndStatusLike(farmEntity, "yes");
+        return ProductConverter.toProductList(productList);
+    }
+
+    // 농장별 상품 리스트 조회 (공구 상품)
+    public ProductResponseDto.ProductListResponseDto getFarmGroupProduct(FarmResponseDto.FarmReadResponseDto farm) {
+        FarmEntity farmEntity = farmRepository.findByfId(farm.getFId());
+        List<ProductEntity> productList = productRepository.findAllByFarmAndStatusLikeAndType(farmEntity, "yes", 1);
+        return ProductConverter.toProductList(productList);
+    }
+
+    // 농장별 상품 리스트 조회 (경매 상품)
+    public ProductResponseDto.ProductListResponseDto getFarmAuctionProduct(FarmResponseDto.FarmReadResponseDto farm) {
+        FarmEntity farmEntity = farmRepository.findByfId(farm.getFId());
+        List<ProductEntity> productList = productRepository.findAllByFarmAndStatusLikeAndType(farmEntity, "yes", 2);
         return ProductConverter.toProductList(productList);
     }
 
