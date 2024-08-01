@@ -84,10 +84,24 @@ public class ProductService {
         return ProductConverter.toProductCreateResponseDto(product);
     }
 
-    // 농장별 상품 리스트 조회
+    // 농장별 상품 리스트 조회 (일반 상품)
     public ProductResponseDto.ProductListResponseDto getFarmProduct(FarmResponseDto.FarmReadResponseDto farm) {
         FarmEntity farmEntity = farmRepository.findByfId(farm.getFId());
         List<ProductEntity> productList = productRepository.findAllByFarmAndStatusLike(farmEntity, "yes");
+        return ProductConverter.toProductList(productList);
+    }
+
+    // 농장별 상품 리스트 조회 (공구 상품)
+    public ProductResponseDto.ProductListResponseDto getFarmGroupProduct(FarmResponseDto.FarmReadResponseDto farm) {
+        FarmEntity farmEntity = farmRepository.findByfId(farm.getFId());
+        List<ProductEntity> productList = productRepository.findAllByFarmAndStatusLikeAndType(farmEntity, "yes", 1);
+        return ProductConverter.toProductList(productList);
+    }
+
+    // 농장별 상품 리스트 조회 (경매 상품)
+    public ProductResponseDto.ProductListResponseDto getFarmAuctionProduct(FarmResponseDto.FarmReadResponseDto farm) {
+        FarmEntity farmEntity = farmRepository.findByfId(farm.getFId());
+        List<ProductEntity> productList = productRepository.findAllByFarmAndStatusLikeAndType(farmEntity, "yes", 2);
         return ProductConverter.toProductList(productList);
     }
 
@@ -120,6 +134,44 @@ public class ProductService {
                     default -> productRepository.findAllByNameContainingAndStatusLike(keyword, Sort.by(Sort.Direction.DESC, "pId"),"yes");
                 };
         return ProductConverter.toProductList(productList);
+    }
+
+    // 공동구매 상품 리스트(정렬만)
+    public ProductResponseDto.ProductListResponseDto getGroupProductsOrderBy(String criteria) {
+        List<ProductEntity> resultList = new ArrayList<>();
+        List<ProductEntity> productList =
+                switch (criteria) {
+                    case "rating" -> productRepository.findAllByStatusLikeOrderByRatingDesc("yes");
+                    case "lowPrice" -> productRepository.findAllByStatusLikeOrderByPriceAsc("yes");
+                    case "highPrice" -> productRepository.findAllByStatusLikeOrderByPriceDesc("yes");
+                    default -> productRepository.findAllByStatusLike(Sort.by(Sort.Direction.DESC, "pId"), "yes");
+                };
+
+        for (ProductEntity val : productList) {
+            if (val.getType() == 1) {
+                resultList.add(val);
+            }
+        }
+        return ProductConverter.toProductList(resultList);
+    }
+
+    // 공동구매 상품 리스트(정렬, 검색 같이)
+    public ProductResponseDto.ProductListResponseDto searchSortGroupProducts(String keyword, String criteria) {
+        List<ProductEntity> resultList = new ArrayList<>();
+        List<ProductEntity> productList =
+                switch (criteria) {
+                    case "rating" -> productRepository.findAllByNameContainingAndStatusLike(keyword, Sort.by(Sort.Direction.DESC, "rating"), "yes");
+                    case "lowPrice" -> productRepository.findAllByNameContainingAndStatusLike(keyword, Sort.by(Sort.Direction.ASC, "price"), "yes");
+                    case "highPrice" -> productRepository.findAllByNameContainingAndStatusLike(keyword, Sort.by(Sort.Direction.DESC, "price"), "yes");
+                    default -> productRepository.findAllByNameContainingAndStatusLike(keyword, Sort.by(Sort.Direction.DESC, "pId"),"yes");
+                };
+
+        for (ProductEntity val : productList) {
+            if (val.getType() == 1) {
+                resultList.add(val);
+            }
+        }
+        return ProductConverter.toProductList(resultList);
     }
 
     // 상품 삭제 *일단은 그냥 조건 없이 삭제 가능하게 뒀으나 나중에 주문 로직 구현하고 수정하기*
