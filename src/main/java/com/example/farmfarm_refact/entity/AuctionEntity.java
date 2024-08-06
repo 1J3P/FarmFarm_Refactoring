@@ -1,6 +1,5 @@
 package com.example.farmfarm_refact.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -15,33 +14,30 @@ import java.util.List;
 @Entity
 @NoArgsConstructor
 @DynamicUpdate
-@Table(name="order_detail")
+@Table(name="farm")
 @Getter
 @Setter
-public class OrderDetailEntity {
-
+public class AuctionEntity {
     @Id
     @GeneratedValue
-    @Column(name="od_id")
-    private Long odId;
+    @Column(name="au_id")
+    private Long auId;
 
     private int quantity;
 
-    private long price;
+    private int price;
 
-    private int type;
+    private String status;
+
+    private Long paId;
 
     @ManyToOne
-    @JoinColumn(name="p_id")
+    @JoinColumn(name="product")
     private ProductEntity product;
 
     @ManyToOne
-    @JoinColumn(name="o_id")
-    private OrderEntity order;
-
-    @ManyToOne
-    @JoinColumn(name = "group_id")
-    private GroupEntity group;
+    @JoinColumn(name="user")
+    private UserEntity user;
 
 }
 
