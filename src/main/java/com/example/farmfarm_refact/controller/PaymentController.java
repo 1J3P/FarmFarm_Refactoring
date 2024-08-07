@@ -9,11 +9,13 @@ import com.example.farmfarm_refact.entity.kakaoPay.KakaoReadyResponse;
 import com.example.farmfarm_refact.entity.kakaoPay.RefundPaymentEntity;
 import com.example.farmfarm_refact.service.OrderService;
 import com.example.farmfarm_refact.service.PaymentService;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -30,9 +32,15 @@ public class PaymentController {
     }
 
     @GetMapping("/success/{oId}")
-    //TODO 필요에 따라 Response Dto 형태로 변환할 것
-    public ApiResponse<ApprovePaymentEntity> afterPayRequest(@RequestParam("pg_token") String pgToken, @PathVariable("oId") long oId) {
-        return ApiResponse.onSuccess(paymentService.afterPayment(pgToken, oId));
+    public void afterPayRequest(HttpServletResponse response, @RequestParam("pg_token") String pgToken, @PathVariable("oId") long oId) throws IOException {
+        // 결제 성공 시
+        response.sendRedirect("http://localhost:3000/paymentCallback?status=success&pg_token=" + pgToken + "&oId=" + oId);
+    }
+
+    @GetMapping("/fail/{oId}")
+    public void afterPayFail(HttpServletResponse response, @PathVariable("oId") long oId) throws IOException {
+        // 결제 실패 시
+        response.sendRedirect("http://localhost:3000/paymentCallback?status=fail&oId=" + oId);
     }
 
     @PostMapping("/refund/{paId}")
