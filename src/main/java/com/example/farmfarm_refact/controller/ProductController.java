@@ -54,18 +54,28 @@ public class ProductController {
     }
 
     // 공동구매 상품 리스트
-//    @GetMapping("/group/list")
-//    public ApiResponse<ProductResponseDto.ProductListResponseDto> getGroupProductList(@RequestParam(required = false, value = "sort", defaultValue = "") String criteria,
-//                                                                                 @RequestParam(required = false, value = "keyword", defaultValue = "") String keyword) {
+    @GetMapping("/group/list")
+    public ApiResponse<ProductResponseDto.ProductListResponseDto> getGroupProductList(@RequestParam(required = false, value = "sort", defaultValue = "") String criteria,
+                                                                                 @RequestParam(required = false, value = "keyword", defaultValue = "") String keyword) {
+        if (keyword.equals("")) {
+            return ApiResponse.onSuccess(productService.getGroupProductsOrderBy(criteria));
+        }
+        else {
+            return ApiResponse.onSuccess(productService.searchSortGroupProducts(keyword, criteria));
+        }
+    }
+
+//    // 경매 상품 리스트
+//    @GetMapping("/auction/list")
+//    public ApiResponse<ProductResponseDto.ProductListResponseDto> getAuctionProductList(@RequestParam(required = false, value = "sort", defaultValue = "") String criteria,
+//                                                                                      @RequestParam(required = false, value = "keyword", defaultValue = "") String keyword) {
 //        if (keyword.equals("")) {
-//            return ApiResponse.onSuccess(productService.getProductsOrderBy(criteria));
+//            return ApiResponse.onSuccess(productService.getGroupProductsOrderBy(criteria));
 //        }
 //        else {
-//            return ApiResponse.onSuccess(productService.searchSortProducts(keyword, criteria));
+//            return ApiResponse.onSuccess(productService.searchSortGroupProducts(keyword, criteria));
 //        }
 //    }
-
-    // 경매 상품 리스트
 
     // 상품 삭제
     @DeleteMapping("/{pId}")
