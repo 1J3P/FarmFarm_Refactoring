@@ -5,6 +5,7 @@ import com.example.farmfarm_refact.apiPayload.code.status.ErrorStatus;
 import com.example.farmfarm_refact.controller.ProductController;
 import com.example.farmfarm_refact.converter.CartConverter;
 import com.example.farmfarm_refact.converter.FarmConverter;
+import com.example.farmfarm_refact.converter.GroupConverter;
 import com.example.farmfarm_refact.converter.ProductConverter;
 import com.example.farmfarm_refact.dto.*;
 import com.example.farmfarm_refact.entity.*;
@@ -12,6 +13,7 @@ import com.example.farmfarm_refact.entity.Cart.Cart;
 import com.example.farmfarm_refact.entity.Cart.Item;
 import com.example.farmfarm_refact.repository.FarmRepository;
 import com.example.farmfarm_refact.repository.FileRepository;
+import com.example.farmfarm_refact.repository.GroupRepository;
 import com.example.farmfarm_refact.repository.ProductRepository;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,10 +24,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static com.example.farmfarm_refact.apiPayload.code.status.ErrorStatus.*;
 
@@ -39,6 +38,8 @@ public class ProductService {
     private FileRepository fileRepository;
     @Autowired
     private FileService fileService;
+    @Autowired
+    private GroupRepository groupRepository;
 
     // 상품 등록
     public ProductResponseDto.ProductCreateResponseDto saveProduct(UserEntity user, ProductRequestDto.ProductCreateRequestDto productCreateRequestDto) {
@@ -239,5 +240,12 @@ public class ProductService {
         Cart cart = (Cart)session.getAttribute("cart");
         cart.delete(pId);
         session.setAttribute("cart", cart);
+    }
+
+    // 공동구매 그룹 리스트
+    public GroupResponseDto.GroupListResponseDto getGroupList(long pId) {
+        Optional<ProductEntity> product = productRepository.findById(pId);
+        List<GroupEntity> groupList = groupRepository.findAllByProduct(product);
+        return GroupConverter.toGroupList(groupList);
     }
 }
