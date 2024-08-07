@@ -112,13 +112,9 @@ public class ProductController {
         return ApiResponse.onSuccess(SuccessStatus.CART_ITEM_DELETE);
     }
 
-    // 공동구매 개설하기 버튼
-
-
-    // 공동구매 참여하기 버튼
-
-
-
     // 공동구매 참여자 목록
-//    public ApiResponse<GroupResponseDto.>
+    @PostMapping("/{pId}/groupList")
+    public ApiResponse<GroupResponseDto.GroupListResponseDto> getGroupList(@PathVariable("pId") long pId) {
+        return ApiResponse.onSuccess(productService.getGroupList(pId));
+    }
 }
