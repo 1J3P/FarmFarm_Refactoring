@@ -75,7 +75,8 @@ public enum ErrorStatus implements BaseErrorCode {
     //order 에러
     ORDER_NOT_FOUND(HttpStatus.NOT_FOUND, "ORDER4001", "order가 존재하지 않습니다"),
 
-
+    //kakao pay 에러
+    REFUND_FAIL(HttpStatus.BAD_REQUEST, "kakaopay4001", "리펀에 실패했습니다.")
 
     ;
 

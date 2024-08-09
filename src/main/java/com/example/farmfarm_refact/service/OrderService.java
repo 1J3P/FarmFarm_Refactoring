@@ -1,33 +1,29 @@
 package com.example.farmfarm_refact.service;
 
 
+import com.example.farmfarm_refact.apiPayload.ApiResponse;
 import com.example.farmfarm_refact.apiPayload.ExceptionHandler;
 import com.example.farmfarm_refact.apiPayload.code.status.ErrorStatus;
-import com.example.farmfarm_refact.apiPayload.exception.GeneralException;
-import com.example.farmfarm_refact.controller.S3Controller;
-import com.example.farmfarm_refact.converter.FarmConverter;
+import com.example.farmfarm_refact.controller.PaymentController;
 import com.example.farmfarm_refact.converter.OrderConverter;
-import com.example.farmfarm_refact.converter.ProductConverter;
+import com.example.farmfarm_refact.converter.PayConverter;
 import com.example.farmfarm_refact.dto.*;
 import com.example.farmfarm_refact.entity.*;
 import com.example.farmfarm_refact.entity.Cart.Cart;
 import com.example.farmfarm_refact.entity.Cart.Item;
+import com.example.farmfarm_refact.entity.kakaoPay.RefundPaymentEntity;
 import com.example.farmfarm_refact.repository.*;
 import jakarta.servlet.http.HttpSession;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.apache.catalina.User;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.servlet.ModelAndView;
+import com.example.farmfarm_refact.entity.kakaoPay.ApprovePaymentEntity;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
-import static com.example.farmfarm_refact.apiPayload.code.status.ErrorStatus.S3_NOT_FOUND;
 
 @Service
 @RequiredArgsConstructor
@@ -38,6 +34,7 @@ public class OrderService {
     private final ProductRepository productRepository;
     private final GroupService groupService;
     private final GroupRepository groupRepository;
+    private final PaymentController paymentController;
 
 
     public OrderResponseDto.OrderCartResponseDto saveOrderDetailCart(HttpSession session) {
@@ -182,8 +179,19 @@ public class OrderService {
 //        return OrderConverter.toOrderReadResponseDto(getOrder);
     }
 
-    public void closeGroup(Long gId) {
-
+    // 공동구매 종료 및 환불(24시간 후 닫히는 메소드)
+    public PayResponseDto.refundPaymentDto closeGroupAndRefund(Long gId) {
+        GroupEntity group = groupService.getGroup(gId);
+        List<OrderDetailEntity> orderdetails = group.getOrderDetails();
+        ProductEntity product = group.getProduct();
+        OrderEntity order = orderdetails.get(0).getOrder();
+        ApprovePaymentEntity approvePayment = order.getPayment();
+        ApiResponse<RefundPaymentEntity> response = paymentController.refund(approvePayment.getPaId());
+        if (response.getIsSuccess() == true) {
+            return PayConverter.toRefundPaymentDto(response.getResult());
+        }
+        else
+            throw new ExceptionHandler(ErrorStatus.REFUND_FAIL);
     }
 
     public OrderEntity getOrder(Long oId){
