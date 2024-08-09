@@ -6,6 +6,7 @@ import com.example.farmfarm_refact.apiPayload.code.status.SuccessStatus;
 import com.example.farmfarm_refact.dto.*;
 import com.example.farmfarm_refact.entity.GroupEntity;
 import com.example.farmfarm_refact.entity.OrderDetailEntity;
+import com.example.farmfarm_refact.entity.ProductEntity;
 import com.example.farmfarm_refact.entity.UserEntity;
 import com.example.farmfarm_refact.service.FarmService;
 import com.example.farmfarm_refact.service.GroupService;
@@ -30,6 +31,8 @@ import java.util.List;
 @RequestMapping("/order")
 public class OrderController {
     private final OrderService orderService;
+    @Autowired
+    private ProductService productService;
 
     //장바구니 페이지에서 주문하기 눌렀을때 호출되는 API - 오더 디테일 객체들 만들어서 session에 저장해주고, 직거래만 되는지 표시
     @GetMapping("/cart")
@@ -57,8 +60,8 @@ public class OrderController {
     }
 
     // 공동구매 24시간 후 닫히는 메소드
-//    @DeleteMapping("/group/{gId}")
-//    public ApiResponse closeGroup(@PathVariable("gId") long gId) {
-//        return ApiResponse.onSuccess();
-//    }
+    @DeleteMapping("/group/{gId}")
+    public ApiResponse<PayResponseDto.refundPaymentDto> closeGroup(@PathVariable("gId") long gId) {
+        return ApiResponse.onSuccess(orderService.closeGroupAndRefund(gId));
+    }
 }
