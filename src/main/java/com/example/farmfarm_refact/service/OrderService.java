@@ -15,6 +15,8 @@ import com.example.farmfarm_refact.entity.kakaoPay.RefundPaymentEntity;
 import com.example.farmfarm_refact.repository.*;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.validator.internal.util.stereotypes.Lazy;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -194,9 +196,9 @@ public class OrderService {
             throw new ExceptionHandler(ErrorStatus.REFUND_FAIL);
     }
 
-    public OrderEntity getOrder(Long oId){
-        return orderRepository.findById(oId)
-                .orElseThrow(()->new ExceptionHandler(ErrorStatus.ORDER_NOT_FOUND));
-    }
+//    public OrderEntity getOrder(Long oId){
+//        return orderRepository.findById(oId)
+//                .orElseThrow(()->new ExceptionHandler(ErrorStatus.ORDER_NOT_FOUND));
+//    }
 
 }

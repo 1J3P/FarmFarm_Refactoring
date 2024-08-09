@@ -7,6 +7,7 @@ import com.example.farmfarm_refact.entity.OrderEntity;
 import com.example.farmfarm_refact.entity.kakaoPay.ApprovePaymentEntity;
 import com.example.farmfarm_refact.entity.kakaoPay.KakaoReadyResponse;
 import com.example.farmfarm_refact.entity.kakaoPay.RefundPaymentEntity;
+import com.example.farmfarm_refact.repository.OrderRepository;
 import com.example.farmfarm_refact.service.OrderService;
 import com.example.farmfarm_refact.service.PaymentService;
 import jakarta.servlet.http.HttpServletResponse;
@@ -23,12 +24,13 @@ import java.util.List;
 @RequestMapping("/pay")
 public class PaymentController {
     private final PaymentService paymentService;
-    private final OrderService orderService;
+//    private final OrderService orderService;
+    private final OrderRepository orderRepository;
 
     //장바구니 페이지에서 주문하기 눌렀을때 호출되는 API - 오더 디테일 객체들 만들어서 session에 저장해주고, 직거래만 되는지 표시
     @GetMapping("/order/{oId}")
     public ApiResponse<KakaoReadyResponse> pay(@PathVariable("oId") Long oId) {
-        return ApiResponse.onSuccess(paymentService.kakaoPayReady(orderService.getOrder(oId)));
+        return ApiResponse.onSuccess(paymentService.kakaoPayReady(orderRepository.findByoId(oId)));
     }
 
     @GetMapping("/success/{oId}")
