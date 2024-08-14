@@ -14,7 +14,7 @@ import java.util.List;
 @Entity
 @NoArgsConstructor
 @DynamicUpdate
-@Table(name="farm")
+@Table(name="auction")
 @Getter
 @Setter
 public class AuctionEntity {

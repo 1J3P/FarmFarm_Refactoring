@@ -6,6 +6,7 @@ import com.example.farmfarm_refact.apiPayload.code.status.SuccessStatus;
 import com.example.farmfarm_refact.dto.*;
 import com.example.farmfarm_refact.entity.GroupEntity;
 import com.example.farmfarm_refact.entity.OrderDetailEntity;
+import com.example.farmfarm_refact.entity.ProductEntity;
 import com.example.farmfarm_refact.entity.UserEntity;
 import com.example.farmfarm_refact.service.FarmService;
 import com.example.farmfarm_refact.service.GroupService;
@@ -29,6 +30,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("/order")
 public class OrderController {
+
     private final OrderService orderService;
 
     //장바구니 페이지에서 주문하기 눌렀을때 호출되는 API - 오더 디테일 객체들 만들어서 session에 저장해주고, 직거래만 되는지 표시
@@ -67,4 +69,10 @@ public class OrderController {
 //    public ApiResponse saveOrderDetailAuction(@AuthenticationPrincipal UserEntity user, @PathVariable("pId") long pId, @RequestParam("quantity") int quantity, @RequestParam("price") int price) {
 //
 //    }
+
+    @DeleteMapping("/group/{gId}")
+    public ApiResponse<PayResponseDto.refundPaymentDto> closeGroup(@PathVariable("gId") long gId) {
+        return ApiResponse.onSuccess(orderService.closeGroupAndRefund(gId));
+    }
+
 }

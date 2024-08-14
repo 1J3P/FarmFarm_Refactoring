@@ -24,7 +24,7 @@ public class PaymentService {
 
     private final ApprovePaymentRepository approvePaymentRepository;
     private final RefundPaymentRepository refundPaymentRepository;
-    private final OrderService orderService;
+//    private final OrderService orderService;
     private final OrderRepository orderRepository;
 
     private String cid = "TC0ONETIME";
@@ -128,7 +128,7 @@ public class PaymentService {
     }
 
     public ApprovePaymentEntity afterPayment(String pgToken, Long oId) {
-        OrderEntity order = orderService.getOrder(oId);
+        OrderEntity order = orderRepository.findByoId(oId);
         ApprovePaymentEntity kakaoApprove = approveResponse(order, pgToken);
         List<OrderDetailEntity> detail = order.getOrderDetails();
         for (OrderDetailEntity od : detail) {
@@ -154,7 +154,7 @@ public class PaymentService {
     public RefundPaymentEntity refund(long paId) {
         ApprovePaymentEntity approve = approvePaymentRepository.findBypaId(paId);
         RefundPaymentEntity kakaoCancelResponse = kakaoRefund(approve);
-        OrderEntity order = orderService.getOrder(Long.parseLong(approve.getPartner_order_id()));
+        OrderEntity order = orderRepository.findByoId(Long.parseLong(approve.getPartner_order_id()));
         List<OrderDetailEntity> detail = order.getOrderDetails();
         for (OrderDetailEntity od : detail) {
             int quantity = od.getProduct().getQuantity();

@@ -52,6 +52,6 @@ public class GroupService {
     }
 
     public List<GroupEntity> findByProduct(ProductEntity product) {
-        return groupRepository.findAllByProduct(product);
+        return groupRepository.findAllByProduct(Optional.ofNullable(product));
     }
 }
