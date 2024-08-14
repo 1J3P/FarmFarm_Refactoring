@@ -61,4 +61,10 @@ public class OrderController {
 //    public ApiResponse closeGroup(@PathVariable("gId") long gId) {
 //        return ApiResponse.onSuccess();
 //    }
+
+    // 경매 구매
+//    @GetMapping("/product/{pId}")
+//    public ApiResponse saveOrderDetailAuction(@AuthenticationPrincipal UserEntity user, @PathVariable("pId") long pId, @RequestParam("quantity") int quantity, @RequestParam("price") int price) {
+//
+//    }
 }
