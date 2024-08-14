@@ -15,11 +15,13 @@ public class GroupResponseDto {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class openedGroupDto {
+        private Long gId;
         private String nickname;
         private String image;
         private Timestamp created_at;
         private Timestamp closed_at;
         private int stock;
+        private int capacity;
         private int isClose;
     }
 

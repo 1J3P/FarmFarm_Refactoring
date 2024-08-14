@@ -13,11 +13,13 @@ public class GroupConverter {
     // GroupEntity를 OpenedGroupDto로 변환하는 메서드
     public static GroupResponseDto.openedGroupDto toGroupDto(GroupEntity group) {
         return GroupResponseDto.openedGroupDto.builder()
+                .gId(group.getGId())
                 .nickname(group.getUser1().getNickname())
                 .image(group.getUser1().getImage())
                 .created_at(group.getCreated_at())
                 .closed_at(group.getClosed_at())
                 .stock(group.getStock())
+                .capacity(group.getCapacity())
                 .isClose(group.getIsClose())
                 .build();
     }
