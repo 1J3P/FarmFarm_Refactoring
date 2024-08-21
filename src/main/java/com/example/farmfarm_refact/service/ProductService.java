@@ -3,6 +3,7 @@ package com.example.farmfarm_refact.service;
 import com.example.farmfarm_refact.apiPayload.ExceptionHandler;
 import com.example.farmfarm_refact.apiPayload.code.status.ErrorStatus;
 import com.example.farmfarm_refact.controller.ProductController;
+import com.example.farmfarm_refact.controller.S3Controller;
 import com.example.farmfarm_refact.converter.CartConverter;
 import com.example.farmfarm_refact.converter.FarmConverter;
 import com.example.farmfarm_refact.converter.GroupConverter;
@@ -38,6 +39,8 @@ public class ProductService {
     private FileRepository fileRepository;
     @Autowired
     private FileService fileService;
+    @Autowired
+    private S3Controller s3Controller;
     @Autowired
     private GroupRepository groupRepository;
 
@@ -194,12 +197,27 @@ public class ProductService {
     }
 
     // 상품 수정
-    public void updateProduct(ProductRequestDto.ProductUpdateRequestDto updateProduct) {
-        ProductEntity oldProduct = productRepository.findBypIdAndStatusLike(updateProduct.getPId(), "yes")
+    public void updateProduct(ProductRequestDto.ProductUpdateRequestDto productUpdateRequestDto) {
+        ProductEntity oldProduct = productRepository.findBypIdAndStatusLike(productUpdateRequestDto.getPId(), "yes")
                 .orElseThrow(() -> new ExceptionHandler(PRODUCT_NOT_FOUND));
-        ProductEntity newProduct = ProductConverter.toNewProduct(updateProduct);
+        ProductEntity newProduct = ProductConverter.toNewProduct(productUpdateRequestDto);
         oldProduct.updateProduct(newProduct);
         productRepository.save(oldProduct);
+        if (productUpdateRequestDto.getAddImages() != null) {
+            for (Long imageId : productUpdateRequestDto.getAddImages()) {
+                FileEntity file = fileRepository.findById(imageId.intValue())
+                        .orElseThrow(() -> new ExceptionHandler(S3_NOT_FOUND));
+                file.setFileType(FileType.PRODUCT);
+                file.setProduct(oldProduct);
+                fileRepository.save(file);
+            }
+        }
+        if (productUpdateRequestDto.getDeleteImages() != null) {
+            for (Long imageId : productUpdateRequestDto.getDeleteImages()) {
+                s3Controller.deleteFile(imageId.intValue());
+                fileService.deleteByFileId(imageId.intValue());
+            }
+        }
     }
 
     // 장바구니(세션)에 상품 담기

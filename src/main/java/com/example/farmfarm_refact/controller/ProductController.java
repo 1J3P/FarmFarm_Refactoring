@@ -86,9 +86,9 @@ public class ProductController {
 
     // 상품 수정
     @PatchMapping("/{pId}")
-    public ApiResponse updateProduct(@PathVariable Long pId, @RequestBody @Valid ProductRequestDto.ProductUpdateRequestDto uProduct) {
-        uProduct.setPId(pId);
-        productService.updateProduct(uProduct);
+    public ApiResponse updateProduct(@PathVariable Long pId, @RequestBody @Valid ProductRequestDto.ProductUpdateRequestDto productUpdateRequestDto) {
+        productUpdateRequestDto.setPId(pId);
+        productService.updateProduct(productUpdateRequestDto);
         return ApiResponse.onSuccess(SuccessStatus.LIMJANG_UPDATE);
     }
 
