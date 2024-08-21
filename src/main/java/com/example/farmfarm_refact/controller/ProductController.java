@@ -113,7 +113,7 @@ public class ProductController {
     }
 
     // 공동구매 참여자 목록
-    @PostMapping("/{pId}/groupList")
+    @GetMapping("/{pId}/groupList")
     public ApiResponse<GroupResponseDto.GroupListResponseDto> getGroupList(@PathVariable("pId") long pId) {
         return ApiResponse.onSuccess(productService.getGroupList(pId));
     }
