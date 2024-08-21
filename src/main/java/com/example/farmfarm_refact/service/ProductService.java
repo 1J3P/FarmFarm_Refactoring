@@ -207,7 +207,7 @@ public class ProductService {
             for (Long imageId : productUpdateRequestDto.getAddImages()) {
                 FileEntity file = fileRepository.findById(imageId.intValue())
                         .orElseThrow(() -> new ExceptionHandler(S3_NOT_FOUND));
-                file.setFileType(FileType.PRODUCT;
+                file.setFileType(FileType.PRODUCT);
                 file.setProduct(oldProduct);
                 fileRepository.save(file);
             }
