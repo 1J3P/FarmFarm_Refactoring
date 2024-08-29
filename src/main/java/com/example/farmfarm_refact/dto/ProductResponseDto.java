@@ -1,5 +1,6 @@
 package com.example.farmfarm_refact.dto;
 
+import com.example.farmfarm_refact.entity.ProductCategory;
 import com.example.farmfarm_refact.entity.ShippingMethod;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -55,6 +56,7 @@ public class ProductResponseDto {
         private int quantity;
         private int productType;
         private ShippingMethod shippingMethod;
+        private ProductCategory productCategory;
         private int groupProductQuantity;
         private int groupProductDiscount;
     }
