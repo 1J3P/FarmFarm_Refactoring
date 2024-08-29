@@ -66,6 +66,7 @@ public class ProductConverter {
                 .quantity(product.getQuantity())
                 .productType(product.getType())
                 .shippingMethod(product.getShippingMethod())
+                .productCategory(product.getProductCategory())
                 .groupProductQuantity(product.getGroupProductQuantity())
                 .groupProductDiscount(product.getGroupProductDiscount())
                 .build();
