@@ -24,4 +24,18 @@ public class OrderRequestDto {
         private int quantity;   // 내가 구매할 공구 상품 수량
     }
 
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class AuctionCreateRequestDto {
+        private String deliveryName;
+        private String deliveryPhone;
+        private Boolean isDelivery;
+        private String deliveryAddress;
+        private String deliveryAddressDetail;
+        private String deliveryMemo;
+        private int quantity;   // 내가 구매할 공구 상품 수량
+    }
+
 }

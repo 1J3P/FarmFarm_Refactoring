@@ -184,6 +184,8 @@ public class OrderService {
     // 공동구매 종료 및 환불(24시간 후 닫히는 메소드)
     public PayResponseDto.refundPaymentDto closeGroupAndRefund(Long gId) {
         GroupEntity group = groupService.getGroup(gId);
+        group.setIsClose(1);
+        group = groupRepository.save(group);
         List<OrderDetailEntity> orderdetails = group.getOrderDetails();
         ProductEntity product = group.getProduct();
         OrderEntity order = orderdetails.get(0).getOrder();
