@@ -58,15 +58,9 @@ public class OrderController {
         return ApiResponse.onSuccess(SuccessStatus._OK);
     }
 
-    // 공동구매 24시간 후 닫히는 메소드
-//    @DeleteMapping("/group/{gId}")
-//    public ApiResponse closeGroup(@PathVariable("gId") long gId) {
-//        return ApiResponse.onSuccess();
-//    }
-
-    // 경매 구매
-//    @GetMapping("/product/{pId}")
-//    public ApiResponse saveOrderDetailAuction(@AuthenticationPrincipal UserEntity user, @PathVariable("pId") long pId, @RequestParam("quantity") int quantity, @RequestParam("price") int price) {
+//    // 경매 구매
+//    @PostMapping("/product/{pId}")
+//    public ApiResponse saveOrderDetailAuction(@AuthenticationPrincipal UserEntity user, OrderRequestDto.OrderCreateRequestDto dto) {
 //
 //    }
 

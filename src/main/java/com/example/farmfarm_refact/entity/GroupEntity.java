@@ -46,7 +46,7 @@ public class GroupEntity {
     @OneToMany(mappedBy = "group")
     private List<OrderDetailEntity> orderDetails = new ArrayList<>();
 
-    private int isClose;
+    private int isClose; //0이면 안닫힘, 1이면 닫힘
 
     private int stock;  // 잔여 수량(각 팀은 농부가 지정한 공구 수량을 알아서 나눠서 사야 한다.)
 }
