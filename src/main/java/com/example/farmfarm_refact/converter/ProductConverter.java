@@ -68,7 +68,7 @@ public class ProductConverter {
                 .farm(FarmConverter.toFarmReadResponseDto(product.getFarm()))
                 .quantity(product.getQuantity())
                 .type(product.getType())
-                .direct(product.isDirect())
+                .shippingMethod(product.getShippingMethod())
                 .groupProductQuantity(product.getGroupProductQuantity())
                 .groupProductDiscount(product.getGroupProductDiscount())
                 .build();
