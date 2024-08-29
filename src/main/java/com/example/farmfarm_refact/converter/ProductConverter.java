@@ -1,11 +1,8 @@
 package com.example.farmfarm_refact.converter;
 
 
-import com.example.farmfarm_refact.dto.FarmRequestDto;
-import com.example.farmfarm_refact.dto.FarmResponseDto;
 import com.example.farmfarm_refact.dto.ProductRequestDto;
 import com.example.farmfarm_refact.dto.ProductResponseDto;
-import com.example.farmfarm_refact.entity.FarmEntity;
 import com.example.farmfarm_refact.entity.ProductEntity;
 
 import java.util.List;
@@ -67,7 +64,7 @@ public class ProductConverter {
                 .images(FileConverter.toFileCreateResponseDtoList(product.getFiles()))
                 .farm(FarmConverter.toFarmReadResponseDto(product.getFarm()))
                 .quantity(product.getQuantity())
-                .type(product.getType())
+                .productType(product.getType())
                 .shippingMethod(product.getShippingMethod())
                 .groupProductQuantity(product.getGroupProductQuantity())
                 .groupProductDiscount(product.getGroupProductDiscount())
