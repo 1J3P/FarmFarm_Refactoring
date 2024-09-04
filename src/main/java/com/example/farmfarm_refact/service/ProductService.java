@@ -17,8 +17,10 @@ import com.example.farmfarm_refact.repository.FileRepository;
 import com.example.farmfarm_refact.repository.GroupRepository;
 import com.example.farmfarm_refact.repository.ProductRepository;
 import jakarta.servlet.http.HttpSession;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
+import org.springframework.orm.jpa.JpaObjectRetrievalFailureException;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -217,16 +219,22 @@ public class ProductService {
     }
 
     // 상품 삭제 *일단은 그냥 조건 없이 삭제 가능하게 뒀으나 나중에 주문 로직 구현하고 수정하기*
+    @Transactional
     public void deleteProduct(UserEntity user, Long pId) {
         ProductEntity product = productRepository.findBypIdAndStatusLike(pId, "yes")
                 .orElseThrow(() -> new ExceptionHandler(ErrorStatus.PRODUCT_NOT_FOUND));
         // 농장 주인인지 확인
         if (user.equals(product.getFarm().getUser())) {
-            if (product.getFiles() != null) {
-                for (FileEntity file : product.getFiles()) {
+            List<FileEntity> files = product.getFiles();
+
+            for (FileEntity file : files) {
+                try {
                     fileService.deleteByFileId(file.getFileId().intValue());
+                } catch (JpaObjectRetrievalFailureException e) {
+                    System.out.println("File with ID " + file.getFileId().intValue() + " does not exist.");
                 }
             }
+
             product.setStatus("no");
             productRepository.save(product);
         }
