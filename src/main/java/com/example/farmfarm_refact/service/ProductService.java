@@ -178,6 +178,44 @@ public class ProductService {
         return ProductConverter.toProductList(resultList);
     }
 
+    // 경매 상품 리스트(정렬만)
+    public ProductResponseDto.ProductListResponseDto getAuctionProductsOrderBy(String criteria) {
+        List<ProductEntity> resultList = new ArrayList<>();
+        List<ProductEntity> productList =
+                switch (criteria) {
+                    case "rating" -> productRepository.findAllByStatusLikeOrderByRatingDesc("yes");
+                    case "lowPrice" -> productRepository.findAllByStatusLikeOrderByPriceAsc("yes");
+                    case "highPrice" -> productRepository.findAllByStatusLikeOrderByPriceDesc("yes");
+                    default -> productRepository.findAllByStatusLike(Sort.by(Sort.Direction.DESC, "pId"), "yes");
+                };
+
+        for (ProductEntity val : productList) {
+            if (val.getType() == 2) {
+                resultList.add(val);
+            }
+        }
+        return ProductConverter.toProductList(resultList);
+    }
+
+    // 경매 상품 리스트(정렬, 검색 같이)
+    public ProductResponseDto.ProductListResponseDto searchSortAuctionProducts(String keyword, String criteria) {
+        List<ProductEntity> resultList = new ArrayList<>();
+        List<ProductEntity> productList =
+                switch (criteria) {
+                    case "rating" -> productRepository.findAllByNameContainingAndStatusLike(keyword, Sort.by(Sort.Direction.DESC, "rating"), "yes");
+                    case "lowPrice" -> productRepository.findAllByNameContainingAndStatusLike(keyword, Sort.by(Sort.Direction.ASC, "price"), "yes");
+                    case "highPrice" -> productRepository.findAllByNameContainingAndStatusLike(keyword, Sort.by(Sort.Direction.DESC, "price"), "yes");
+                    default -> productRepository.findAllByNameContainingAndStatusLike(keyword, Sort.by(Sort.Direction.DESC, "pId"),"yes");
+                };
+
+        for (ProductEntity val : productList) {
+            if (val.getType() == 2) {
+                resultList.add(val);
+            }
+        }
+        return ProductConverter.toProductList(resultList);
+    }
+
     // 상품 삭제 *일단은 그냥 조건 없이 삭제 가능하게 뒀으나 나중에 주문 로직 구현하고 수정하기*
     public void deleteProduct(UserEntity user, Long pId) {
         ProductEntity product = productRepository.findBypIdAndStatusLike(pId, "yes")
