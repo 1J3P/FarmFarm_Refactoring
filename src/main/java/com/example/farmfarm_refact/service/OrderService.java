@@ -37,6 +37,8 @@ public class OrderService {
     private final GroupService groupService;
     private final GroupRepository groupRepository;
     private final PaymentController paymentController;
+    private final AuctionRepository auctionRepository;
+
 
 
     public OrderResponseDto.OrderCartResponseDto saveOrderDetailCart(HttpSession session) {
@@ -202,5 +204,18 @@ public class OrderService {
 //        return orderRepository.findById(oId)
 //                .orElseThrow(()->new ExceptionHandler(ErrorStatus.ORDER_NOT_FOUND));
 //    }
+
+    public void saveOrderDetailAuction(UserEntity user, Long pId, OrderRequestDto.AuctionCreateRequestDto dto, HttpSession session) {
+        ProductEntity product = productRepository.findById(pId)
+                .orElseThrow(() -> new ExceptionHandler(ErrorStatus.PRODUCT_NOT_FOUND));
+        List<OrderDetailEntity> details = new ArrayList<>();
+        if (product.getShippingMethod() == ShippingMethod.DIRECT) {
+            AuctionEntity auction = new AuctionEntity(dto.getQuantity(), dto.getPrice(), AuctionStatus.AUCTION_IN_PROGRESS, product, user);
+            auction = auctionRepository.save(auction);
+            OrderDetailEntity orderDetail = new OrderDetailEntity(auction.getQuantity(), (int)(long) auction.getPrice() * auction.getQuantity(), 2, product, auction);
+            details.add(orderDetail);
+            session.setAttribute("orderDetail", details);
+        }
+    }
 
 }
