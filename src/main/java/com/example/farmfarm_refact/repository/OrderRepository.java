@@ -14,5 +14,6 @@ import java.util.Optional;
 public interface OrderRepository extends CrudRepository<OrderEntity, Long> {
 
     public OrderEntity findByoId(Long oId);
+    public List<OrderEntity> findAllByUser(UserEntity user);
 
 }

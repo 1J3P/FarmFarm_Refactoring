@@ -44,6 +44,9 @@ public class OrderEntity {
 
     private String deliveryMemo;
 
+    @CreationTimestamp
+    private Timestamp created_at;
+
     @OneToMany(mappedBy = "order")
     private List<OrderDetailEntity> orderDetails = new ArrayList<>();
 
