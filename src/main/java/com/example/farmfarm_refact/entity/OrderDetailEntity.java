@@ -40,9 +40,22 @@ public class OrderDetailEntity {
     private OrderEntity order;
 
     @ManyToOne
+    @JoinColumn(name="au_id")
+    private AuctionEntity auction;
+
+    @ManyToOne
     @JoinColumn(name = "group_id")
     private GroupEntity group;
 
+
+
+    public OrderDetailEntity(int quantity, long price, int type, ProductEntity product, AuctionEntity auction) {
+        this.quantity = quantity;
+        this.price = price;
+        this.type = type;
+        this.product = product;
+        this.auction = auction;
+    }
 }
 
 

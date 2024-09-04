@@ -59,10 +59,11 @@ public class OrderController {
     }
 
 //    // 경매 구매
-//    @PostMapping("/product/{pId}")
-//    public ApiResponse saveOrderDetailAuction(@AuthenticationPrincipal UserEntity user, OrderRequestDto.OrderCreateRequestDto dto) {
-//
-//    }
+    @PostMapping("/product/{pId}")
+    public ApiResponse saveOrderDetailAuction(@AuthenticationPrincipal UserEntity user, @PathVariable("pId") long pId, OrderRequestDto.AuctionCreateRequestDto dto, HttpSession session) {
+        orderService.saveOrderDetailAuction(user, pId, dto, session);
+        return ApiResponse.onSuccess(SuccessStatus._OK);
+    }
 
     @DeleteMapping("/group/{gId}")
     public ApiResponse<PayResponseDto.refundPaymentDto> closeGroup(@PathVariable("gId") long gId) {
