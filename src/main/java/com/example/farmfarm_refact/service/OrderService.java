@@ -5,6 +5,7 @@ import com.example.farmfarm_refact.apiPayload.ApiResponse;
 import com.example.farmfarm_refact.apiPayload.ExceptionHandler;
 import com.example.farmfarm_refact.apiPayload.code.status.ErrorStatus;
 import com.example.farmfarm_refact.controller.PaymentController;
+import com.example.farmfarm_refact.converter.MyPageConverter;
 import com.example.farmfarm_refact.converter.OrderConverter;
 import com.example.farmfarm_refact.converter.PayConverter;
 import com.example.farmfarm_refact.dto.*;
@@ -205,7 +206,8 @@ public class OrderService {
 
     // 나의 주문내역
     public OrderResponseDto.MyOrderListResponseDto getMyOrderList(UserEntity user) {
-
+        List<OrderEntity> myOrders = orderRepository.findAllByUser(user);
+        return OrderConverter.toMyOrderList(myOrders);
     }
 
 }

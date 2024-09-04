@@ -1,11 +1,12 @@
 package com.example.farmfarm_refact.dto;
 
+import com.example.farmfarm_refact.entity.PaymentStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.security.Timestamp;
+import java.sql.Timestamp;
 import java.util.List;
 
 @Getter
@@ -46,6 +47,9 @@ public class OrderResponseDto {
         private Long price;
         private Integer quantity;
         private Integer type;
+        private String farmName;
+        private String productName;
+        private Long totalPrice;
     }
 
     @Getter
@@ -54,8 +58,8 @@ public class OrderResponseDto {
     @AllArgsConstructor
     public static class MyOrderListDto {
         private Timestamp created_at;
-        private String farmName;
-        private String productName;
+        private PaymentStatus paymentStatus;
+        private List<OrderResponseDto.OrderDetailReadResponseDto> orderDetails;
 
     }
 
