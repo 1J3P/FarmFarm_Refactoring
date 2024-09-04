@@ -35,7 +35,8 @@ public class OrderRequestDto {
         private String deliveryAddress;
         private String deliveryAddressDetail;
         private String deliveryMemo;
-        private int quantity;   // 내가 구매할 공구 상품 수량
+        private int quantity;   // 내가 구매할 상품 수량
+        private int price;      // 내가 구매할 상품 가격
     }
 
 }

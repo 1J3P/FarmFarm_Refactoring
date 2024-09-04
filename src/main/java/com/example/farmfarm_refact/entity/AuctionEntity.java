@@ -27,7 +27,7 @@ public class AuctionEntity {
 
     private int price;
 
-    private String status;
+    private AuctionStatus status;
 
     private Long paId;
 
@@ -39,6 +39,13 @@ public class AuctionEntity {
     @JoinColumn(name="user")
     private UserEntity user;
 
+    public AuctionEntity(int quantity, int price, AuctionStatus status, ProductEntity product, UserEntity user) {
+        this.quantity = quantity;
+        this.price = price;
+        this.status = status;
+        this.product = product;
+        this.user = user;
+    }
 }
 
 
