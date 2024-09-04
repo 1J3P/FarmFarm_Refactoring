@@ -181,7 +181,7 @@ public class ProductService {
     // 상품 삭제 *일단은 그냥 조건 없이 삭제 가능하게 뒀으나 나중에 주문 로직 구현하고 수정하기*
     public void deleteProduct(UserEntity user, Long pId) {
         ProductEntity product = productRepository.findBypIdAndStatusLike(pId, "yes")
-                .orElseThrow(() -> new ExceptionHandler(ErrorStatus.PRODUCT_NOT_FOUND));;
+                .orElseThrow(() -> new ExceptionHandler(ErrorStatus.PRODUCT_NOT_FOUND));
         // 농장 주인인지 확인
         if (user.equals(product.getFarm().getUser())) {
             if (product.getFiles() != null) {
