@@ -139,16 +139,18 @@ public class FarmService {
     }
 
     // 농장 삭제
+    @Transactional
     public void deleteFarm(UserEntity user, Long fId) {
         FarmEntity farm = farmRepository.findByfIdAndStatusLike(fId, "yes").orElseThrow(() -> new ExceptionHandler(ErrorStatus.FARM_NOT_FOUND));
         if (user.equals(farm.getUser())) {
             if (productService.getFarmProduct(FarmConverter.toFarmReadResponseDto(farm)) == null || productService.getFarmProduct(FarmConverter.toFarmReadResponseDto(farm)).getProductList().isEmpty()) { // 농장에 상품이 없으면
                 System.out.println("농장에 상품이 없으므로 농장을 삭제합니다.");
-                if (farm.getFiles() != null) {
-                    for (FileEntity file : farm.getFiles()) {
-                        fileService.deleteByFileId(file.getFileId().intValue());
-                    }
+
+                List<FileEntity> files = farm.getFiles();
+                for (FileEntity file : files) {
+                    fileService.deleteByFileId(file.getFileId().intValue());
                 }
+
                 farm.setStatus("no");
                 farmRepository.save(farm);
             }
