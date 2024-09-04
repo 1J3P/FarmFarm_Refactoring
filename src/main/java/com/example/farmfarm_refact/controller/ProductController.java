@@ -65,17 +65,17 @@ public class ProductController {
         }
     }
 
-//    // 경매 상품 리스트
-//    @GetMapping("/auction/list")
-//    public ApiResponse<ProductResponseDto.ProductListResponseDto> getAuctionProductList(@RequestParam(required = false, value = "sort", defaultValue = "") String criteria,
-//                                                                                      @RequestParam(required = false, value = "keyword", defaultValue = "") String keyword) {
-//        if (keyword.equals("")) {
-//            return ApiResponse.onSuccess(productService.getGroupProductsOrderBy(criteria));
-//        }
-//        else {
-//            return ApiResponse.onSuccess(productService.searchSortGroupProducts(keyword, criteria));
-//        }
-//    }
+    // 경매 상품 리스트
+    @GetMapping("/auction/list")
+    public ApiResponse<ProductResponseDto.ProductListResponseDto> getAuctionProductList(@RequestParam(required = false, value = "sort", defaultValue = "") String criteria,
+                                                                                      @RequestParam(required = false, value = "keyword", defaultValue = "") String keyword) {
+        if (keyword.equals("")) {
+            return ApiResponse.onSuccess(productService.getAuctionProductsOrderBy(criteria));
+        }
+        else {
+            return ApiResponse.onSuccess(productService.searchSortAuctionProducts(keyword, criteria));
+        }
+    }
 
     // 상품 삭제
     @DeleteMapping("/{pId}")
