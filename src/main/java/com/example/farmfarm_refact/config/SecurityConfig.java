@@ -61,7 +61,7 @@ public class SecurityConfig {
 //                                        AntPathRequestMatcher.antMatcher("/api/auth/**")
 //                                ).authenticated()
                                 .requestMatchers(
-                                        AntPathRequestMatcher.antMatcher("/user/login/**"), AntPathRequestMatcher.antMatcher( "favicon.ico"), AntPathRequestMatcher.antMatcher("/error")
+                                        AntPathRequestMatcher.antMatcher("/user/login/**"), AntPathRequestMatcher.antMatcher( "favicon.ico"), AntPathRequestMatcher.antMatcher("/error"), AntPathRequestMatcher.antMatcher("/product/**")
                                 ).permitAll()
 
                                 .anyRequest().authenticated()
