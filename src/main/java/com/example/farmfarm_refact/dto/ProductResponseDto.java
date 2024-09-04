@@ -1,7 +1,7 @@
 package com.example.farmfarm_refact.dto;
 
-import com.example.farmfarm_refact.entity.FarmEntity;
-import com.example.farmfarm_refact.entity.ProductEntity;
+import com.example.farmfarm_refact.entity.ProductCategory;
+import com.example.farmfarm_refact.entity.ShippingMethod;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -54,8 +54,9 @@ public class ProductResponseDto {
         private List<FileResponseDto.FileCreateResponseDto> images;
         private FarmResponseDto.FarmReadResponseDto farm;
         private int quantity;
-        private int type;
-        private boolean direct;
+        private int productType;
+        private ShippingMethod shippingMethod;
+        private ProductCategory productCategory;
         private int groupProductQuantity;
         private int groupProductDiscount;
     }
