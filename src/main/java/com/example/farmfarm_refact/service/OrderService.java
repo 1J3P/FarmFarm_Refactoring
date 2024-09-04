@@ -201,4 +201,9 @@ public class OrderService {
 //                .orElseThrow(()->new ExceptionHandler(ErrorStatus.ORDER_NOT_FOUND));
 //    }
 
+    // 나의 주문내역
+    public OrderResponseDto.MyOrderListResponseDto getMyOrderList(UserEntity user) {
+
+    }
+
 }

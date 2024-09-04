@@ -47,4 +47,23 @@ public class OrderResponseDto {
         private Integer quantity;
         private Integer type;
     }
+
+    @Getter
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class MyOrderListDto {
+        private Timestamp created_at;
+        private String farmName;
+        private String productName;
+
+    }
+
+    @Getter
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class MyOrderListResponseDto {
+        private List<MyOrderListDto> myOrderList;
+    }
 }
