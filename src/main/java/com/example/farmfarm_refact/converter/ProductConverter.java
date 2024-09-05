@@ -39,6 +39,7 @@ public class ProductConverter {
               .price(product.getPrice())
               .images(FileConverter.toFileCreateResponseDtoList(product.getFiles()))
               .farm(FarmConverter.toFarmReadResponseDto(product.getFarm()))
+              .productType(product.getType())
               .build();
   }
 
