@@ -31,6 +31,7 @@ public class ProductResponseDto {
         private int price;
         private List<FileResponseDto.FileCreateResponseDto> images;
         private FarmResponseDto.FarmReadResponseDto farm;
+        private int productType;
     }
 
     @Getter
