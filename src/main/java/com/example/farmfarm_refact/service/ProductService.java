@@ -120,6 +120,7 @@ public class ProductService {
 
     // 상품 전체 조회(정렬만)
     public ProductResponseDto.ProductListResponseDto getProductsOrderBy(String criteria) {
+        List<ProductEntity> resultList = new ArrayList<>();
         List<ProductEntity> productList =
                 switch (criteria) {
                     case "rating" -> productRepository.findAllByStatusLikeOrderByRatingDesc("yes");
@@ -127,11 +128,18 @@ public class ProductService {
                     case "highPrice" -> productRepository.findAllByStatusLikeOrderByPriceDesc("yes");
                     default -> productRepository.findAllByStatusLike(Sort.by(Sort.Direction.DESC, "pId"), "yes");
                 };
-        return ProductConverter.toProductList(productList);
+
+        for (ProductEntity val : productList) {
+            if (val.getType() == 1) {
+                resultList.add(val);
+            }
+        }
+        return ProductConverter.toProductList(resultList);
     }
 
     // 상품 전체 조회(정렬, 검색 같이)
     public ProductResponseDto.ProductListResponseDto searchSortProducts(String keyword, String criteria) {
+        List<ProductEntity> resultList = new ArrayList<>();
         List<ProductEntity> productList =
                 switch (criteria) {
                     case "rating" -> productRepository.findAllByNameContainingAndStatusLike(keyword, Sort.by(Sort.Direction.DESC, "rating"), "yes");
@@ -139,7 +147,13 @@ public class ProductService {
                     case "highPrice" -> productRepository.findAllByNameContainingAndStatusLike(keyword, Sort.by(Sort.Direction.DESC, "price"), "yes");
                     default -> productRepository.findAllByNameContainingAndStatusLike(keyword, Sort.by(Sort.Direction.DESC, "pId"),"yes");
                 };
-        return ProductConverter.toProductList(productList);
+
+        for (ProductEntity val : productList) {
+            if (val.getType() == 0) {
+                resultList.add(val);
+            }
+        }
+        return ProductConverter.toProductList(resultList);
     }
 
     // 공동구매 상품 리스트(정렬만)

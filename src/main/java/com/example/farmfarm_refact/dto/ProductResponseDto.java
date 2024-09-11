@@ -29,6 +29,7 @@ public class ProductResponseDto {
         private Long pId;
         private String name;
         private int price;
+        private int lowPrice;
         private List<FileResponseDto.FileCreateResponseDto> images;
         private FarmResponseDto.FarmReadResponseDto farm;
         private int productType;
