@@ -7,6 +7,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.DynamicUpdate;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Data
@@ -35,9 +36,13 @@ public class ProductEntity {
 
     private String closeCalendar;
 
-    private int quantity;   // 공구일 시 총 공구 상품 수량
+    private Date date;  // 경매 마감 날짜
 
-    private int auctionQuantity;
+    private int hour;   // 경매 마감 시간
+
+    private int minute;     // 경매 마감 분
+
+    private int quantity;   // 상품 수량 (일반, 공구, 경매 상관 없이 총 수량임)
 
     private int price;
 
@@ -54,7 +59,7 @@ public class ProductEntity {
 
     private int type; // 0: 일반 상품, 1: 공동구매 상품, 2: 경매 상품
 
-    private int groupProductQuantity; // 공동구매 상품 수량
+    private int groupProductQuantity; // 공동구매 상품 수량(한 팀당 구매해야 하는 수량)
 
     private int groupProductDiscount; // 공동구매 상품 할인율
 
