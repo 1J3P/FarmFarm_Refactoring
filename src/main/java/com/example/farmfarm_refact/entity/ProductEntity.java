@@ -48,7 +48,7 @@ public class ProductEntity {
 
     private String directLocation;  // 직거래 장소
 
-    private int lowPrice;  // 경매 최저가
+//    private int lowPrice;  // 경매 최저가
 
     private int openStatus; //0이면 아직 안열림, 1이면 열려있음, 2이면 열렸다가 닫힘 -> 처음값은 무조건 0
 
