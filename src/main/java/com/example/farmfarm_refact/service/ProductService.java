@@ -57,7 +57,7 @@ public class ProductService {
                 SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm");
                 cal.set(productCreateRequestDto.getDate().getYear() + 1900, productCreateRequestDto.getDate().getMonth(), productCreateRequestDto.getDate().getDate(), productCreateRequestDto.getHour(), productCreateRequestDto.getMinute());
                 newProduct.setCloseCalendar(format.format(cal.getTime()));
-                newProduct.setAuctionQuantity(productCreateRequestDto.getQuantity());
+                newProduct.setQuantity(productCreateRequestDto.getQuantity());
                 newProduct.setPrice(productCreateRequestDto.getPrice());
             }
             else {
