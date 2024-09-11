@@ -58,7 +58,7 @@ public class ProductService {
                 cal.set(productCreateRequestDto.getDate().getYear() + 1900, productCreateRequestDto.getDate().getMonth(), productCreateRequestDto.getDate().getDate(), productCreateRequestDto.getHour(), productCreateRequestDto.getMinute());
                 newProduct.setCloseCalendar(format.format(cal.getTime()));
                 newProduct.setAuctionQuantity(productCreateRequestDto.getQuantity());
-                newProduct.setLowPrice(productCreateRequestDto.getPrice());
+                newProduct.setPrice(productCreateRequestDto.getPrice());
             }
             else {
                 throw new ExceptionHandler(FARM_AUCTION_FALSE) ;
@@ -130,7 +130,7 @@ public class ProductService {
                 };
 
         for (ProductEntity val : productList) {
-            if (val.getType() == 1) {
+            if (val.getType() == 0) {
                 resultList.add(val);
             }
         }
