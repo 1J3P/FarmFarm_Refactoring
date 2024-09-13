@@ -50,6 +50,7 @@ public class OrderResponseDto {
         private String farmName;
         private String productName;
         private Long totalPrice;
+        private String fileUrl;
     }
 
     @Getter
