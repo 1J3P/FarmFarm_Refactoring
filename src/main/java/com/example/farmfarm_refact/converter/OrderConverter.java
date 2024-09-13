@@ -60,6 +60,7 @@ public class OrderConverter {
               .farmName(orderDetail.getProduct().getFarm().getName())
               .productName(orderDetail.getProduct().getName())
               .totalPrice(orderDetail.getPrice() * orderDetail.getQuantity())
+              .fileUrl(orderDetail.getProduct().getFiles().get(0).getFileurl())
               .build();
   }
 
