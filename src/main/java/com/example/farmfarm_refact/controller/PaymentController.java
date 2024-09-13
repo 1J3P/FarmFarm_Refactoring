@@ -36,6 +36,7 @@ public class PaymentController {
     @GetMapping("/success/{oId}")
     public void afterPayRequest(HttpServletResponse response, @RequestParam("pg_token") String pgToken, @PathVariable("oId") long oId) throws IOException {
         // 결제 성공 시
+        paymentService.afterPayment(pgToken, oId);
         response.sendRedirect("http://localhost:3000/paymentCallback?status=success&pg_token=" + pgToken + "&oId=" + oId);
     }
 
