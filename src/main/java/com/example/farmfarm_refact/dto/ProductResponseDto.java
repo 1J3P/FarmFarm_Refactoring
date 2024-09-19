@@ -60,6 +60,7 @@ public class ProductResponseDto {
         private ProductCategory productCategory;
         private int groupProductQuantity;
         private int groupProductDiscount;
+        private String closeCalendar;
     }
 
 }

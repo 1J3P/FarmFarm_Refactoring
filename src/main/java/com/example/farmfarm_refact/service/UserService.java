@@ -129,25 +129,25 @@ public class UserService {
 //
 //        return jwtToken; //(2-6)만들어진 JWT 를 반환한다.
 //    }
-@Transactional
-public LoginResponseDto createToken(UserEntity user) {
-    String newAccessToken = jwtService.encodeJwtToken(new TokenDto(user.getUId()));
-    String newRefreshToken = jwtService.encodeJwtRefreshToken(user.getUId());
+    @Transactional
+    public LoginResponseDto createToken(UserEntity user) {
+        String newAccessToken = jwtService.encodeJwtToken(new TokenDto(user.getUId()));
+        String newRefreshToken = jwtService.encodeJwtRefreshToken(user.getUId());
 
-    System.out.println("newAccessToken : " + newAccessToken);
-    System.out.println("newRefreshToken : " + newRefreshToken);
+        System.out.println("newAccessToken : " + newAccessToken);
+        System.out.println("newRefreshToken : " + newRefreshToken);
 
-    // DB에 refreshToken 저장
-    user.updateRefreshToken(newRefreshToken);
-    userRepository.save(user);
+        // DB에 refreshToken 저장
+        user.updateRefreshToken(newRefreshToken);
+        userRepository.save(user);
 
-    System.out.println("user nickname : " + user.getNickname());
+        System.out.println("user nickname : " + user.getNickname());
 
-    LoginResponseDto responseDto = new LoginResponseDto(newAccessToken, newRefreshToken, user.getEmail(), user.getNickname());
-    System.out.println(responseDto.getAccessToken() + responseDto.getRefreshToken() + responseDto.getEmail());
-    return responseDto;
+        LoginResponseDto responseDto = new LoginResponseDto(newAccessToken, newRefreshToken, user.getEmail(), user.getNickname());
+        System.out.println(responseDto.getAccessToken() + responseDto.getRefreshToken() + responseDto.getEmail());
+        return responseDto;
 
-}
+    }
 
     //(1-1)응답 받은 Json 데이터와 정확히 일치하는 KakaoProfile 클래스를 만든다.(👇아래 참고)
     public KakaoProfile findProfile(String token) {

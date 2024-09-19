@@ -56,21 +56,40 @@ public class ProductConverter {
 
   // ProductEntity를 ProductDto로 변환하는 메서드
     public static ProductResponseDto.ProductReadResponseDto toProductReadResponseDto(ProductEntity product) {
-        return ProductResponseDto.ProductReadResponseDto.builder()
-                .pId(product.getPId())
-                .name(product.getName())
-                .price(product.getPrice())
-                .rating(product.getRating())
-                .detail(product.getDetail())
-                .images(FileConverter.toFileCreateResponseDtoList(product.getFiles()))
-                .farm(FarmConverter.toFarmReadResponseDto(product.getFarm()))
-                .quantity(product.getQuantity())
-                .productType(product.getType())
-                .shippingMethod(product.getShippingMethod())
-                .productCategory(product.getProductCategory())
-                .groupProductQuantity(product.getGroupProductQuantity())
-                .groupProductDiscount(product.getGroupProductDiscount())
-                .build();
+        if (product.getType() == 2) {
+            return ProductResponseDto.ProductReadResponseDto.builder()
+                    .pId(product.getPId())
+                    .name(product.getName())
+                    .price(product.getPrice())
+                    .rating(product.getRating())
+                    .detail(product.getDetail())
+                    .images(FileConverter.toFileCreateResponseDtoList(product.getFiles()))
+                    .farm(FarmConverter.toFarmReadResponseDto(product.getFarm()))
+                    .quantity(product.getQuantity())
+                    .productType(product.getType())
+                    .shippingMethod(product.getShippingMethod())
+                    .productCategory(product.getProductCategory())
+                    .closeCalendar(product.getCloseCalendar())
+                    .build();
+        }
+        else {
+            return ProductResponseDto.ProductReadResponseDto.builder()
+                    .pId(product.getPId())
+                    .name(product.getName())
+                    .price(product.getPrice())
+                    .rating(product.getRating())
+                    .detail(product.getDetail())
+                    .images(FileConverter.toFileCreateResponseDtoList(product.getFiles()))
+                    .farm(FarmConverter.toFarmReadResponseDto(product.getFarm()))
+                    .quantity(product.getQuantity())
+                    .productType(product.getType())
+                    .shippingMethod(product.getShippingMethod())
+                    .productCategory(product.getProductCategory())
+                    .groupProductQuantity(product.getGroupProductQuantity())
+                    .groupProductDiscount(product.getGroupProductDiscount())
+                    .build();
+        }
+
     }
 
     public static ProductEntity toNewProduct(ProductRequestDto.ProductUpdateRequestDto updateDto) {

@@ -1,6 +1,5 @@
 package com.example.farmfarm_refact.entity;
 
-import com.example.farmfarm_refact.dto.ProductRequestDto;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
