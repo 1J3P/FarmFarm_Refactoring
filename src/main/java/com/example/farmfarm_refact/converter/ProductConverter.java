@@ -33,14 +33,27 @@ public class ProductConverter {
 
   // ProductEntity를 ProductListDto로 변환하는 메서드
   public static ProductResponseDto.ProductListDto toProductDto(ProductEntity product) {
-      return ProductResponseDto.ProductListDto.builder()
-              .pId(product.getPId())
-              .name(product.getName())
-              .price(product.getPrice())
-              .images(FileConverter.toFileCreateResponseDtoList(product.getFiles()))
-              .farm(FarmConverter.toFarmReadResponseDto(product.getFarm()))
-              .productType(product.getType())
-              .build();
+      if (product.getType() == 2) {
+          return ProductResponseDto.ProductListDto.builder()
+                  .pId(product.getPId())
+                  .name(product.getName())
+                  .price(product.getPrice())
+                  .images(FileConverter.toFileCreateResponseDtoList(product.getFiles()))
+                  .farm(FarmConverter.toFarmReadResponseDto(product.getFarm()))
+                  .productType(product.getType())
+                  .closeCalendar(product.getCloseCalendar())
+                  .build();
+      }
+      else {
+          return ProductResponseDto.ProductListDto.builder()
+                  .pId(product.getPId())
+                  .name(product.getName())
+                  .price(product.getPrice())
+                  .images(FileConverter.toFileCreateResponseDtoList(product.getFiles()))
+                  .farm(FarmConverter.toFarmReadResponseDto(product.getFarm()))
+                  .productType(product.getType())
+                  .build();
+      }
   }
 
   // ProductEntity 리스트를 ProductListResponseDto로 변환하는 메서드

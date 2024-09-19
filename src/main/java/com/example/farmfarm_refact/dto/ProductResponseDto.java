@@ -32,6 +32,7 @@ public class ProductResponseDto {
         private List<FileResponseDto.FileCreateResponseDto> images;
         private FarmResponseDto.FarmReadResponseDto farm;
         private int productType;
+        private String closeCalendar;
     }
 
     @Getter
