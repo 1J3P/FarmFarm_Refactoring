@@ -19,7 +19,7 @@ import java.util.List;
 @Setter
 public class ProductEntity {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "p_id")
     private Long pId;
 
