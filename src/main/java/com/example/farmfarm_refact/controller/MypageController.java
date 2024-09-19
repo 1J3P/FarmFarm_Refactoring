@@ -33,6 +33,10 @@ public class MypageController {
     }
 
     // 경매 참가 내역
+//    @GetMapping("/auctionList")
+//    public ApiResponse<> myAuctionList(@AuthenticationPrincipal UserEntity user) {
+//        return ApiResponse.onSuccess()
+//    }
 
     // 상품 후기 내역
 

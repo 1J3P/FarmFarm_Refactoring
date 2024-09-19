@@ -3,7 +3,6 @@ package com.example.farmfarm_refact.entity.kakaoPay;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.DynamicUpdate;
-
 import java.sql.Timestamp;
 
 @Data
