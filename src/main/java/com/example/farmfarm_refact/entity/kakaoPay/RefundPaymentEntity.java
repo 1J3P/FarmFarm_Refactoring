@@ -16,7 +16,7 @@ import java.sql.Timestamp;
 public class RefundPaymentEntity {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="re_id")
     private Long reId;
 
