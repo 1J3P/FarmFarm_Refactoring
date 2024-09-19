@@ -12,5 +12,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface OrderDetailRepository extends CrudRepository<OrderDetailEntity, Long> {
+    List<OrderDetailEntity> findByOrderUserAndType(UserEntity user, Integer type);
 
 }
+

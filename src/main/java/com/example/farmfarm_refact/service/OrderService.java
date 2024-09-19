@@ -5,7 +5,6 @@ import com.example.farmfarm_refact.apiPayload.ApiResponse;
 import com.example.farmfarm_refact.apiPayload.ExceptionHandler;
 import com.example.farmfarm_refact.apiPayload.code.status.ErrorStatus;
 import com.example.farmfarm_refact.controller.PaymentController;
-import com.example.farmfarm_refact.converter.MyPageConverter;
 import com.example.farmfarm_refact.converter.OrderConverter;
 import com.example.farmfarm_refact.converter.PayConverter;
 import com.example.farmfarm_refact.dto.*;
@@ -16,10 +15,6 @@ import com.example.farmfarm_refact.entity.kakaoPay.RefundPaymentEntity;
 import com.example.farmfarm_refact.repository.*;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
-import org.hibernate.validator.internal.util.stereotypes.Lazy;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import com.example.farmfarm_refact.entity.kakaoPay.ApprovePaymentEntity;
 
@@ -210,6 +205,12 @@ public class OrderService {
     public OrderResponseDto.MyOrderListResponseDto getMyOrderList(UserEntity user) {
         List<OrderEntity> myOrders = orderRepository.findAllByUser(user);
         return OrderConverter.toMyOrderList(myOrders);
+    }
+
+    // 나의 경매내역
+    public List<OrderResponseDto.AuctionOrderDetailResponseDto> getMyAuctionList(UserEntity user) {
+        List<OrderDetailEntity> myAuctions = orderDetailRepository.findByOrderUserAndType(user, 2);
+        return OrderConverter.toMyAuctionList(myAuctions);
     }
 
     public void saveOrderDetailAuction(UserEntity user, Long pId, OrderRequestDto.AuctionCreateRequestDto dto, HttpSession session) {
