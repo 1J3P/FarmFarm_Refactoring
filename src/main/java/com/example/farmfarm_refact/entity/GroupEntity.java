@@ -19,7 +19,7 @@ import java.util.List;
 @Setter
 public class GroupEntity {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="g_id")
     private Long gId;
 

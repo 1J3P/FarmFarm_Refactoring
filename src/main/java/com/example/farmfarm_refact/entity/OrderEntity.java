@@ -20,7 +20,7 @@ import java.util.List;
 @Setter
 public class OrderEntity {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="o_id")
     private Long oId;
 

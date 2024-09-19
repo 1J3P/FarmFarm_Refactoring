@@ -19,7 +19,7 @@ import java.util.List;
 @Setter
 public class AuctionEntity {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="au_id")
     private Long auId;
 
