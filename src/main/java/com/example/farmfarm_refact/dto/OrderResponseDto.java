@@ -1,5 +1,6 @@
 package com.example.farmfarm_refact.dto;
 
+import com.example.farmfarm_refact.entity.AuctionStatus;
 import com.example.farmfarm_refact.entity.PaymentStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -50,7 +51,24 @@ public class OrderResponseDto {
         private String farmName;
         private String productName;
         private Long totalPrice;
-        private String fileUrl;
+        private List<FileResponseDto.FileCreateResponseDto> images;
+    }
+
+    @Getter
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class AuctionOrderDetailResponseDto {
+        private Long odId;
+        private Long auId;
+        private Long price;
+        private Integer quantity;
+        private String farmName;
+        private String productName;
+        private Long totalPrice;
+        private List<FileResponseDto.FileCreateResponseDto> images;
+        private AuctionStatus auctionStatus;
+        private Timestamp createdAt;
     }
 
     @Getter

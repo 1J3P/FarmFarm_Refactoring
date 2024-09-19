@@ -2,10 +2,10 @@ package com.example.farmfarm_refact.converter;
 
 
 import com.example.farmfarm_refact.dto.*;
+import com.example.farmfarm_refact.entity.AuctionEntity;
 import com.example.farmfarm_refact.entity.FarmEntity;
 import com.example.farmfarm_refact.entity.OrderDetailEntity;
 import com.example.farmfarm_refact.entity.OrderEntity;
-import com.example.farmfarm_refact.entity.ProductEntity;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -60,7 +60,7 @@ public class OrderConverter {
               .farmName(orderDetail.getProduct().getFarm().getName())
               .productName(orderDetail.getProduct().getName())
               .totalPrice(orderDetail.getPrice() * orderDetail.getQuantity())
-              .fileUrl(orderDetail.getProduct().getFiles().get(0).getFileurl())
+              .images(FileConverter.toFileCreateResponseDtoList(orderDetail.getProduct().getFiles()))
               .build();
   }
 
@@ -106,4 +106,26 @@ public class OrderConverter {
                 .build();
     }
 
+    // 마이페이지 나의 경매 내역들
+    public static List<OrderResponseDto.AuctionOrderDetailResponseDto> toMyAuctionList(List<OrderDetailEntity> auctionList) {
+        List<OrderResponseDto.AuctionOrderDetailResponseDto> myAuctionList = auctionList.stream()
+                .map(OrderConverter::toAuctionOrderDetailDto)
+                .collect(Collectors.toList());
+        return myAuctionList;
+    }
+
+    public static OrderResponseDto.AuctionOrderDetailResponseDto toAuctionOrderDetailDto(OrderDetailEntity orderDetail) {
+        return OrderResponseDto.AuctionOrderDetailResponseDto.builder()
+                .odId(orderDetail.getOdId())
+                .auId(orderDetail.getAuction().getAuId())
+                .price(orderDetail.getPrice())
+                .quantity(orderDetail.getQuantity())
+                .farmName(orderDetail.getProduct().getFarm().getName())
+                .productName(orderDetail.getProduct().getName())
+                .totalPrice(orderDetail.getOrder().getTotalPrice())
+                .images(FileConverter.toFileCreateResponseDtoList(orderDetail.getProduct().getFiles()))
+                .auctionStatus(orderDetail.getAuction().getStatus())
+                .createdAt(orderDetail.getOrder().getCreated_at())
+                .build();
+    }
 }
