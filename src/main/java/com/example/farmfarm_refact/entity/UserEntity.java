@@ -23,7 +23,7 @@ import java.util.Objects;
 @Setter
 public class UserEntity implements UserDetails {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="u_id")
     private Long uId;
 

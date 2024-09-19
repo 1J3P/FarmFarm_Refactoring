@@ -20,7 +20,7 @@ import java.util.List;
 @Setter
 public class FarmEntity {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="f_id")
     private Long fId;
 

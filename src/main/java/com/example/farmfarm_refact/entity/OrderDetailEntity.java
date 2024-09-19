@@ -15,7 +15,7 @@ import org.hibernate.annotations.DynamicUpdate;
 public class OrderDetailEntity {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="od_id")
     private Long odId;
 
