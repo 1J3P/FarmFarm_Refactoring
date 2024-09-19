@@ -1,6 +1,5 @@
 package com.example.farmfarm_refact.dto;
 
-import com.example.farmfarm_refact.entity.ProductEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -22,6 +21,7 @@ public class CartResponseDto {
         private int totalPrice;
         private int quantity;
         // 대표 이미지 1장 어떻게 받아와야 하지??
+        private List<FileResponseDto.FileCreateResponseDto> images;
     }
 
     @Getter

@@ -19,6 +19,7 @@ public class CartConverter {
                 .price(item.getProduct().getPrice())
                 .totalPrice(item.getProduct().getPrice() * item.getQuantity())
                 .quantity(item.getQuantity())
+                .images(FileConverter.toFileCreateResponseDtoList(item.getProduct().getFiles()))
                 .build();
     }
 
