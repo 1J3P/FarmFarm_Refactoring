@@ -19,7 +19,7 @@ import java.sql.Timestamp;
 public class ApprovePaymentEntity {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="pa_id")
     private Long paId;
 
