@@ -220,7 +220,7 @@ public class OrderService {
         if (product.getType() == 2) {
             AuctionEntity auction = new AuctionEntity(dto.getQuantity(), dto.getPrice(), AuctionStatus.AUCTION_IN_PROGRESS, product, user);
             auction = auctionRepository.save(auction);
-            OrderDetailEntity orderDetail = new OrderDetailEntity(auction.getQuantity(), (int)(long) auction.getPrice() * auction.getQuantity(), 2, product, auction);
+            OrderDetailEntity orderDetail = new OrderDetailEntity(auction.getQuantity(), auction.getPrice(), 2, product, auction);
             details.add(orderDetail);
             session.setAttribute("orderDetail", details);
         }
