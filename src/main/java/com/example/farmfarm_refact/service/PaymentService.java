@@ -6,6 +6,7 @@ import com.example.farmfarm_refact.entity.kakaoPay.ApprovePaymentEntity;
 import com.example.farmfarm_refact.entity.kakaoPay.KakaoReadyResponse;
 import com.example.farmfarm_refact.entity.kakaoPay.RefundPaymentEntity;
 import com.example.farmfarm_refact.repository.*;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
@@ -34,6 +35,7 @@ public class PaymentService {
     private String serverUrl;
 
     private KakaoReadyResponse response;
+    private final AuctionRepository auctionRepository;
 
     private HttpHeaders getHeaders() {
         HttpHeaders httpHeaders = new HttpHeaders();
@@ -103,6 +105,7 @@ public class PaymentService {
         return approvePaymentRepository.save(approveResponse);
     }
 
+    @Transactional
     public RefundPaymentEntity kakaoRefund(ApprovePaymentEntity order) {
 
         // 카카오페이 요청
@@ -127,6 +130,7 @@ public class PaymentService {
         return refundPaymentRepository.save(refundResponse);
     }
 
+    @Transactional
     public ApprovePaymentEntity afterPayment(String pgToken, Long oId) {
         OrderEntity order = orderRepository.findByoId(oId);
         ApprovePaymentEntity kakaoApprove = approveResponse(order, pgToken);
@@ -140,14 +144,15 @@ public class PaymentService {
             od.getProduct().setSales(updateSales);
             // orderDetail이 경매일 경우, auction에 paId 등록하기
             if (od.getType() == 2) {
-                //TODO Auction 추가한 후 고칠것!
-                //od.getAuction().setPaId(kakaoApprove.getPaId());
+                AuctionEntity auction = od.getAuction();
+                auction.setPaId(kakaoApprove.getPaId());
+                auctionRepository.save(auction);
+
             }
         }
         order.setPayment(kakaoApprove);
-        orderRepository.save(order);
         order.setPaymentStatus(PaymentStatus.PAYMENT_COMPLETED);
-//        orderService.createOrder(order);
+        orderRepository.save(order);
         return kakaoApprove;
     }
 

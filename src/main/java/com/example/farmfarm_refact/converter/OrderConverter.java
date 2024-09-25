@@ -118,7 +118,7 @@ public class OrderConverter {
         return OrderResponseDto.AuctionOrderDetailResponseDto.builder()
                 .odId(orderDetail.getOdId())
                 .auId(orderDetail.getAuction().getAuId())
-                .price(orderDetail.getPrice())
+                .price((long) orderDetail.getAuction().getPrice())
                 .quantity(orderDetail.getQuantity())
                 .farmName(orderDetail.getProduct().getFarm().getName())
                 .productName(orderDetail.getProduct().getName())
