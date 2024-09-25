@@ -18,6 +18,7 @@ import com.example.farmfarm_refact.repository.GroupRepository;
 import com.example.farmfarm_refact.repository.ProductRepository;
 import jakarta.servlet.http.HttpSession;
 import jakarta.transaction.Transactional;
+import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.orm.jpa.JpaObjectRetrievalFailureException;
@@ -302,11 +303,13 @@ public class ProductService {
     }
 
     // 장바구니로 이동해서 담은 상품 조회하기
+    @Transactional
     public CartResponseDto.ItemListResponseDto getCartItemList(HttpSession session) {
         Cart cart = (Cart)session.getAttribute("cart");
         List<Item> itemList = new ArrayList<>();
         if (cart != null) {
             for (Item i : cart.getItemList()) {
+                Hibernate.initialize(i.getProduct().getFiles());
                 itemList.add(i);
             }
         }
