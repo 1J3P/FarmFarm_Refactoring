@@ -43,7 +43,7 @@ public class PaymentController {
     @GetMapping("/fail/{oId}")
     public void afterPayFail(HttpServletResponse response, @PathVariable("oId") long oId) throws IOException {
         // 결제 실패 시
-        response.sendRedirect("http://localhost:3000/paymentCallback?status=fail&oId=" + oId);
+        response.sendRedirect("http ://localhost:3000/paymentCallback?status=fail&oId=" + oId);
     }
 
     @PostMapping("/refund/{paId}")
