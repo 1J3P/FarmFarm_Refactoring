@@ -107,7 +107,4 @@ public class FarmController {
         return ApiResponse.onSuccess(SuccessStatus.LIMJANG_DELETE);
     }
 
-
-    // gugun ??
-
 }
