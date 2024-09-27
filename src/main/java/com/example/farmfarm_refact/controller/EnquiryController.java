@@ -39,7 +39,8 @@ public class EnquiryController {
 
     //문의사항 삭제
     @DeleteMapping("/{eId}")
-    public ApiResponse deleteEnquiry(@AuthenticationPrincipal UserEntity user, @PathVariable("pId") Long pId) {
+    public ApiResponse deleteEnquiry(@AuthenticationPrincipal UserEntity user, @PathVariable("eId") Long eId) {
+        enquiryService.deleteEnquiry(user, eId);
         return ApiResponse.onSuccess(SuccessStatus.LIMJANG_DELETE);
     }
 

@@ -48,4 +48,16 @@ public class EnquiryService {
             throw new ExceptionHandler(ENQUIRY_USER_NOT_EQUAL);
     }
 
+    // 문의사항 삭제
+    public void deleteEnquiry(UserEntity user, Long eId) {
+        EnquiryEntity enquiry = enquiryRepository.findById(eId)
+                .orElseThrow(() -> new ExceptionHandler(ErrorStatus.ENQUIRY_NOT_FOUND));
+        if (user.equals(enquiry.getUser())) {
+            enquiry.setStatus("답변삭제");
+            enquiryRepository.save(enquiry);
+        }
+        else
+            throw new ExceptionHandler(ENQUIRY_USER_NOT_EQUAL);
+    }
+
 }
