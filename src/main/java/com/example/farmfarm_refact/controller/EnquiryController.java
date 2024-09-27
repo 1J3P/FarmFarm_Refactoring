@@ -44,8 +44,11 @@ public class EnquiryController {
         return ApiResponse.onSuccess(SuccessStatus.LIMJANG_DELETE);
     }
 
-
     //상품별 문의사항 조회
+    @GetMapping("/list/{pId}")
+    public ApiResponse<EnquiryResponseDto.EnquiryListResponseDto> getProductEnquiryList(@PathVariable Long pId) {
+        return ApiResponse.onSuccess(enquiryService.getProductEnquiryList(pId));
+    }
 
 
     //내가 쓴 문의사항 보기

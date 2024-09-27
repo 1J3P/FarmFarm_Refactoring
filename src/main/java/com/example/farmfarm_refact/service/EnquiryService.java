@@ -13,6 +13,9 @@ import com.example.farmfarm_refact.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static com.example.farmfarm_refact.apiPayload.code.status.ErrorStatus.ENQUIRY_USER_NOT_EQUAL;
 
 
@@ -58,6 +61,14 @@ public class EnquiryService {
         }
         else
             throw new ExceptionHandler(ENQUIRY_USER_NOT_EQUAL);
+    }
+
+    // 상품별 문의사항 조회
+    public EnquiryResponseDto.EnquiryListResponseDto getProductEnquiryList(Long pId) {
+        ProductEntity product = productRepository.findBypIdAndStatusLike(pId, "yes")
+                .orElseThrow(() -> new ExceptionHandler(ErrorStatus.PRODUCT_NOT_FOUND));
+        List<EnquiryEntity> enquiryList = enquiryRepository.findAllByProductAndStatusNotLike(product, "답변삭제");
+        return EnquiryConverter.toEnquiryList(enquiryList);
     }
 
 }
