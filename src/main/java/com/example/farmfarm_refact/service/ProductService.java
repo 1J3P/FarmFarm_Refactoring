@@ -2,10 +2,8 @@ package com.example.farmfarm_refact.service;
 
 import com.example.farmfarm_refact.apiPayload.ExceptionHandler;
 import com.example.farmfarm_refact.apiPayload.code.status.ErrorStatus;
-import com.example.farmfarm_refact.controller.ProductController;
 import com.example.farmfarm_refact.controller.S3Controller;
 import com.example.farmfarm_refact.converter.CartConverter;
-import com.example.farmfarm_refact.converter.FarmConverter;
 import com.example.farmfarm_refact.converter.GroupConverter;
 import com.example.farmfarm_refact.converter.ProductConverter;
 import com.example.farmfarm_refact.dto.*;
@@ -22,10 +20,7 @@ import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.orm.jpa.JpaObjectRetrievalFailureException;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import java.text.SimpleDateFormat;
 import java.util.*;

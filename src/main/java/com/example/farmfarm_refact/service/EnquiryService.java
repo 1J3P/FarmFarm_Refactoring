@@ -2,7 +2,6 @@ package com.example.farmfarm_refact.service;
 
 import com.example.farmfarm_refact.apiPayload.ExceptionHandler;
 import com.example.farmfarm_refact.apiPayload.code.status.ErrorStatus;
-import com.example.farmfarm_refact.controller.EnquiryController;
 import com.example.farmfarm_refact.converter.EnquiryConverter;
 import com.example.farmfarm_refact.dto.EnquiryRequestDto;
 import com.example.farmfarm_refact.dto.EnquiryResponseDto;
@@ -14,7 +13,8 @@ import com.example.farmfarm_refact.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
+import static com.example.farmfarm_refact.apiPayload.code.status.ErrorStatus.ENQUIRY_USER_NOT_EQUAL;
+
 
 @Service
 public class EnquiryService {
@@ -33,6 +33,19 @@ public class EnquiryService {
         newEnquiry.setProduct(product);
         EnquiryEntity enquiry = enquiryRepository.save(newEnquiry);
         return EnquiryConverter.toEnquiryCreateResponseDto(enquiry);
+    }
+
+    // 문의사항 수정
+    public void updateEnquiry(UserEntity user, Long eId, EnquiryRequestDto.EnquiryUpdateRequestDto enquiryUpdateRequestDto) {
+        EnquiryEntity oldEnquiry = enquiryRepository.findById(eId)
+                .orElseThrow(() -> new ExceptionHandler(ErrorStatus.ENQUIRY_NOT_FOUND));
+        EnquiryEntity newEnquiry = EnquiryConverter.toNewEnquiry(enquiryUpdateRequestDto);
+        if (user.equals(oldEnquiry.getUser())) {
+            oldEnquiry.updateEnquiry(newEnquiry);
+            enquiryRepository.save(oldEnquiry);
+        }
+        else
+            throw new ExceptionHandler(ENQUIRY_USER_NOT_EQUAL);
     }
 
 }

@@ -65,7 +65,6 @@ public enum ErrorStatus implements BaseErrorCode {
     FARM_HAS_PRODUCT(HttpStatus.NOT_FOUND, "FARM4003", "농장에 상품이 등록되어 있어 농장을 삭제할 수 없습니다."),
     FARM_IS_PRESENT(HttpStatus.BAD_REQUEST, "FARM4004", "농장이 이미 존재합니다."),
 
-
     //product 에러
     PRODUCT_NOT_FOUND(HttpStatus.NOT_FOUND, "PRODUCT4001", "product가 존재하지 않습니다"),
     PRODUCT_CART_FARM_DIFF(HttpStatus.NO_CONTENT, "PRODUCT4002", "다른 농장의 상품은 장바구니에 담을 수 없습니다."),
@@ -76,8 +75,11 @@ public enum ErrorStatus implements BaseErrorCode {
     ORDER_NOT_FOUND(HttpStatus.NOT_FOUND, "ORDER4001", "order가 존재하지 않습니다"),
 
     //kakao pay 에러
-    REFUND_FAIL(HttpStatus.BAD_REQUEST, "kakaopay4001", "리펀에 실패했습니다.")
+    REFUND_FAIL(HttpStatus.BAD_REQUEST, "kakaopay4001", "리펀에 실패했습니다."),
 
+    //enquiry 에러
+    ENQUIRY_NOT_FOUND(HttpStatus.NOT_FOUND, "ENQUIRY4001", "enquiry가 존재하지 않습니다."),
+    ENQUIRY_USER_NOT_EQUAL(HttpStatus.FORBIDDEN, "ENQUIRY403", "유저가 달라 수정 권한이 없습니다.")
     ;
 
 

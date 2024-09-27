@@ -31,13 +31,14 @@ public class EnquiryController {
     }
 
     //문의사항 수정
-    @PatchMapping("/{pId}")
-    public ApiResponse updateEnquiry(@AuthenticationPrincipal UserEntity user, @PathVariable Long pId, @RequestBody EnquiryRequestDto.EnquiryUpdateRequestDto updateEnquiry) {
+    @PatchMapping("/{eId}")
+    public ApiResponse updateEnquiry(@AuthenticationPrincipal UserEntity user, @PathVariable Long eId, @RequestBody EnquiryRequestDto.EnquiryUpdateRequestDto enquiryUpdateRequestDto) {
+        enquiryService.updateEnquiry(user, eId, enquiryUpdateRequestDto);
         return ApiResponse.onSuccess(SuccessStatus.LIMJANG_UPDATE);
     }
 
     //문의사항 삭제
-    @DeleteMapping("/{pId}")
+    @DeleteMapping("/{eId}")
     public ApiResponse deleteEnquiry(@AuthenticationPrincipal UserEntity user, @PathVariable("pId") Long pId) {
         return ApiResponse.onSuccess(SuccessStatus.LIMJANG_DELETE);
     }

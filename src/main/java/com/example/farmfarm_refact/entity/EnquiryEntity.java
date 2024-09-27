@@ -45,4 +45,8 @@ public class EnquiryEntity {
         this.status = status;
     }
 
+    public void updateEnquiry(EnquiryEntity enquiry) {
+        this.content = enquiry.getContent();
+    }
+
 }
