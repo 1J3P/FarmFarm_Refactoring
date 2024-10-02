@@ -45,13 +45,16 @@ public class EnquiryController {
     }
 
     //상품별 문의사항 조회
-    @GetMapping("/list/{pId}")
+    @GetMapping("/{pId}")
     public ApiResponse<EnquiryResponseDto.EnquiryListResponseDto> getProductEnquiryList(@PathVariable Long pId) {
         return ApiResponse.onSuccess(enquiryService.getProductEnquiryList(pId));
     }
 
 
     //내가 쓴 문의사항 보기
-
+    @GetMapping("/my")
+    public ApiResponse<EnquiryResponseDto.EnquiryListResponseDto> getMyEnquiryList(@AuthenticationPrincipal UserEntity user) {
+        return ApiResponse.onSuccess(enquiryService.getMyEnquiryList(user));
+    }
 
 }

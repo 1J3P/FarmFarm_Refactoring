@@ -71,4 +71,10 @@ public class EnquiryService {
         return EnquiryConverter.toEnquiryList(enquiryList);
     }
 
+    // 내가 쓴 문의사항 보기
+    public EnquiryResponseDto.EnquiryListResponseDto getMyEnquiryList(UserEntity user) {
+        List<EnquiryEntity> enquiryList = enquiryRepository.findAllByUser(user);
+        return EnquiryConverter.toEnquiryList(enquiryList);
+    }
+
 }
