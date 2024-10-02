@@ -27,5 +27,5 @@ public interface ProductRepository extends CrudRepository<ProductEntity, Long> {
     public List<ProductEntity> findAllByNameContainingAndStatusLike(@RequestParam("name") String keyword, Sort sort, String status);
 
     public List<ProductEntity> findAllByFarmAndStatusLikeAndType(FarmEntity farm, String status, int type);
-
+    public List<ProductEntity> findAllByStatusLikeAndType(String status, int type);
 }
