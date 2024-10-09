@@ -62,6 +62,7 @@ public class SchedulerService {
                             if (auctionQuantity <= 0 || auctionQuantity < auction.getQuantity()) {
                                 auction.setStatus(AuctionStatus.AUCTION_FAILED);
                                 product.setOpenStatus(3); // 모든 경매가 완료된 상태로 설정
+                                paymentController.refund(auction.getPaId());
                                 productRepository.save(product); // 수량 업데이트
                                 auctionRepository.save(auction);
                                 System.out.println("fail select top auction : auction - " + auction.getAuId());
