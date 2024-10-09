@@ -36,6 +36,7 @@ public class PaymentService {
 
     private KakaoReadyResponse response;
     private final AuctionRepository auctionRepository;
+    private final ProductRepository productRepository;
 
     private HttpHeaders getHeaders() {
         HttpHeaders httpHeaders = new HttpHeaders();
@@ -136,18 +137,20 @@ public class PaymentService {
         ApprovePaymentEntity kakaoApprove = approveResponse(order, pgToken);
         List<OrderDetailEntity> detail = order.getOrderDetails();
         for (OrderDetailEntity od : detail) {
-            int quantity = od.getProduct().getQuantity();
-            int updateQuantity = quantity - od.getQuantity();
-            od.getProduct().setQuantity(updateQuantity);
-            int sales = od.getProduct().getSales();
-            int updateSales = sales + od.getQuantity();
-            od.getProduct().setSales(updateSales);
             // orderDetail이 경매일 경우, auction에 paId 등록하기
             if (od.getType() == 2) {
                 AuctionEntity auction = od.getAuction();
                 auction.setPaId(kakaoApprove.getPaId());
                 auctionRepository.save(auction);
-
+            }
+            else {
+                int quantity = od.getProduct().getQuantity();
+                int updateQuantity = quantity - od.getQuantity();
+                od.getProduct().setQuantity(updateQuantity);
+                int sales = od.getProduct().getSales();
+                int updateSales = sales + od.getQuantity();
+                od.getProduct().setSales(updateSales);
+                productRepository.save(od.getProduct());
             }
         }
         order.setPayment(kakaoApprove);
@@ -156,6 +159,7 @@ public class PaymentService {
         return kakaoApprove;
     }
 
+    @Transactional
     public RefundPaymentEntity refund(long paId) {
         ApprovePaymentEntity approve = approvePaymentRepository.findBypaId(paId);
         RefundPaymentEntity kakaoCancelResponse = kakaoRefund(approve);
