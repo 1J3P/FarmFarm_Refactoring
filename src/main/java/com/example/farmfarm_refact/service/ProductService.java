@@ -202,7 +202,7 @@ public class ProductService {
                 };
 
         for (ProductEntity val : productList) {
-            if (val.getType() == 2) {
+            if (val.getType() == 2 && val.getOpenStatus() < 2) {
                 resultList.add(val);
             }
         }
@@ -221,7 +221,7 @@ public class ProductService {
                 };
 
         for (ProductEntity val : productList) {
-            if (val.getType() == 2) {
+            if (val.getType() == 2 && val.getOpenStatus() < 2) {
                 resultList.add(val);
             }
         }
