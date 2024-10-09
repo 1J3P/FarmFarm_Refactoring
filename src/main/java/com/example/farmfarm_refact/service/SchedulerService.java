@@ -64,20 +64,24 @@ public class SchedulerService {
                                 product.setOpenStatus(3); // 모든 경매가 완료된 상태로 설정
                                 productRepository.save(product); // 수량 업데이트
                                 auctionRepository.save(auction);
+                                System.out.println("fail select top auction : auction - " + auction.getAuId());
                                 continue;
                             } else {
                                 auctionQuantity -= auction.getQuantity(); // 남은 수량에서 현재 경매 수량을 차감
                                 product.setQuantity(auctionQuantity); // 남은 수량을 제품에 반영
+                                sales += auction.getQuantity();
+                                product.setSales(sales);
                                 productRepository.save(product); // DB에 반영
                                 auction.setStatus(AuctionStatus.AUCTION_SUCCESS); // 경매 성공 처리
                                 auctionRepository.save(auction);
                                 System.out.println("success select top auction : auction - " + auction.getAuId());
                             }
                         }
-                        else if (product.getOpenStatus() == 3) {  // 낙찰이 완료되었을 경우 경매 기각
+                        if (product.getOpenStatus() == 3) {  // 낙찰이 완료되었을 경우 경매 기각
                             auction.setStatus(AuctionStatus.AUCTION_FAILED); // 해당 경매건을 기각
                             auctionRepository.save(auction);
                             paymentController.refund(auction.getPaId()); // 결제 취소 처리 후 그 다음 경매건을 탐색
+                            System.out.println("fail2 select top auction : auction - " + auction.getAuId());
                         }
 
                     }
