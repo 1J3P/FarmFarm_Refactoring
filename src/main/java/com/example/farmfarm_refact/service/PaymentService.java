@@ -166,6 +166,9 @@ public class PaymentService {
         OrderEntity order = orderRepository.findByoId(Long.parseLong(approve.getPartner_order_id()));
         List<OrderDetailEntity> detail = order.getOrderDetails();
         for (OrderDetailEntity od : detail) {
+            if (od.getProduct().getType() == 2) {
+                continue;
+            }
             int quantity = od.getProduct().getQuantity();
             int updateQuantity = quantity + od.getQuantity();
             od.getProduct().setQuantity(updateQuantity);
