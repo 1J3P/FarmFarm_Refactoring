@@ -84,11 +84,11 @@ public class FarmController {
     }
 
 
-//    // 농장별 상품 보기(경매 상품)
-//    @GetMapping("/{fId}/auctionProduct")
-//    public ApiResponse<ProductResponseDto.ProductListResponseDto> getFarmGroupProduct(@PathVariable("fId") long fId) {
-//
-//    }
+    // 농장별 상품 보기(경매 상품)
+    @GetMapping("/{fId}/auctionProduct")
+    public ApiResponse<ProductResponseDto.ProductListResponseDto> getFarmAuctionProduct(@PathVariable("fId") long fId) {
+        return ApiResponse.onSuccess(productService.getFarmAuctionProduct(farmService.getFarm(fId)));
+    }
 
 
     // 농장 정보 수정
