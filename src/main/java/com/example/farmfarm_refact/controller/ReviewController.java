@@ -31,9 +31,12 @@ public class ReviewController {
         return ApiResponse.onSuccess(SuccessStatus.LIMJANG_UPDATE);
     }
 
-
-
     // 리뷰 삭제
+    @DeleteMapping("/{rId}")
+    public ApiResponse deleteReviw(@AuthenticationPrincipal UserEntity user, @PathVariable Long rId) {
+        reviewService.deleteReview(user, rId);
+        return ApiResponse.onSuccess(SuccessStatus.LIMJANG_DELETE);
+    }
 
 
     // 상품별 리뷰 조회

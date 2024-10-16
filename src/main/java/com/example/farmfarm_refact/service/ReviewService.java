@@ -15,6 +15,7 @@ import com.example.farmfarm_refact.entity.UserEntity;
 import com.example.farmfarm_refact.repository.OrderDetailRepository;
 import com.example.farmfarm_refact.repository.ReviewRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Service;
 
 import static com.example.farmfarm_refact.apiPayload.code.status.ErrorStatus.ENQUIRY_USER_NOT_EQUAL;
@@ -31,7 +32,7 @@ public class ReviewService {
 
     // 리뷰 등록
     public ReviewResponseDto.ReviewCreateResponseDto saveReview(UserEntity user, Long odId, ReviewRequestDto.ReviewCreateRequestDto reviewDto) {
-        ReviewEntity newReview = new ReviewEntity(reviewDto.getProductStar(), reviewDto.getFarmStar(), reviewDto.getComment(), user);
+        ReviewEntity newReview = new ReviewEntity(reviewDto.getProductStar(), reviewDto.getFarmStar(), reviewDto.getComment(), user, "리뷰등록");
         OrderDetailEntity orderDetail = orderDetailRepository.findByOdId(odId);
         newReview.setOrderDetail(orderDetail);
         ReviewEntity review = reviewRepository.save(newReview);
@@ -46,6 +47,18 @@ public class ReviewService {
         if (user.equals(oldReview.getUser())) {
             oldReview.updateReview(newReview);
             reviewRepository.save(oldReview);
+        }
+        else
+            throw new ExceptionHandler(REVIEW_USER_NOT_EQUAL);
+    }
+
+    // 리뷰 삭제
+    public void deleteReview(UserEntity user, Long rId) {
+        ReviewEntity review = reviewRepository.findById(rId)
+                .orElseThrow(() -> new ExceptionHandler(ErrorStatus.REVIEW_NOT_FOUND));
+        if (user.equals(review.getUser())) {
+            review.setStatus("리뷰삭제");
+            reviewRepository.save(review);
         }
         else
             throw new ExceptionHandler(REVIEW_USER_NOT_EQUAL);

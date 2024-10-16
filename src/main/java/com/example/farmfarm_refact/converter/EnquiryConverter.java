@@ -29,6 +29,8 @@ public class EnquiryConverter {
                 .username(enquiry.getUser().getUsername())
                 .content(enquiry.getContent())
                 .created_at(enquiry.getCreated_at())
+                .productName(enquiry.getProduct().getName())
+                .images(FileConverter.toFileCreateResponseDtoList(enquiry.getProduct().getFiles()))
                 .build();
     }
 

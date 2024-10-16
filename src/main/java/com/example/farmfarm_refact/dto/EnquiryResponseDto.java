@@ -37,6 +37,8 @@ public class EnquiryResponseDto {
         private String username;
         private String content;
         private Timestamp created_at;
+        private String productName;
+        private List<FileResponseDto.FileCreateResponseDto> images;
     }
 
     @Getter
