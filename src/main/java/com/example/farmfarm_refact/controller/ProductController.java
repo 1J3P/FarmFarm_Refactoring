@@ -117,4 +117,6 @@ public class ProductController {
     public ApiResponse<GroupResponseDto.GroupListResponseDto> getGroupList(@PathVariable("pId") long pId) {
         return ApiResponse.onSuccess(productService.getGroupList(pId));
     }
+
+
 }

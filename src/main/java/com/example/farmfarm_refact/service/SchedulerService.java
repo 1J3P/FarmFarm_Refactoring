@@ -25,7 +25,7 @@ public class SchedulerService {
     @Autowired
     private AuctionRepository auctionRepository;
 
-    @Scheduled(cron = "0 * * * * *")
+//    @Scheduled(cron = "0 * * * * *")
     public void closeAuction() throws ParseException {
         List<ProductEntity> products = productRepository.findAllByStatusLikeAndType("yes", 2);
         Calendar current = Calendar.getInstance();
@@ -44,7 +44,7 @@ public class SchedulerService {
         }
     }
 
-    @Scheduled(cron = "0 * * * * *")
+//    @Scheduled(cron = "0 * * * * *")
     @Transactional
     public void selectTopAuction() throws ParseException {
         List<ProductEntity> products = productRepository.findAllByStatusLikeAndType("yes", 2);
