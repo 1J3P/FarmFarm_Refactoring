@@ -39,4 +39,10 @@ public class ReviewEntity {
         this.comment = comment;
         this.user = user;
     }
+
+    public void updateReview(ReviewEntity review) {
+        this.productStar = review.getProductStar();
+        this.farmStar = review.getFarmStar();
+        this.comment = review.getComment();
+    }
 }
