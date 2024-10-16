@@ -79,7 +79,11 @@ public enum ErrorStatus implements BaseErrorCode {
 
     //enquiry 에러
     ENQUIRY_NOT_FOUND(HttpStatus.NOT_FOUND, "ENQUIRY4001", "enquiry가 존재하지 않습니다."),
-    ENQUIRY_USER_NOT_EQUAL(HttpStatus.FORBIDDEN, "ENQUIRY403", "유저가 달라 수정 권한이 없습니다.")
+    ENQUIRY_USER_NOT_EQUAL(HttpStatus.FORBIDDEN, "ENQUIRY403", "유저가 달라 수정 권한이 없습니다."),
+
+    //review 에러
+    REVIEW_NOT_FOUND(HttpStatus.NOT_FOUND, "REVIEW4001", "review가 존재하지 않습니다."),
+    REVIEW_USER_NOT_EQUAL(HttpStatus.FORBIDDEN, "REVIEW403", "유저가 달라 수정 권한이 없습니다.")
     ;
 
 

@@ -1,10 +1,12 @@
 package com.example.farmfarm_refact.controller;
 
 import com.example.farmfarm_refact.apiPayload.ApiResponse;
+import com.example.farmfarm_refact.apiPayload.code.status.SuccessStatus;
 import com.example.farmfarm_refact.dto.ReviewRequestDto;
 import com.example.farmfarm_refact.dto.ReviewResponseDto;
 import com.example.farmfarm_refact.entity.UserEntity;
 import com.example.farmfarm_refact.service.ReviewService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -23,10 +25,18 @@ public class ReviewController {
     }
 
     // 리뷰 수정
-
-
+    @PatchMapping("/{rId}")
+    public ApiResponse updateReview(@AuthenticationPrincipal UserEntity user, @PathVariable Long rId, @RequestBody @Valid ReviewRequestDto.ReviewUpdateRequestDto reviewUpdateRequestDto) {
+        reviewService.updateReview(user, rId, reviewUpdateRequestDto);
+        return ApiResponse.onSuccess(SuccessStatus.LIMJANG_UPDATE);
+    }
 
     // 리뷰 삭제
+    @DeleteMapping("/{rId}")
+    public ApiResponse deleteReviw(@AuthenticationPrincipal UserEntity user, @PathVariable Long rId) {
+        reviewService.deleteReview(user, rId);
+        return ApiResponse.onSuccess(SuccessStatus.LIMJANG_DELETE);
+    }
 
 
     // 상품별 리뷰 조회

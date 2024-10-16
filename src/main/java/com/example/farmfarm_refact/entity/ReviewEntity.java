@@ -24,6 +24,8 @@ public class ReviewEntity {
 
     private String comment;
 
+    private String status; // 삭제 여부를 위한 필드
+
     @ManyToOne
     @JoinColumn(name="user")
     private UserEntity user;
@@ -33,10 +35,17 @@ public class ReviewEntity {
     private OrderDetailEntity orderDetail;
 
     @Builder
-    public ReviewEntity(Long productStar, Long farmStar, String comment, UserEntity user) {
+    public ReviewEntity(Long productStar, Long farmStar, String comment, UserEntity user, String status) {
         this.productStar = productStar;
         this.farmStar = farmStar;
         this.comment = comment;
         this.user = user;
+        this.status = status;
+    }
+
+    public void updateReview(ReviewEntity review) {
+        this.productStar = review.getProductStar();
+        this.farmStar = review.getFarmStar();
+        this.comment = review.getComment();
     }
 }
