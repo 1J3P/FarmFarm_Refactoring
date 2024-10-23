@@ -34,6 +34,9 @@ public class ReviewEntity {
     @JoinColumn(name="order_detail")
     private OrderDetailEntity orderDetail;
 
+    @Column(name="p_id")
+    private Long pId;
+
     @Builder
     public ReviewEntity(Long productStar, Long farmStar, String comment, UserEntity user, String status) {
         this.productStar = productStar;
