@@ -8,11 +8,9 @@ import com.example.farmfarm_refact.dto.EnquiryRequestDto;
 import com.example.farmfarm_refact.dto.EnquiryResponseDto;
 import com.example.farmfarm_refact.dto.ReviewRequestDto;
 import com.example.farmfarm_refact.dto.ReviewResponseDto;
-import com.example.farmfarm_refact.entity.EnquiryEntity;
-import com.example.farmfarm_refact.entity.OrderDetailEntity;
-import com.example.farmfarm_refact.entity.ReviewEntity;
-import com.example.farmfarm_refact.entity.UserEntity;
+import com.example.farmfarm_refact.entity.*;
 import com.example.farmfarm_refact.repository.OrderDetailRepository;
+import com.example.farmfarm_refact.repository.ProductRepository;
 import com.example.farmfarm_refact.repository.ReviewRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -28,9 +26,10 @@ public class ReviewService {
 
     @Autowired
     private ReviewRepository reviewRepository;
-
     @Autowired
     private OrderDetailRepository orderDetailRepository;
+    @Autowired
+    private ProductRepository productRepository;
 
     // 리뷰 등록
     public ReviewResponseDto.ReviewCreateResponseDto saveReview(UserEntity user, Long odId, ReviewRequestDto.ReviewCreateRequestDto reviewDto) {
@@ -66,9 +65,17 @@ public class ReviewService {
             throw new ExceptionHandler(REVIEW_USER_NOT_EQUAL);
     }
 
+    // 상품별 리뷰 조회
+    public ReviewResponseDto.ReviewListResponseDto getProductReviewList(Long pId) {
+        ProductEntity product = productRepository.findBypIdAndStatusLike(pId, "yes")
+                .orElseThrow(() -> new ExceptionHandler(ErrorStatus.PRODUCT_NOT_FOUND));
+        List<ReviewEntity> reviewList = reviewRepository.findAllByProductAndStatusNotLike(product, "리뷰삭제");
+        return ReviewConverter.toReviewList(reviewList);
+    }
+
     // 내가 쓴 리뷰 보기
     public ReviewResponseDto.ReviewListResponseDto getMyReviewList(UserEntity user) {
-        List<ReviewEntity> reviewList = reviewRepository.findAllByUser(user);
+        List<ReviewEntity> reviewList = reviewRepository.findAllByUserAndStatusNotLike(user, "리뷰삭제");
         return ReviewConverter.toReviewList(reviewList);
     }
 }

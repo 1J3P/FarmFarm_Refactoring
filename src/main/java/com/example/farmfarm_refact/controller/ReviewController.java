@@ -39,6 +39,10 @@ public class ReviewController {
     }
 
     // 상품별 리뷰 조회
+    @GetMapping("/{pId}")
+    public ApiResponse<ReviewResponseDto.ReviewListResponseDto> getProductReviewList(@PathVariable Long pId) {
+        return ApiResponse.onSuccess(reviewService.getProductReviewList(pId));
+    }
 
 
     // 내가 쓴 리뷰 보기

@@ -9,6 +9,6 @@ import java.util.List;
 
 public interface EnquiryRepository extends CrudRepository<EnquiryEntity, Long> {
     public List<EnquiryEntity> findAllByProductAndStatusNotLike(ProductEntity product, String status);
-    public List<EnquiryEntity> findAllByUser(UserEntity user);
+    public List<EnquiryEntity> findAllByUserAndStatusNotLike(UserEntity user, String status);
 
 }
