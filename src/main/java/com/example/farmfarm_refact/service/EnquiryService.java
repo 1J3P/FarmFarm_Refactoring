@@ -24,7 +24,6 @@ public class EnquiryService {
 
     @Autowired
     private EnquiryRepository enquiryRepository;
-
     @Autowired
     private ProductRepository productRepository;
 
@@ -56,7 +55,7 @@ public class EnquiryService {
         EnquiryEntity enquiry = enquiryRepository.findById(eId)
                 .orElseThrow(() -> new ExceptionHandler(ErrorStatus.ENQUIRY_NOT_FOUND));
         if (user.equals(enquiry.getUser())) {
-            enquiry.setStatus("답변삭제");
+            enquiry.setStatus("문의삭제");
             enquiryRepository.save(enquiry);
         }
         else
@@ -67,13 +66,13 @@ public class EnquiryService {
     public EnquiryResponseDto.EnquiryListResponseDto getProductEnquiryList(Long pId) {
         ProductEntity product = productRepository.findBypIdAndStatusLike(pId, "yes")
                 .orElseThrow(() -> new ExceptionHandler(ErrorStatus.PRODUCT_NOT_FOUND));
-        List<EnquiryEntity> enquiryList = enquiryRepository.findAllByProductAndStatusNotLike(product, "답변삭제");
+        List<EnquiryEntity> enquiryList = enquiryRepository.findAllByProductAndStatusNotLike(product, "문의삭제");
         return EnquiryConverter.toEnquiryList(enquiryList);
     }
 
     // 내가 쓴 문의사항 보기
     public EnquiryResponseDto.EnquiryListResponseDto getMyEnquiryList(UserEntity user) {
-        List<EnquiryEntity> enquiryList = enquiryRepository.findAllByUser(user);
+        List<EnquiryEntity> enquiryList = enquiryRepository.findAllByUserAndStatusNotLike(user, "문의삭제");
         return EnquiryConverter.toEnquiryList(enquiryList);
     }
 

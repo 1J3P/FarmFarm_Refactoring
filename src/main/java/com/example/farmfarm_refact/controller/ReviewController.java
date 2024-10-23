@@ -38,10 +38,17 @@ public class ReviewController {
         return ApiResponse.onSuccess(SuccessStatus.LIMJANG_DELETE);
     }
 
-
     // 상품별 리뷰 조회
+    @GetMapping("/{pId}")
+    public ApiResponse<ReviewResponseDto.ReviewListResponseDto> getProductReviewList(@PathVariable Long pId) {
+        return ApiResponse.onSuccess(reviewService.getProductReviewList(pId));
+    }
 
 
     // 내가 쓴 리뷰 보기
+    @GetMapping("/my")
+    public ApiResponse<ReviewResponseDto.ReviewListResponseDto> getMyReviewList(@AuthenticationPrincipal UserEntity user) {
+        return ApiResponse.onSuccess(reviewService.getMyReviewList(user));
+    }
 
 }
