@@ -18,6 +18,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 import static com.example.farmfarm_refact.apiPayload.code.status.ErrorStatus.ENQUIRY_USER_NOT_EQUAL;
 import static com.example.farmfarm_refact.apiPayload.code.status.ErrorStatus.REVIEW_USER_NOT_EQUAL;
 
@@ -62,5 +64,11 @@ public class ReviewService {
         }
         else
             throw new ExceptionHandler(REVIEW_USER_NOT_EQUAL);
+    }
+
+    // 내가 쓴 리뷰 보기
+    public ReviewResponseDto.ReviewListResponseDto getMyReviewList(UserEntity user) {
+        List<ReviewEntity> reviewList = reviewRepository.findAllByUser(user);
+        return ReviewConverter.toReviewList(reviewList);
     }
 }

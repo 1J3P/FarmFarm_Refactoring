@@ -38,10 +38,13 @@ public class ReviewController {
         return ApiResponse.onSuccess(SuccessStatus.LIMJANG_DELETE);
     }
 
-
     // 상품별 리뷰 조회
 
 
     // 내가 쓴 리뷰 보기
+    @GetMapping("/my")
+    public ApiResponse<ReviewResponseDto.ReviewListResponseDto> getMyReviewList(@AuthenticationPrincipal UserEntity user) {
+        return ApiResponse.onSuccess(reviewService.getMyReviewList(user));
+    }
 
 }
