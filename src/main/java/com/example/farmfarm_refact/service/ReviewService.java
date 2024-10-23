@@ -36,6 +36,7 @@ public class ReviewService {
         ReviewEntity newReview = new ReviewEntity(reviewDto.getProductStar(), reviewDto.getFarmStar(), reviewDto.getComment(), user, "리뷰등록");
         OrderDetailEntity orderDetail = orderDetailRepository.findByOdId(odId);
         newReview.setOrderDetail(orderDetail);
+        newReview.setPId(orderDetail.getProduct().getPId());
         ReviewEntity review = reviewRepository.save(newReview);
         return ReviewConverter.toReviewCreateResponseDto(review);
     }
@@ -67,9 +68,9 @@ public class ReviewService {
 
     // 상품별 리뷰 조회
     public ReviewResponseDto.ReviewListResponseDto getProductReviewList(Long pId) {
-        ProductEntity product = productRepository.findBypIdAndStatusLike(pId, "yes")
-                .orElseThrow(() -> new ExceptionHandler(ErrorStatus.PRODUCT_NOT_FOUND));
-        List<ReviewEntity> reviewList = reviewRepository.findAllByProductAndStatusNotLike(product, "리뷰삭제");
+//        ProductEntity product = productRepository.findBypIdAndStatusLike(pId, "yes")
+//                .orElseThrow(() -> new ExceptionHandler(ErrorStatus.PRODUCT_NOT_FOUND));
+        List<ReviewEntity> reviewList = reviewRepository.findAllBypIdAndStatusNotLike(pId, "리뷰삭제");
         return ReviewConverter.toReviewList(reviewList);
     }
 
