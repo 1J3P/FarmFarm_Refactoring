@@ -55,9 +55,9 @@ public class MypageController {
         return ApiResponse.onSuccess(userService.updateProfile(user, updateUser));
     }
 
-    // 농장 관리
-    @GetMapping("/farm")
-    public ApiResponse<FarmResponseDto.FarmManageResponseDto> manageFarm(@AuthenticationPrincipal UserEntity user) {
-        return ApiResponse.onSuccess(farmService.manageFarm(user));
-    }
+//    // 농장 관리
+//    @GetMapping("/farm")
+//    public ApiResponse<FarmResponseDto.FarmManageResponseDto> manageFarm(@AuthenticationPrincipal UserEntity user) {
+//        return ApiResponse.onSuccess(farmService.manageFarm(user));
+//    }
 }
