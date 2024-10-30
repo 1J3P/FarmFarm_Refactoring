@@ -27,6 +27,7 @@ public class ReviewResponseDto {
         private String productName;
         private String comment;
         private Long productStar;
+        private Long farmStar;
         private List<FileResponseDto.FileCreateResponseDto> images;
     }
 

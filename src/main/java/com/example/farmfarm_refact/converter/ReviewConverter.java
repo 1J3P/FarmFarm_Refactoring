@@ -32,6 +32,7 @@ public class ReviewConverter {
                 .productName(review.getOrderDetail().getProduct().getName())
                 .comment(review.getComment())
                 .productStar(review.getProductStar())
+                .farmStar(review.getFarmStar())
                 .images(FileConverter.toFileCreateResponseDtoList(review.getOrderDetail().getProduct().getFiles()))
                 .build();
     }
