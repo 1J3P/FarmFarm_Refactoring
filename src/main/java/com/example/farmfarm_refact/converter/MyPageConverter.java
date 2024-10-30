@@ -11,6 +11,8 @@ public class MyPageConverter {
                 .userName(user.getNickname())
                 .farmName(user.getFarm().getName())
                 .farmDetail(user.getFarm().getDetail())
+                .profileImage(user.getImage())
+                .farmImages(FileConverter.toFileCreateResponseDtoList(user.getFarm().getFiles()))
                 .build();
     }
 
