@@ -20,6 +20,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 import static com.example.farmfarm_refact.apiPayload.code.status.ErrorStatus.S3_NOT_FOUND;
 
@@ -159,5 +160,12 @@ public class FarmService {
         }
         else
             throw new ExceptionHandler(ErrorStatus.FARM_USER_NOT_EQUAL);
+    }
+
+    // 농장 관리
+    public FarmResponseDto.FarmManageResponseDto manageFarm(UserEntity user) {
+        // 농장이 존재하면 true, null이면 false
+        boolean exist = farmRepository.findByUserAndStatusLike(user, "yes").isPresent();
+        return FarmConverter.toFarmManageResponseDto(exist);
     }
 }

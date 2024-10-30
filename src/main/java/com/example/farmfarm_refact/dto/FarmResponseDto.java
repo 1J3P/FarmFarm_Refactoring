@@ -64,4 +64,12 @@ public class FarmResponseDto {
         private Long fId;
     }
 
+    @Getter
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class FarmManageResponseDto {
+        private boolean isFarm;
+    }
+
 }

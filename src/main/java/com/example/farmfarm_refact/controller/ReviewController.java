@@ -27,6 +27,7 @@ public class ReviewController {
     // 리뷰 수정
     @PatchMapping("/{rId}")
     public ApiResponse updateReview(@AuthenticationPrincipal UserEntity user, @PathVariable Long rId, @RequestBody @Valid ReviewRequestDto.ReviewUpdateRequestDto reviewUpdateRequestDto) {
+        reviewUpdateRequestDto.setRId(rId);
         reviewService.updateReview(user, rId, reviewUpdateRequestDto);
         return ApiResponse.onSuccess(SuccessStatus.LIMJANG_UPDATE);
     }
