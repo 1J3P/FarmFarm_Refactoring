@@ -26,7 +26,7 @@ public class EnquiryConverter {
     public static EnquiryResponseDto.EnquiryListDto toEnquiryDto(EnquiryEntity enquiry) {
         return EnquiryResponseDto.EnquiryListDto.builder()
                 .eId(enquiry.getEId())
-                .username(enquiry.getUser().getUsername())
+                .username(enquiry.getUser().getNickname())
                 .content(enquiry.getContent())
                 .created_at(enquiry.getCreated_at())
                 .productName(enquiry.getProduct().getName())
