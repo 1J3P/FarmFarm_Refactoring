@@ -93,6 +93,7 @@ public class EnquiryService {
         EnquiryEntity enquiry = enquiryRepository.findById(eId)
                 .orElseThrow(() -> new ExceptionHandler(ErrorStatus.ENQUIRY_NOT_FOUND));
         enquiry.setReply(enquiryDto.getReply());
+        enquiry.setStatus("답변완료");
         enquiryRepository.save(enquiry);
         return EnquiryConverter.toEnquiryReplyCreateResponseDto(enquiry);
     }
