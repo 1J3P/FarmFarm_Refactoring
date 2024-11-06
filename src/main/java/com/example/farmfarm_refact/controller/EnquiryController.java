@@ -57,4 +57,10 @@ public class EnquiryController {
         return ApiResponse.onSuccess(enquiryService.getMyEnquiryList(user));
     }
 
+    //관리자 페이지 문의관리
+    @GetMapping("/admin")
+    public ApiResponse<EnquiryResponseDto.EnquiryListResponseDto> getEnquiryAdminList() {
+        return ApiResponse.onSuccess(enquiryService.getEnquiryAdminList());
+    }
+
 }

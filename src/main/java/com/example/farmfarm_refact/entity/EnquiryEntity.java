@@ -38,6 +38,8 @@ public class EnquiryEntity {
 
     private String status;
 
+    private String reply;
+
     @Builder
     public EnquiryEntity(String content, UserEntity user, String status) {
         this.content = content;

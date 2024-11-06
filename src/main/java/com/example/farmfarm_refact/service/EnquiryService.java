@@ -76,4 +76,9 @@ public class EnquiryService {
         return EnquiryConverter.toEnquiryList(enquiryList);
     }
 
+    //관리자 페이지 문의관리
+    public EnquiryResponseDto.EnquiryListResponseDto getEnquiryAdminList() {
+        List<EnquiryEntity> enquiryList = enquiryRepository.findAll();
+        return EnquiryConverter.toEnquiryList(enquiryList);
+    }
 }
