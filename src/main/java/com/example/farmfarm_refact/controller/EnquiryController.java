@@ -50,7 +50,6 @@ public class EnquiryController {
         return ApiResponse.onSuccess(enquiryService.getProductEnquiryList(pId));
     }
 
-
     //내가 쓴 문의사항 보기
     @GetMapping("/my")
     public ApiResponse<EnquiryResponseDto.EnquiryListResponseDto> getMyEnquiryList(@AuthenticationPrincipal UserEntity user) {
@@ -62,5 +61,11 @@ public class EnquiryController {
     public ApiResponse<EnquiryResponseDto.EnquiryListResponseDto> getEnquiryAdminList(@AuthenticationPrincipal UserEntity user) {
         return ApiResponse.onSuccess(enquiryService.getEnquiryAdminList(user));
     }
+
+//    //문의 답변 달기
+//    @PostMapping("/reply/{eId}")
+//    public ApiResponse<EnquiryResponseDto.EnquiryReplyCreateResponseDto> createEnquiryReply(@PathVariable Long eId) {
+//        return ApiResponse.onSuccess(enquiryService.createEnquiryReply());
+//    }
 
 }

@@ -81,7 +81,7 @@ public class EnquiryService {
         List<EnquiryEntity> enquiryList = enquiryRepository.findAll();
         List<EnquiryEntity> resultList = new ArrayList<>();
         for (EnquiryEntity val : enquiryList) {
-            if (val.getProduct().getFarm().getUser() == user) {
+            if (val.getProduct().getFarm().getUser().equals(user)) {
                 resultList.add(val);
             }
         }
