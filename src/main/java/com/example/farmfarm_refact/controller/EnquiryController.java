@@ -59,8 +59,8 @@ public class EnquiryController {
 
     //관리자 페이지 문의관리
     @GetMapping("/admin")
-    public ApiResponse<EnquiryResponseDto.EnquiryListResponseDto> getEnquiryAdminList() {
-        return ApiResponse.onSuccess(enquiryService.getEnquiryAdminList());
+    public ApiResponse<EnquiryResponseDto.EnquiryListResponseDto> getEnquiryAdminList(@AuthenticationPrincipal UserEntity user) {
+        return ApiResponse.onSuccess(enquiryService.getEnquiryAdminList(user));
     }
 
 }
