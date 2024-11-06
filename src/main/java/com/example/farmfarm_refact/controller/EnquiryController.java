@@ -62,10 +62,10 @@ public class EnquiryController {
         return ApiResponse.onSuccess(enquiryService.getEnquiryAdminList(user));
     }
 
-//    //문의 답변 달기
-//    @PostMapping("/reply/{eId}")
-//    public ApiResponse<EnquiryResponseDto.EnquiryReplyCreateResponseDto> createEnquiryReply(@PathVariable Long eId) {
-//        return ApiResponse.onSuccess(enquiryService.createEnquiryReply());
-//    }
+    //문의 답변 달기
+    @PostMapping("/reply/{eId}")
+    public ApiResponse<EnquiryResponseDto.EnquiryReplyCreateResponseDto> createEnquiryReply(@PathVariable Long eId, @RequestBody EnquiryRequestDto.EnquiryReplyCreateRequestDto enquiry) {
+        return ApiResponse.onSuccess(enquiryService.createEnquiryReply(eId, enquiry));
+    }
 
 }

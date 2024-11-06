@@ -21,4 +21,13 @@ public class EnquiryRequestDto {
         private Long eId;
         private String content;
     }
+
+    @Builder
+    @Getter
+    @Setter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class EnquiryReplyCreateRequestDto {
+        private String reply;
+    }
 }

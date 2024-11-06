@@ -87,4 +87,13 @@ public class EnquiryService {
         }
         return EnquiryConverter.toEnquiryList(resultList);
     }
+
+    //문의 답변 달기
+    public EnquiryResponseDto.EnquiryReplyCreateResponseDto createEnquiryReply(Long eId, EnquiryRequestDto.EnquiryReplyCreateRequestDto enquiryDto) {
+        EnquiryEntity enquiry = enquiryRepository.findById(eId)
+                .orElseThrow(() -> new ExceptionHandler(ErrorStatus.ENQUIRY_NOT_FOUND));
+        enquiry.setReply(enquiryDto.getReply());
+        enquiryRepository.save(enquiry);
+        return EnquiryConverter.toEnquiryReplyCreateResponseDto(enquiry);
+    }
 }

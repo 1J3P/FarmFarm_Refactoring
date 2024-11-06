@@ -50,4 +50,13 @@ public class EnquiryResponseDto {
     public static class EnquiryListResponseDto {
         private List<EnquiryListDto> enquiryList;
     }
+
+    @Getter
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class EnquiryReplyCreateResponseDto {
+        private Long eId;
+        private String reply;
+    }
 }
