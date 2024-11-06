@@ -17,6 +17,13 @@ public class EnquiryConverter {
                 .build();
     }
 
+    public static EnquiryResponseDto.EnquiryReplyCreateResponseDto toEnquiryReplyCreateResponseDto(EnquiryEntity enquiry) {
+        return EnquiryResponseDto.EnquiryReplyCreateResponseDto.builder()
+                .eId(enquiry.getEId())
+                .reply(enquiry.getReply())
+                .build();
+    }
+
     public static EnquiryEntity toNewEnquiry (EnquiryRequestDto.EnquiryUpdateRequestDto updateDto) {
         return EnquiryEntity.builder()
                 .content(updateDto.getContent())
