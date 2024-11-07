@@ -170,7 +170,7 @@ public class FarmService {
 
     public List<OrderResponseDto.OrderDeliveryReadResponseDto> getShippingList (UserEntity user) {
         return OrderConverter.toOrderDeliveryDtoList(orderRepository.findOrdersByFarmOwner(user));
-
+    }
     // 농장 관리
     public FarmResponseDto.FarmManageResponseDto manageFarm(UserEntity user) {
         // 농장이 존재하면 true, null이면 false
