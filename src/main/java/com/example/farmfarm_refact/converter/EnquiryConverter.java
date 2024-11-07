@@ -17,6 +17,13 @@ public class EnquiryConverter {
                 .build();
     }
 
+    public static EnquiryResponseDto.EnquiryReplyCreateResponseDto toEnquiryReplyCreateResponseDto(EnquiryEntity enquiry) {
+        return EnquiryResponseDto.EnquiryReplyCreateResponseDto.builder()
+                .eId(enquiry.getEId())
+                .reply(enquiry.getReply())
+                .build();
+    }
+
     public static EnquiryEntity toNewEnquiry (EnquiryRequestDto.EnquiryUpdateRequestDto updateDto) {
         return EnquiryEntity.builder()
                 .content(updateDto.getContent())
@@ -26,11 +33,13 @@ public class EnquiryConverter {
     public static EnquiryResponseDto.EnquiryListDto toEnquiryDto(EnquiryEntity enquiry) {
         return EnquiryResponseDto.EnquiryListDto.builder()
                 .eId(enquiry.getEId())
-                .username(enquiry.getUser().getUsername())
+                .username(enquiry.getUser().getNickname())
                 .content(enquiry.getContent())
                 .created_at(enquiry.getCreated_at())
                 .productName(enquiry.getProduct().getName())
                 .images(FileConverter.toFileCreateResponseDtoList(enquiry.getProduct().getFiles()))
+                .status(enquiry.getStatus())
+                .reply(enquiry.getReply())
                 .build();
     }
 

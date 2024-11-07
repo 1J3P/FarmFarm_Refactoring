@@ -4,12 +4,17 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 
 import com.example.farmfarm_refact.apiPayload.ExceptionHandler;
+import com.example.farmfarm_refact.converter.UserConverter;
 import com.example.farmfarm_refact.dto.LoginResponseDto;
 import com.example.farmfarm_refact.dto.TokenDto;
 import com.example.farmfarm_refact.dto.UserRequestDto;
+import com.example.farmfarm_refact.dto.UserResponseDto;
+import com.example.farmfarm_refact.entity.FileEntity;
+import com.example.farmfarm_refact.entity.FileType;
 import com.example.farmfarm_refact.entity.UserEntity;
 import com.example.farmfarm_refact.entity.oauth.KakaoProfile;
 import com.example.farmfarm_refact.entity.oauth.OauthToken;
+import com.example.farmfarm_refact.repository.FileRepository;
 import com.example.farmfarm_refact.repository.UserRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +40,8 @@ import static com.example.farmfarm_refact.apiPayload.code.status.ErrorStatus.*;
 public class UserService {
     @Autowired
     private UserRepository userRepository; //(1)만들어둔 UserRepository 를 @Autowired 해준다.
+    @Autowired
+    private FileRepository fileRepository;
     @Autowired
     private JwtService jwtService;
 
@@ -244,5 +251,13 @@ public class UserService {
         userRepository.save(user);
 
         return "로그아웃 성공";
+    }
+
+    // 프로필 수정
+    public UserResponseDto.UserUpdateProfileResponseDto updateProfile(UserEntity user, UserRequestDto.UserUpdateProfileRequestDto userDto) {
+        user.setNickname(userDto.getNickname());
+        user.setImage(userDto.getImage());
+        UserEntity saveUser = userRepository.save(user);
+        return UserConverter.toUserUpdateResponseDto(saveUser);
     }
 }

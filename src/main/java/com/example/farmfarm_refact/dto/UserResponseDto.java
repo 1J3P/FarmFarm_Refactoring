@@ -4,6 +4,9 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
+
 @Getter
 public class UserResponseDto {
 
@@ -29,6 +32,15 @@ public class UserResponseDto {
         private Long uId;
         private String nickname;
         private String email;
+        private String image;
+    }
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class UserUpdateProfileResponseDto {
+        private String nickname;
         private String image;
     }
 }

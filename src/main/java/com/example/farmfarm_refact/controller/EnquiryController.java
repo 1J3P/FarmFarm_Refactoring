@@ -50,11 +50,22 @@ public class EnquiryController {
         return ApiResponse.onSuccess(enquiryService.getProductEnquiryList(pId));
     }
 
-
     //내가 쓴 문의사항 보기
     @GetMapping("/my")
     public ApiResponse<EnquiryResponseDto.EnquiryListResponseDto> getMyEnquiryList(@AuthenticationPrincipal UserEntity user) {
         return ApiResponse.onSuccess(enquiryService.getMyEnquiryList(user));
+    }
+
+    //관리자 페이지 문의관리
+    @GetMapping("/admin")
+    public ApiResponse<EnquiryResponseDto.EnquiryListResponseDto> getEnquiryAdminList(@AuthenticationPrincipal UserEntity user) {
+        return ApiResponse.onSuccess(enquiryService.getEnquiryAdminList(user));
+    }
+
+    //문의 답변 달기
+    @PostMapping("/reply/{eId}")
+    public ApiResponse<EnquiryResponseDto.EnquiryReplyCreateResponseDto> createEnquiryReply(@PathVariable Long eId, @RequestBody EnquiryRequestDto.EnquiryReplyCreateRequestDto enquiry) {
+        return ApiResponse.onSuccess(enquiryService.createEnquiryReply(eId, enquiry));
     }
 
 }

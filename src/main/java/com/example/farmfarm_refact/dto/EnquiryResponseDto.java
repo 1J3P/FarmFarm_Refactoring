@@ -39,6 +39,8 @@ public class EnquiryResponseDto {
         private Timestamp created_at;
         private String productName;
         private List<FileResponseDto.FileCreateResponseDto> images;
+        private String status;
+        private String reply;
     }
 
     @Getter
@@ -47,5 +49,14 @@ public class EnquiryResponseDto {
     @AllArgsConstructor
     public static class EnquiryListResponseDto {
         private List<EnquiryListDto> enquiryList;
+    }
+
+    @Getter
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class EnquiryReplyCreateResponseDto {
+        private Long eId;
+        private String reply;
     }
 }

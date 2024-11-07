@@ -8,9 +8,11 @@ public class MyPageConverter {
 
     public static MyPageResponseDto.myPageResponseDto toMyPageResponseDto(UserEntity user) {
         return MyPageResponseDto.myPageResponseDto.builder()
-                .userName(user.getUsername())
+                .userName(user.getNickname())
                 .farmName(user.getFarm().getName())
                 .farmDetail(user.getFarm().getDetail())
+                .profileImage(user.getImage())
+                .farmImages(FileConverter.toFileCreateResponseDtoList(user.getFarm().getFiles()))
                 .build();
     }
 

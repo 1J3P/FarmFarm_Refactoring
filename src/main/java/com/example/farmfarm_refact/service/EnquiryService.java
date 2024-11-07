@@ -76,4 +76,25 @@ public class EnquiryService {
         return EnquiryConverter.toEnquiryList(enquiryList);
     }
 
+    //관리자 페이지 문의관리
+    public EnquiryResponseDto.EnquiryListResponseDto getEnquiryAdminList(UserEntity user) {
+        List<EnquiryEntity> enquiryList = enquiryRepository.findAll();
+        List<EnquiryEntity> resultList = new ArrayList<>();
+        for (EnquiryEntity val : enquiryList) {
+            if (val.getProduct().getFarm().getUser().equals(user)) {
+                resultList.add(val);
+            }
+        }
+        return EnquiryConverter.toEnquiryList(resultList);
+    }
+
+    //문의 답변 달기
+    public EnquiryResponseDto.EnquiryReplyCreateResponseDto createEnquiryReply(Long eId, EnquiryRequestDto.EnquiryReplyCreateRequestDto enquiryDto) {
+        EnquiryEntity enquiry = enquiryRepository.findById(eId)
+                .orElseThrow(() -> new ExceptionHandler(ErrorStatus.ENQUIRY_NOT_FOUND));
+        enquiry.setReply(enquiryDto.getReply());
+        enquiry.setStatus("답변완료");
+        enquiryRepository.save(enquiry);
+        return EnquiryConverter.toEnquiryReplyCreateResponseDto(enquiry);
+    }
 }

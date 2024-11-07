@@ -75,4 +75,10 @@ public class FarmConverter {
               .build();
     }
 
+    public static FarmResponseDto.FarmManageResponseDto toFarmManageResponseDto(Boolean exist) {
+        return FarmResponseDto.FarmManageResponseDto.builder()
+                .isFarm(exist)
+                .build();
+    }
+
 }
