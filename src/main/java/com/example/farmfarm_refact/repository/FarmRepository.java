@@ -19,4 +19,5 @@ public interface FarmRepository extends CrudRepository<FarmEntity, Long> {
     public List<FarmEntity> findAllByNameContainingAndStatusLike(@RequestParam("name") String keyword, String status);
     public List<FarmEntity> findAllByNameContainingAndStatusLike(@RequestParam("name") String keyword, Sort sort, String status);
     public List<FarmEntity> findAllByLocationCityAndLocationGu(String locationCity, String locationGu);
+    List<FarmEntity> findByUser(UserEntity user);
 }
