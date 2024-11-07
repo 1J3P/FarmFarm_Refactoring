@@ -31,6 +31,15 @@ public class OrderEntity {
     //결제에 대한 상태
     private PaymentStatus paymentStatus;
 
+    //배송에 대한 상태
+    private ShippingStatus shippingStatus;
+
+    //송장 번호
+    private String invoiceNumber;
+
+    @Column(name="order_number", unique = true)
+    private String orderNumber;
+
     @Column(name="is_delivery")
     private boolean delivery;
 
@@ -69,6 +78,11 @@ public class OrderEntity {
         this.deliveryName = deliveryName;
         this.deliveryPhone = deliveryPhone;
         this.deliveryMemo = deliveryMemo;
+    }
+
+    // 주문번호 생성 메서드
+    public void generateOrderNumber() {
+        this.orderNumber = String.format("%s_%d", new java.text.SimpleDateFormat("yyyyMMdd").format(new java.util.Date()), this.oId);
     }
 }
 

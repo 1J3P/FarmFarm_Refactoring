@@ -5,8 +5,10 @@ import com.example.farmfarm_refact.apiPayload.ExceptionHandler;
 import com.example.farmfarm_refact.apiPayload.code.status.ErrorStatus;
 import com.example.farmfarm_refact.controller.S3Controller;
 import com.example.farmfarm_refact.converter.FarmConverter;
+import com.example.farmfarm_refact.converter.OrderConverter;
 import com.example.farmfarm_refact.dto.FarmRequestDto;
 import com.example.farmfarm_refact.dto.FarmResponseDto;
+import com.example.farmfarm_refact.dto.OrderResponseDto;
 import com.example.farmfarm_refact.entity.FarmEntity;
 import com.example.farmfarm_refact.entity.FileEntity;
 import com.example.farmfarm_refact.entity.FileType;
@@ -14,6 +16,7 @@ import com.example.farmfarm_refact.entity.UserEntity;
 import com.example.farmfarm_refact.repository.FarmRepository;
 import com.example.farmfarm_refact.repository.FileRepository;
 
+import com.example.farmfarm_refact.repository.OrderRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
@@ -27,6 +30,8 @@ import static com.example.farmfarm_refact.apiPayload.code.status.ErrorStatus.S3_
 public class FarmService {
     @Autowired
     private FarmRepository farmRepository;
+    @Autowired
+    private OrderRepository orderRepository;
     @Autowired
     private UserService userService;
     @Autowired
@@ -159,5 +164,9 @@ public class FarmService {
         }
         else
             throw new ExceptionHandler(ErrorStatus.FARM_USER_NOT_EQUAL);
+    }
+
+    public List<OrderResponseDto.OrderDeliveryReadResponseDto> getShippingList (UserEntity user) {
+        return OrderConverter.toOrderDeliveryDtoList(orderRepository.findOrdersByFarmOwner(user));
     }
 }

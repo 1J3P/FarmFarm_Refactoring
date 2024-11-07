@@ -86,12 +86,18 @@ public class OrderService {
 
         if (order.isDelivery() == true) {
             totalPrice += 3000;
+            order.setShippingStatus(ShippingStatus.PAYMENT_CONFIRMED);
+        }
+        else {
+            order.setShippingStatus(ShippingStatus.NO_DELIVERY);
         }
 
         order.setTotalPrice(totalPrice);
         order.setTotalQuantity(totalQuantity);
         order.setPaymentStatus(PaymentStatus.BEFORE_PAYMENT);
         OrderEntity saveOrder = orderRepository.save(order);
+        saveOrder.generateOrderNumber();
+        orderRepository.save(saveOrder);
         OrderEntity getOrder = orderRepository.findById(saveOrder.getOId())
                 .orElseThrow(()->new ExceptionHandler(ErrorStatus.ORDER_NOT_FOUND));
         for (OrderDetailEntity d : details) {

@@ -2,6 +2,7 @@ package com.example.farmfarm_refact.dto;
 
 import com.example.farmfarm_refact.entity.AuctionStatus;
 import com.example.farmfarm_refact.entity.PaymentStatus;
+import com.example.farmfarm_refact.entity.ShippingStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -28,9 +29,12 @@ public class OrderResponseDto {
     @AllArgsConstructor
     public static class OrderReadResponseDto {
         private Long oId;
+        private String orderNumber;
         private Long totalPrice;
         private Integer totalQuantity;
-        private String paymentStatus;
+        private PaymentStatus paymentStatus;
+        private ShippingStatus shippingStatus;
+        private String invoiceNumber;
         private Boolean isDelivery;
         private String deliveryAddress;
         private String deliveryAddressDetail;
@@ -39,6 +43,30 @@ public class OrderResponseDto {
         private String deliveryMemo;
         private List<OrderResponseDto.OrderDetailReadResponseDto> orderDetails;
     }
+
+    @Getter
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class OrderDeliveryReadResponseDto {
+        private Long oId;
+        private String orderNumber;
+        private Long totalPrice;
+        private Integer totalQuantity;
+        private PaymentStatus paymentStatus;
+        private ShippingStatus shippingStatus;
+        private String invoiceNumber;
+        private Boolean isDelivery;
+        private String deliveryAddress;
+        private String deliveryAddressDetail;
+        private String deliveryName;
+        private String deliveryPhone;
+        private String deliveryMemo;
+        private String itemName;
+        private List<OrderResponseDto.OrderDetailReadResponseDto> orderDetails;
+    }
+
+
     @Getter
     @Builder
     @NoArgsConstructor

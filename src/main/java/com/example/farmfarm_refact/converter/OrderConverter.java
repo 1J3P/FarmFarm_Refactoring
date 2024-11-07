@@ -41,7 +41,11 @@ public class OrderConverter {
   public static OrderResponseDto.OrderReadResponseDto toOrderReadResponseDto(OrderEntity order) {
       return OrderResponseDto.OrderReadResponseDto.builder()
               .oId(order.getOId())
+              .orderNumber(order.getOrderNumber())
+              .invoiceNumber(order.getInvoiceNumber())
               .isDelivery(order.isDelivery())
+              .paymentStatus(order.getPaymentStatus())
+              .shippingStatus(order.getShippingStatus())
               .deliveryName(order.getDeliveryName())
               .deliveryPhone(order.getDeliveryPhone())
               .deliveryAddress(order.getDeliveryAddress())
@@ -50,6 +54,26 @@ public class OrderConverter {
               .orderDetails(OrderConverter.toOrderDetailDtoList(order.getOrderDetails()))
               .build();
   }
+
+    public static OrderResponseDto.OrderDeliveryReadResponseDto toOrderDeliveryReadResponseDto(OrderEntity order) {
+        return OrderResponseDto.OrderDeliveryReadResponseDto.builder()
+                .oId(order.getOId())
+                .orderNumber(order.getOrderNumber())
+                .invoiceNumber(order.getInvoiceNumber())
+                .isDelivery(order.isDelivery())
+                .paymentStatus(order.getPaymentStatus())
+                .shippingStatus(order.getShippingStatus())
+                .deliveryName(order.getDeliveryName())
+                .deliveryPhone(order.getDeliveryPhone())
+                .deliveryAddress(order.getDeliveryAddress())
+                .deliveryAddressDetail(order.getDeliveryAddressDetail())
+                .deliveryMemo(order.getDeliveryMemo())
+                .itemName(order.getPayment().getItem_name())
+                .totalQuantity(order.getTotalQuantity())
+                .totalPrice(order.getTotalPrice())
+                .orderDetails(OrderConverter.toOrderDetailDtoList(order.getOrderDetails()))
+                .build();
+    }
 
   public static OrderResponseDto.OrderDetailReadResponseDto toOrderDetailReadResponseDto(OrderDetailEntity orderDetail) {
       return OrderResponseDto.OrderDetailReadResponseDto.builder()
@@ -72,6 +96,14 @@ public class OrderConverter {
                 .collect(Collectors.toList());
 
         return orderDetailDtoList;
+    }
+
+    public static List<OrderResponseDto.OrderDeliveryReadResponseDto> toOrderDeliveryDtoList(List<OrderEntity> orderList) {
+        List<OrderResponseDto.OrderDeliveryReadResponseDto> orderDeliveryDtoList = orderList.stream()
+                .map(OrderConverter::toOrderDeliveryReadResponseDto)
+                .collect(Collectors.toList());
+
+        return orderDeliveryDtoList;
     }
 
     // update 시 필요한 메서드
