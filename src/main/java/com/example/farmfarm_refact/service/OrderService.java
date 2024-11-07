@@ -20,6 +20,7 @@ import com.example.farmfarm_refact.entity.kakaoPay.ApprovePaymentEntity;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 
@@ -34,6 +35,7 @@ public class OrderService {
     private final GroupRepository groupRepository;
     private final PaymentController paymentController;
     private final AuctionRepository auctionRepository;
+    private final UserRepository userRepository;
 
 
 
@@ -232,5 +234,26 @@ public class OrderService {
         }
     }
 
+    public List<OrderEntity> findOrdersByUser(Long userId) {
+        // 1. User 조회
+        UserEntity user = userRepository.findById(userId);
 
+        if (user == null) {
+            return Collections.emptyList();
+        }
+
+        List<OrderEntity> orders = new ArrayList<>();
+        FarmEntity farm = user.getFarm();
+        // 2. User의 Farm을 통해 Product 찾기
+        for (ProductEntity product : farm.getProducts()) {
+            // 3. Product의 OrderDetail 찾기
+            for (OrderDetailEntity orderDetail : product.getDetails()) {
+                // 4. OrderDetail을 통해 Order를 찾기
+                orders.add(orderDetail.getOrder());
+            }
+        }
+
+        // 5. 결과 반환
+        return orders;
+    }
 }

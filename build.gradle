@@ -64,6 +64,9 @@ dependencies {
 
     implementation 'net.bytebuddy:byte-buddy:1.14.0'
 
+    // ANTLR 종속성 추가
+    implementation 'org.antlr:antlr4-runtime:4.13.0'
+    compileOnly 'org.antlr:antlr4:4.13.0'  // 코드 생성용
 }
 
 tasks.named('test') {

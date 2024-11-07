@@ -15,8 +15,8 @@ import com.example.farmfarm_refact.entity.FileType;
 import com.example.farmfarm_refact.entity.UserEntity;
 import com.example.farmfarm_refact.repository.FarmRepository;
 import com.example.farmfarm_refact.repository.FileRepository;
-
 import com.example.farmfarm_refact.repository.OrderRepository;
+
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
@@ -32,7 +32,7 @@ public class FarmService {
     @Autowired
     private FarmRepository farmRepository;
     @Autowired
-    private OrderRepository orderRepository;
+    private OrderService orderService;
     @Autowired
     private UserService userService;
     @Autowired
@@ -169,7 +169,7 @@ public class FarmService {
 
 
     public List<OrderResponseDto.OrderDeliveryReadResponseDto> getShippingList (UserEntity user) {
-        return OrderConverter.toOrderDeliveryDtoList(orderRepository.findOrdersByFarmOwner(user));
+        return OrderConverter.toOrderDeliveryDtoList(orderService.findOrdersByUser(user.getId()));
     }
     // 농장 관리
     public FarmResponseDto.FarmManageResponseDto manageFarm(UserEntity user) {
