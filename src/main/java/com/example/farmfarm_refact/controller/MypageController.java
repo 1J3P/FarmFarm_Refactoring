@@ -49,6 +49,7 @@ public class MypageController {
 
     // 로그아웃
 
+
     // 프로필 관리
     @PostMapping("/profile")
     public ApiResponse<UserResponseDto.UserUpdateProfileResponseDto> updateProfile(@AuthenticationPrincipal UserEntity user, @RequestBody UserRequestDto.UserUpdateProfileRequestDto updateUser) {
@@ -60,4 +61,5 @@ public class MypageController {
 //    public ApiResponse<FarmResponseDto.FarmManageResponseDto> manageFarm(@AuthenticationPrincipal UserEntity user) {
 //        return ApiResponse.onSuccess(farmService.manageFarm(user));
 //    }
+
 }

@@ -25,6 +25,8 @@ import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 import static com.example.farmfarm_refact.apiPayload.code.status.ErrorStatus.MEMBER_NOT_FOUND;
 import static com.example.farmfarm_refact.apiPayload.code.status.ErrorStatus.TOKEN_EMPTY;
 
@@ -105,6 +107,12 @@ public class FarmController {
     public ApiResponse deleteFarm(@AuthenticationPrincipal UserEntity user, @PathVariable("fId") long fId)  {
         farmService.deleteFarm(user, fId);
         return ApiResponse.onSuccess(SuccessStatus.LIMJANG_DELETE);
+    }
+
+    // 배송 조회 목록
+    @GetMapping("/shippingList")
+    public ApiResponse<List<OrderResponseDto.OrderDeliveryReadResponseDto>> getShippingList(@AuthenticationPrincipal UserEntity user) {
+        return ApiResponse.onSuccess(farmService.getShippingList(user));
     }
 
 }
