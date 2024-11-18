@@ -64,4 +64,26 @@ public class ProductResponseDto {
         private String closeCalendar;
     }
 
+//    @Getter
+//    @Builder
+//    @NoArgsConstructor
+//    @AllArgsConstructor
+//    public static class ProductCategoryListDto {
+//        private Long pId;
+//        private String name;
+//        private int price;
+//        private List<FileResponseDto.FileCreateResponseDto> images;
+//        private FarmResponseDto.FarmReadResponseDto farm;
+//        private int productType;
+//        private String closeCalendar;
+//    }
+//
+//    @Getter
+//    @Builder
+//    @NoArgsConstructor
+//    @AllArgsConstructor
+//    public static class ProductCategoryListResponseDto {
+//        private List<ProductCategoryListDto> productList;
+//    }
+
 }

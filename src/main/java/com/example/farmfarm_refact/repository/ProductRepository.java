@@ -31,4 +31,6 @@ public interface ProductRepository extends CrudRepository<ProductEntity, Long> {
 
     public List<ProductEntity> findAllByFarmUserAndType(UserEntity user, int type);
     List<ProductEntity> findByFarm(FarmEntity farm);
+
+    public List<ProductEntity> findAllByProductCategory(Long cId);
 }

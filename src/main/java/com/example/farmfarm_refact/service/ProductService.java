@@ -324,4 +324,10 @@ public class ProductService {
         List<GroupEntity> groupList = groupRepository.findAllByProduct(product);
         return GroupConverter.toGroupList(groupList);
     }
+
+    // 카테고리별 상품 구분하기
+    public ProductResponseDto.ProductListResponseDto getProductCategory(Long cId) {
+        List<ProductEntity> productList = productRepository.findAllByProductCategory(cId);
+        return ProductConverter.toProductList(productList);
+    }
 }
