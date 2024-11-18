@@ -118,5 +118,10 @@ public class ProductController {
         return ApiResponse.onSuccess(productService.getGroupList(pId));
     }
 
+    // 카테고리별 상품 구분하기
+    @GetMapping("/category/{cId}")
+    public ApiResponse<ProductResponseDto.ProductListResponseDto> getProductCategory(@PathVariable("cId") Long cId) {
+        return ApiResponse.onSuccess(productService.getProductCategory(cId));
+    }
 
 }
