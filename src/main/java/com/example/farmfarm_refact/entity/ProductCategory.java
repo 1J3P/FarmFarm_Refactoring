@@ -6,8 +6,8 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @Getter
 public enum ProductCategory {
-    FRUIT(1),
-    VEGETABLE(2),
-    ETC(3);
+    FRUIT(0),
+    VEGETABLE(1),
+    ETC(2);
     private final Integer cateNum;
 }

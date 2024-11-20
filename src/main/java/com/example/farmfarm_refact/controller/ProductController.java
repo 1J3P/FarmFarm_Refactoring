@@ -6,6 +6,7 @@ import com.example.farmfarm_refact.apiPayload.code.status.SuccessStatus;
 import com.example.farmfarm_refact.dto.*;
 import com.example.farmfarm_refact.entity.Cart.Cart;
 import com.example.farmfarm_refact.entity.Cart.Item;
+import com.example.farmfarm_refact.entity.ProductCategory;
 import com.example.farmfarm_refact.entity.ProductEntity;
 import com.example.farmfarm_refact.entity.UserEntity;
 import com.example.farmfarm_refact.service.FarmService;
@@ -17,7 +18,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -119,9 +119,10 @@ public class ProductController {
     }
 
     // 카테고리별 상품 구분하기
-    @GetMapping("/category/{cId}")
-    public ApiResponse<ProductResponseDto.ProductListResponseDto> getProductCategory(@PathVariable("cId") Long cId) {
-        return ApiResponse.onSuccess(productService.getProductCategory(cId));
+    @GetMapping("/category/{keyword}")
+    public ApiResponse<ProductResponseDto.ProductListResponseDto> getProductCategory(@PathVariable("keyword") String keyword) {
+        ProductCategory category = ProductCategory.valueOf(keyword.toUpperCase()); // 문자열 -> enum
+        return ApiResponse.onSuccess(productService.getProductCategory(category));
     }
 
 }

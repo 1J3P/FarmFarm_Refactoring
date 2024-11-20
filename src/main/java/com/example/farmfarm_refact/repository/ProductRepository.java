@@ -3,6 +3,7 @@ package com.example.farmfarm_refact.repository;
 
 import com.example.farmfarm_refact.dto.FarmResponseDto;
 import com.example.farmfarm_refact.entity.FarmEntity;
+import com.example.farmfarm_refact.entity.ProductCategory;
 import com.example.farmfarm_refact.entity.ProductEntity;
 import com.example.farmfarm_refact.entity.UserEntity;
 import org.springframework.data.domain.Sort;
@@ -32,5 +33,5 @@ public interface ProductRepository extends CrudRepository<ProductEntity, Long> {
     public List<ProductEntity> findAllByFarmUserAndType(UserEntity user, int type);
     List<ProductEntity> findByFarm(FarmEntity farm);
 
-    public List<ProductEntity> findAllByProductCategory(Long cId);
+    public List<ProductEntity> findAllByProductCategory(ProductCategory category);
 }
