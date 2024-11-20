@@ -326,8 +326,8 @@ public class ProductService {
     }
 
     // 카테고리별 상품 구분하기
-    public ProductResponseDto.ProductListResponseDto getProductCategory(Long cId) {
-        List<ProductEntity> productList = productRepository.findAllByProductCategory(cId);
+    public ProductResponseDto.ProductListResponseDto getProductCategory(ProductCategory category) {
+        List<ProductEntity> productList = productRepository.findAllByProductCategory(category);
         return ProductConverter.toProductList(productList);
     }
 }
