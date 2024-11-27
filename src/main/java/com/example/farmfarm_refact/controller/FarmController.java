@@ -115,4 +115,9 @@ public class FarmController {
         return ApiResponse.onSuccess(farmService.getShippingList(user));
     }
 
+    @PatchMapping("/shippingList/{oId}")
+    public ApiResponse<FarmResponseDto.ShippingStatusUpdateResponseDto> changeShippingStatus(@AuthenticationPrincipal UserEntity user, @RequestBody FarmRequestDto.ShippingStatusUpdateRequestDto requestDto, @PathVariable("orderNumber") long oId) {
+        return ApiResponse.onSuccess(farmService.changeShippingStatus(user, requestDto, oId));
+    }
+
 }

@@ -9,10 +9,7 @@ import com.example.farmfarm_refact.converter.OrderConverter;
 import com.example.farmfarm_refact.dto.FarmRequestDto;
 import com.example.farmfarm_refact.dto.FarmResponseDto;
 import com.example.farmfarm_refact.dto.OrderResponseDto;
-import com.example.farmfarm_refact.entity.FarmEntity;
-import com.example.farmfarm_refact.entity.FileEntity;
-import com.example.farmfarm_refact.entity.FileType;
-import com.example.farmfarm_refact.entity.UserEntity;
+import com.example.farmfarm_refact.entity.*;
 import com.example.farmfarm_refact.repository.FarmRepository;
 import com.example.farmfarm_refact.repository.FileRepository;
 import com.example.farmfarm_refact.repository.OrderRepository;
@@ -25,6 +22,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
+import static com.example.farmfarm_refact.apiPayload.code.status.ErrorStatus.FARM_USER_NOT_EQUAL;
 import static com.example.farmfarm_refact.apiPayload.code.status.ErrorStatus.S3_NOT_FOUND;
 
 @Service
@@ -43,6 +41,8 @@ public class FarmService {
     private S3Controller s3Controller;
     @Autowired
     private FileService fileService;
+    @Autowired
+    private OrderRepository orderRepository;
 
     // 농장 등록
     public FarmResponseDto.FarmCreateResponseDto saveFarm(UserEntity user, FarmRequestDto.FarmCreateRequestDto farmCreateRequestDto) {
@@ -164,7 +164,7 @@ public class FarmService {
                 throw new ExceptionHandler(ErrorStatus.FARM_HAS_PRODUCT);
         }
         else
-            throw new ExceptionHandler(ErrorStatus.FARM_USER_NOT_EQUAL);
+            throw new ExceptionHandler(FARM_USER_NOT_EQUAL);
     }
 
 
@@ -177,5 +177,20 @@ public class FarmService {
         boolean exist = farmRepository.findByUserAndStatusLike(user, "yes").isPresent();
         return FarmConverter.toFarmManageResponseDto(exist);
 
+    }
+
+    @Transactional
+    public FarmResponseDto.ShippingStatusUpdateResponseDto changeShippingStatus(UserEntity user, FarmRequestDto.ShippingStatusUpdateRequestDto requestDto, long oId) {
+        OrderEntity order = orderRepository.findById(oId)
+                .orElseThrow(() -> new ExceptionHandler(ErrorStatus.ORDER_NOT_FOUND));
+        if (order.getOrderDetails().get(0).getProduct().getFarm().getUser().getUId() == user.getUId()) {
+            throw new ExceptionHandler(FARM_USER_NOT_EQUAL);
+        }
+        order.setShippingStatus(requestDto.getShippingStatus());
+        if (requestDto.getInvoiceNumber() != null) {
+            order.setInvoiceNumber(requestDto.getInvoiceNumber());
+        }
+        OrderEntity changedOrder = orderRepository.save(order);
+        return FarmConverter.toShippingStatusUpdateResponseDto(changedOrder);
     }
 }

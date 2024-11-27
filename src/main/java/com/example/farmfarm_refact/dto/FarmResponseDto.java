@@ -1,5 +1,6 @@
 package com.example.farmfarm_refact.dto;
 
+import com.example.farmfarm_refact.entity.ShippingStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -72,4 +73,14 @@ public class FarmResponseDto {
         private boolean isFarm;
     }
 
+    @Getter
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class ShippingStatusUpdateResponseDto {
+        private long oId;
+        private String orderNumber;
+        private ShippingStatus shippingStatus;
+        private String invoiceNumber;
+    }
 }
