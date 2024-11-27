@@ -4,6 +4,7 @@ package com.example.farmfarm_refact.converter;
 import com.example.farmfarm_refact.dto.FarmRequestDto;
 import com.example.farmfarm_refact.dto.FarmResponseDto;
 import com.example.farmfarm_refact.entity.FarmEntity;
+import com.example.farmfarm_refact.entity.OrderEntity;
 import org.springframework.data.repository.config.FragmentMetadata;
 
 import java.util.List;
@@ -81,4 +82,12 @@ public class FarmConverter {
                 .build();
     }
 
+    public static FarmResponseDto.ShippingStatusUpdateResponseDto toShippingStatusUpdateResponseDto(OrderEntity order) {
+        return FarmResponseDto.ShippingStatusUpdateResponseDto.builder()
+                .oId(order.getOId())
+                .orderNumber(order.getOrderNumber())
+                .shippingStatus(order.getShippingStatus())
+                .invoiceNumber(order.getInvoiceNumber())
+                .build();
+   }
 }

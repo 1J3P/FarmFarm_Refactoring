@@ -1,5 +1,6 @@
 package com.example.farmfarm_refact.dto;
 
+import com.example.farmfarm_refact.entity.ShippingStatus;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
@@ -49,5 +50,16 @@ public class FarmRequestDto {
         private Boolean auction;
         private List<Long> addImages;
         private List<Long> deleteImages;
+    }
+
+    @Builder
+    @Getter
+    @Setter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class ShippingStatusUpdateRequestDto {
+        private ShippingStatus shippingStatus;
+        private String invoiceNumber;
+
     }
 }
