@@ -37,8 +37,8 @@ public class ProductController {
 
     // 상품 조회
     @GetMapping("/{pId}")
-    public ApiResponse<ProductResponseDto.ProductReadResponseDto> getProduct(@PathVariable("pId") long pId) {
-        return ApiResponse.onSuccess(productService.getProduct(pId));
+    public ApiResponse<ProductResponseDto.ProductReadResponseDto> getProduct(@AuthenticationPrincipal UserEntity user, @PathVariable("pId") long pId) {
+        return ApiResponse.onSuccess(productService.getProduct(user, pId));
     }
 
     // 상품 리스트 조회, 검색, 정렬(신상품순-default, 인기순, 낮은 가격순, 높은 가격순)
@@ -92,7 +92,7 @@ public class ProductController {
         return ApiResponse.onSuccess(SuccessStatus.LIMJANG_UPDATE);
     }
 
-    // 장바구니(세션)에 상품 담기
+    // 장바구니에 상품 담기
     @PostMapping("/cart/{pId}")
     public ApiResponse addToCart(@AuthenticationPrincipal UserEntity user, @PathVariable("pId") long pId, @RequestBody CartRequestDto.ItemDto itemDto, HttpSession session) {
         productService.addToCart(user, pId, itemDto.getQuantity(), session);

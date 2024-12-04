@@ -2,10 +2,7 @@ package com.example.farmfarm_refact.dto;
 
 import com.example.farmfarm_refact.entity.ProductCategory;
 import com.example.farmfarm_refact.entity.ShippingMethod;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.List;
 
@@ -44,6 +41,7 @@ public class ProductResponseDto {
     }
 
     @Getter
+    @Setter
     @Builder
     @NoArgsConstructor
     @AllArgsConstructor
@@ -62,6 +60,7 @@ public class ProductResponseDto {
         private int groupProductQuantity;
         private int groupProductDiscount;
         private String closeCalendar;
+        private Boolean isMyProduct;
     }
 
 //    @Getter

@@ -108,10 +108,17 @@ public class ProductService {
     }
 
     // 상품 디테일 조회
-    public ProductResponseDto.ProductReadResponseDto getProduct(Long pId) {
+    public ProductResponseDto.ProductReadResponseDto getProduct(UserEntity user, Long pId) {
         ProductEntity product = productRepository.findBypIdAndStatusLike(pId, "yes")
                 .orElseThrow(() -> new ExceptionHandler(ErrorStatus.PRODUCT_NOT_FOUND));
-        return ProductConverter.toProductReadResponseDto(product);
+        ProductResponseDto.ProductReadResponseDto dto = ProductConverter.toProductReadResponseDto(product);
+        if (user.equals(product.getFarm().getUser())) {
+            dto.setIsMyProduct(true);
+        }
+        else {
+            dto.setIsMyProduct(false);
+        }
+        return dto;
     }
 
     // 상품 전체 조회(정렬만)
