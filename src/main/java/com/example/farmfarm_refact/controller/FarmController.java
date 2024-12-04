@@ -59,8 +59,8 @@ public class FarmController {
 
     // 농장 조회 (전체 농장 리스트에서 클릭 시 해당 농장 페이지로 이동)
     @GetMapping("/{fId}")
-    public ApiResponse<FarmResponseDto.FarmReadResponseDto> getFarm(@PathVariable("fId") long fId) {
-        return ApiResponse.onSuccess(farmService.getFarm(fId));
+    public ApiResponse<FarmResponseDto.FarmReadResponseDto> getFarm(@AuthenticationPrincipal UserEntity user, @PathVariable("fId") long fId) {
+        return ApiResponse.onSuccess(farmService.getFarm(user, fId));
     }
 
     // 나의 농장 조회
@@ -75,21 +75,21 @@ public class FarmController {
 
     // 농장별 상품 보기(일반 상품)
     @GetMapping("/{fId}/product")
-    public ApiResponse<ProductResponseDto.ProductListResponseDto> getFarmProduct(@PathVariable("fId") long fId) {
-        return ApiResponse.onSuccess(productService.getFarmProduct(farmService.getFarm(fId)));
+    public ApiResponse<ProductResponseDto.ProductListResponseDto> getFarmProduct(@AuthenticationPrincipal UserEntity user, @PathVariable("fId") long fId) {
+        return ApiResponse.onSuccess(productService.getFarmProduct(farmService.getFarm(user, fId)));
     }
 
     // 농장별 상품 보기(공구 상품)
     @GetMapping("/{fId}/groupProduct")
-    public ApiResponse<ProductResponseDto.ProductListResponseDto> getFarmGroupProduct(@PathVariable("fId") long fId) {
-        return ApiResponse.onSuccess(productService.getFarmGroupProduct(farmService.getFarm(fId)));
+    public ApiResponse<ProductResponseDto.ProductListResponseDto> getFarmGroupProduct(@AuthenticationPrincipal UserEntity user, @PathVariable("fId") long fId) {
+        return ApiResponse.onSuccess(productService.getFarmGroupProduct(farmService.getFarm(user, fId)));
     }
 
 
     // 농장별 상품 보기(경매 상품)
     @GetMapping("/{fId}/auctionProduct")
-    public ApiResponse<ProductResponseDto.ProductListResponseDto> getFarmAuctionProduct(@PathVariable("fId") long fId) {
-        return ApiResponse.onSuccess(productService.getFarmAuctionProduct(farmService.getFarm(fId)));
+    public ApiResponse<ProductResponseDto.ProductListResponseDto> getFarmAuctionProduct(@AuthenticationPrincipal UserEntity user, @PathVariable("fId") long fId) {
+        return ApiResponse.onSuccess(productService.getFarmAuctionProduct(farmService.getFarm(user, fId)));
     }
 
 

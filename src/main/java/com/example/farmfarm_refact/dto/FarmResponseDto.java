@@ -1,10 +1,7 @@
 package com.example.farmfarm_refact.dto;
 
 import com.example.farmfarm_refact.entity.ShippingStatus;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.security.Timestamp;
 import java.util.List;
@@ -22,6 +19,7 @@ public class FarmResponseDto {
     }
 
     @Getter
+    @Setter
     @Builder
     @NoArgsConstructor
     @AllArgsConstructor
@@ -38,6 +36,7 @@ public class FarmResponseDto {
         private boolean auction;
         private Timestamp created_at;
         private List<FileResponseDto.FileCreateResponseDto> images;
+        private Boolean isMyFarm;
     }
 
     @Getter
