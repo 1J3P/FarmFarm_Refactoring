@@ -69,10 +69,16 @@ public class FarmService {
     }
 
     // 농장 조회
-    public FarmResponseDto.FarmReadResponseDto getFarm(Long fId) {
+    public FarmResponseDto.FarmReadResponseDto getFarm(UserEntity user, Long fId) {
         FarmEntity farm = farmRepository.findByfIdAndStatusLike(fId, "yes")
                 .orElseThrow(() -> new ExceptionHandler(ErrorStatus.FARM_NOT_FOUND));
-        return FarmConverter.toFarmReadResponseDto(farm);
+        FarmResponseDto.FarmReadResponseDto dto = FarmConverter.toFarmReadResponseDto(farm);
+        if (user != null && user.getUId() == farm.getUser().getUId()) {
+            dto.setIsMyFarm(true);
+        } else {
+            dto.setIsMyFarm(false);
+        }
+        return dto;
     }
 
     //농장 전체 조회 및 정렬 (rating: 인기순 , old: 오래된 순, new: 신규순), Default: rating
