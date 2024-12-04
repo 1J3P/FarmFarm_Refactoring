@@ -1,10 +1,7 @@
 package com.example.farmfarm_refact.dto;
 
 import com.example.farmfarm_refact.entity.UserEntity;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.sql.Timestamp;
 import java.util.List;
@@ -29,6 +26,7 @@ public class EnquiryResponseDto {
     }
 
     @Getter
+    @Setter
     @Builder
     @NoArgsConstructor
     @AllArgsConstructor
@@ -41,6 +39,7 @@ public class EnquiryResponseDto {
         private List<FileResponseDto.FileCreateResponseDto> images;
         private String status;
         private String reply;
+        private Boolean isMyEnquiry;
     }
 
     @Getter

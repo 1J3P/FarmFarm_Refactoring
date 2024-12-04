@@ -63,11 +63,20 @@ public class EnquiryService {
     }
 
     // 상품별 문의사항 조회
-    public EnquiryResponseDto.EnquiryListResponseDto getProductEnquiryList(Long pId) {
+    public EnquiryResponseDto.EnquiryListResponseDto getProductEnquiryList(UserEntity user, Long pId) {
         ProductEntity product = productRepository.findBypIdAndStatusLike(pId, "yes")
                 .orElseThrow(() -> new ExceptionHandler(ErrorStatus.PRODUCT_NOT_FOUND));
         List<EnquiryEntity> enquiryList = enquiryRepository.findAllByProductAndStatusNotLike(product, "문의삭제");
-        return EnquiryConverter.toEnquiryList(enquiryList);
+        EnquiryResponseDto.EnquiryListResponseDto dtoList = EnquiryConverter.toEnquiryList(enquiryList);
+        for (EnquiryResponseDto.EnquiryListDto dto : dtoList.getEnquiryList()) {
+            if (dto.getUsername().equals(user.getNickname())) {
+                dto.setIsMyEnquiry(true);
+            }
+           else {
+               dto.setIsMyEnquiry(false);
+            }
+        }
+        return dtoList;
     }
 
     // 내가 쓴 문의사항 보기
