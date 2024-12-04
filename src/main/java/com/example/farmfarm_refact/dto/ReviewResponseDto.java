@@ -1,9 +1,6 @@
 package com.example.farmfarm_refact.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.sql.Timestamp;
 import java.util.List;
@@ -19,6 +16,7 @@ public class ReviewResponseDto {
     }
 
     @Getter
+    @Setter
     @Builder
     @NoArgsConstructor
     @AllArgsConstructor
@@ -31,6 +29,7 @@ public class ReviewResponseDto {
         private List<FileResponseDto.FileCreateResponseDto> images;
         private String nickname;
         private String profileImage;
+        private Boolean isMyReview;
     }
 
     @Getter
