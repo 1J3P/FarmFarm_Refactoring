@@ -60,15 +60,9 @@ public class UserController {
     }
 
     // 프론트에서 인가코드 받아오는 url
-    @GetMapping("/login/oauth_kakao")
-    public ApiResponse<LoginResponseDto> getLogin(@RequestParam("code") String code) {
-        System.out.println("code : " + code);
-        // 넘어온 인가 코드를 통해 access_token 발급
-        OauthToken oauthToken= userService.getAccessToken(code);
-        System.out.println("oauthToken : " + oauthToken);
-        // 발급 받은 accessToken 으로 카카오 회원 정보 DB 저장 후 JWT 를 생성
-        //UserService 의 기존 SaveUser 메소드를 수정한다
-        LoginResponseDto responseDto = userService.saveUserAndGetToken(oauthToken.getAccess_token());
+    @PostMapping("/login/oauth_kakao")
+    public ApiResponse<LoginResponseDto> getLogin(@RequestBody UserRequestDto.UserFindProfile oauthToken) {
+        LoginResponseDto responseDto = userService.saveUserAndGetToken(oauthToken.getAccessToken());
         System.out.println("Controller get login : " + responseDto.getAccessToken() + responseDto.getRefreshToken() + responseDto.getEmail());
         return ApiResponse.onSuccess(responseDto);
     }

@@ -26,4 +26,12 @@ public class UserRequestDto {
         private String nickname;
         private String image;
     }
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class UserFindProfile {
+        private String accessToken;
+    }
 }
