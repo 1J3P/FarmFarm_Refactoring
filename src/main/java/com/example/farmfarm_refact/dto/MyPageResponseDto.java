@@ -20,5 +20,6 @@ public class MyPageResponseDto {
         private String farmDetail;
         private String profileImage;
         private List<FileResponseDto.FileCreateResponseDto> farmImages;
+        private Boolean isFarm;
     }
 }
