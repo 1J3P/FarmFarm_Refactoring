@@ -15,7 +15,9 @@ public class MyPageService {
     // 유저 이름, 농장 보여주기
     @Transactional
     public MyPageResponseDto.myPageResponseDto mypage(UserEntity user) {
-        if (user.getFarm() == null) throw new ExceptionHandler(FARM_NOT_FOUND);
-        return MyPageConverter.toMyPageResponseDto(user);
+        if (user.getFarm() == null) {
+            return MyPageConverter.toMyPageResponseDto(user, false);
+        }
+        return MyPageConverter.toMyPageResponseDto(user, true);
     }
 }
