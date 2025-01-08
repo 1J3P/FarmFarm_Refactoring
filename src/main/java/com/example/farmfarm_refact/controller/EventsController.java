@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/events")
 public class EventsController {
@@ -22,9 +24,9 @@ public class EventsController {
         return ApiResponse.onSuccess(eventsService.getEvent(evId));
     }
 
-//    // 이벤트 전체 조회
-//    @GetMapping("/list")
-//    public ApiResponse<> getEventList {
-//        return ApiResponse.onSuccess(eventsService.getEventList);
-//    }
+    // 이벤트 전체 조회
+    @GetMapping("/list")
+    public ApiResponse<List<EventsEntity>> getEventList() {
+        return ApiResponse.onSuccess(eventsService.getEventList());
+    }
 }
