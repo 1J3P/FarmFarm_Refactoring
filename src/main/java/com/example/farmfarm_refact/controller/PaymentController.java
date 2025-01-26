@@ -37,13 +37,13 @@ public class PaymentController {
     public void afterPayRequest(HttpServletResponse response, @RequestParam("pg_token") String pgToken, @PathVariable("oId") long oId) throws IOException {
         // 결제 성공 시
         paymentService.afterPayment(pgToken, oId);
-        response.sendRedirect("http://localhost:3000/paymentCallback?status=success&pg_token=" + pgToken + "&oId=" + oId);
+        response.sendRedirect("https://farm-farm.store/paymentCallback?status=success&pg_token=" + pgToken + "&oId=" + oId);
     }
 
     @GetMapping("/fail/{oId}")
     public void afterPayFail(HttpServletResponse response, @PathVariable("oId") long oId) throws IOException {
         // 결제 실패 시
-        response.sendRedirect("http ://localhost:3000/paymentCallback?status=fail&oId=" + oId);
+        response.sendRedirect("https://farm-farm.store/paymentCallback?status=fail&oId=" + oId);
     }
 
     @PostMapping("/refund/{paId}")
