@@ -50,6 +50,7 @@ public class FarmConverter {
         return FarmResponseDto.FarmListDto.builder()
                 .fId(farmEntity.getFId())
                 .name(farmEntity.getName())
+                .locationFull(farmEntity.getLocationFull())
                 .build();
     }
 
