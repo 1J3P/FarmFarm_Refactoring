@@ -18,7 +18,7 @@ public class CorsConfig {
     public CorsFilter corsFilter() {
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowCredentials(true);
-        config.setAllowedOriginPatterns(List.of("https://farm-farm.store", "http://localhost:3000")); // ✅ 패턴 사용
+        config.setAllowedOriginPatterns(List.of("https://farm-farm.store", "https://back.farm-farm.store", "http://localhost:3000")); // ✅ 패턴 사용
         config.setAllowedHeaders(List.of("*")); // 모든 헤더 허용 (Authorization 포함)
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS")); // 허용할 HTTP 메서드
         config.setMaxAge(3600L); // Preflight 요청 캐시 설정
