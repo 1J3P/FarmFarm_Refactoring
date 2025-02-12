@@ -18,7 +18,6 @@ import java.io.IOException;
 @Slf4j
 public class JwtAuthenticationFilter extends BasicAuthenticationFilter {
     public static final String AUTHORIZATION_HEADER = "Authorization";
-
     private final JwtService jwtService;
 
     public JwtAuthenticationFilter(AuthenticationManager authenticationManager, JwtService jwtService) {
@@ -31,7 +30,8 @@ public class JwtAuthenticationFilter extends BasicAuthenticationFilter {
         log.info("JwtAuthenticationFilter 실행 - 요청 URI: {}", request.getRequestURI());
 
         // 헤더에서 토큰 가져오기
-        String token = jwtService.resolveToken(request);
+        String token = resolveToken(request);
+        log.info("추출된 토큰: {}", token);
 
         if (StringUtils.isBlank(token)) {
             log.warn("요청에 JWT 토큰이 없습니다 - URI: {}", request.getRequestURI());
@@ -41,7 +41,7 @@ public class JwtAuthenticationFilter extends BasicAuthenticationFilter {
 
         try {
             if (!jwtService.validateTokenBoolean(token)) {
-                log.warn("유효하지 않은 JWT 토큰입니다 - URI: {}", request.getRequestURI());
+                log.warn("유효하지 않은 JWT 토큰입니다: {}", token);
                 response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "유효하지 않은 Access Token입니다.");
                 return;
             }
@@ -58,5 +58,15 @@ public class JwtAuthenticationFilter extends BasicAuthenticationFilter {
             log.error("JWT 필터 처리 중 예외 발생 - URI: {}", request.getRequestURI(), e);
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "JWT 처리 중 서버 오류가 발생했습니다.");
         }
+    }
+
+    private String resolveToken(HttpServletRequest request) {
+        String bearerToken = request.getHeader(AUTHORIZATION_HEADER);
+        log.info("Authorization 헤더 값: {}", bearerToken);
+
+        if (StringUtils.isNotBlank(bearerToken) && bearerToken.startsWith("Bearer ")) {
+            return bearerToken.substring(7);
+        }
+        return null;
     }
 }
