@@ -1,7 +1,6 @@
 package com.example.farmfarm_refact.config.jwt;
 
 import com.example.farmfarm_refact.apiPayload.ExceptionHandler;
-import com.example.farmfarm_refact.apiPayload.code.BaseErrorCode;
 import com.example.farmfarm_refact.apiPayload.code.status.ErrorStatus;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
@@ -24,43 +23,42 @@ import java.util.Map;
 @Component
 public class JwtExceptionFilter extends OncePerRequestFilter {
 
+    private static final int BAD_REQUEST_STATUS = HttpServletResponse.SC_BAD_REQUEST;
+    private static final int UNAUTHORIZED_STATUS = 419;
+
+    private ObjectMapper getObjectMapper() {
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.registerModule(new JavaTimeModule());
+        mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+        return mapper;
+    }
+
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        try{
+        try {
             log.info("exception filter");
-            doFilter(request,response,filterChain);
+            filterChain.doFilter(request, response); // 한 번만 호출
             log.info("jwt success");
         } catch (NullPointerException e) {
-            final Map<String, Object> body = new HashMap<>();
-            final ObjectMapper mapper = new ObjectMapper();
-            mapper.registerModule(new JavaTimeModule());
-            mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
-            response.setStatus(HttpServletResponse.SC_BAD_REQUEST); // 예외에 맞는 HTTP 상태 코드 설정
-            response.setContentType("application/json");
-            body.put("timestamp", LocalDateTime.now());
-            body.put("code", ErrorStatus.TOKEN_EMPTY.getCode());
-            body.put("error", "Bad Request");
-            body.put("message", ErrorStatus.TOKEN_EMPTY.getMessage()); // 예외에 맞는 메시지 설정
-            body.put("path", request.getRequestURI());
-
-            mapper.writeValue(response.getOutputStream(), body);
-            logger.info("jwt exception nullpointer");
-            throw new ExceptionHandler(ErrorStatus.TOKEN_EMPTY);
+            handleException(response, request, ErrorStatus.TOKEN_EMPTY, BAD_REQUEST_STATUS);
+        } catch (ExpiredJwtException e) {
+            handleException(response, request, ErrorStatus.TOKEN_UNAUTHORIZED, UNAUTHORIZED_STATUS);
         }
-        catch (ExpiredJwtException e) {
-            final Map<String, Object> body = new HashMap<>();
-            final ObjectMapper mapper = new ObjectMapper();
-            mapper.registerModule(new JavaTimeModule());
-            mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
-            response.setStatus(419);
-            response.setContentType("application/json");
-            body.put("timestamp", LocalDateTime.now());
-            body.put("code", ErrorStatus.TOKEN_UNAUTHORIZED.getCode());
-            body.put("error", "Unauthorized");
-            body.put("message", ErrorStatus.TOKEN_UNAUTHORIZED.getMessage());
-            body.put("path", request.getRequestURI());
+    }
 
-            mapper.writeValue(response.getOutputStream(), body);
-        }
+    private void handleException(HttpServletResponse response, HttpServletRequest request, ErrorStatus errorStatus, int statusCode) throws IOException {
+        Map<String, Object> body = new HashMap<>();
+        ObjectMapper mapper = getObjectMapper();
+
+        response.setStatus(statusCode);
+        response.setContentType("application/json");
+        body.put("timestamp", LocalDateTime.now());
+        body.put("code", errorStatus.getCode());
+        body.put("error", "Unauthorized");
+        body.put("message", errorStatus.getMessage());
+        body.put("path", request.getRequestURI());
+
+        mapper.writeValue(response.getOutputStream(), body);
+        log.error("JWT 처리 중 오류 - {}", errorStatus.getMessage());
     }
 }

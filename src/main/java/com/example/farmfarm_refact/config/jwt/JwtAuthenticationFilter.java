@@ -33,24 +33,30 @@ public class JwtAuthenticationFilter extends BasicAuthenticationFilter {
         // 헤더에서 토큰 가져오기
         String token = jwtService.resolveToken(request);
 
-        if (StringUtils.isEmpty(token)) {
+        if (StringUtils.isBlank(token)) {
             log.warn("요청에 JWT 토큰이 없습니다 - URI: {}", request.getRequestURI());
             chain.doFilter(request, response);
             return;
         }
 
-        // 토큰 유효성 검사
-        if (!jwtService.validateTokenBoolean(token)) {
-            log.warn("유효하지 않은 JWT 토큰입니다 - URI: {}", request.getRequestURI());
-            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "유효하지 않은 Access Token입니다.");
-            return;
+        try {
+            if (!jwtService.validateTokenBoolean(token)) {
+                log.warn("유효하지 않은 JWT 토큰입니다 - URI: {}", request.getRequestURI());
+                response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "유효하지 않은 Access Token입니다.");
+                return;
+            }
+
+            Authentication authentication = jwtService.getAuthentication(token);
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+            log.info("Security Context에 '{}' 인증 정보를 저장 - URI: {}", authentication.getName(), request.getRequestURI());
+
+            chain.doFilter(request, response);
+        } catch (ExpiredJwtException e) {
+            log.warn("만료된 JWT 토큰입니다 - URI: {}", request.getRequestURI());
+            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "만료된 Access Token입니다.");
+        } catch (Exception e) {
+            log.error("JWT 필터 처리 중 예외 발생 - URI: {}", request.getRequestURI(), e);
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "JWT 처리 중 서버 오류가 발생했습니다.");
         }
-
-        // 토큰이 유효한 경우
-        Authentication authentication = jwtService.getAuthentication(token);
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-        log.info("Security Context에 '{}' 인증 정보를 저장 - URI: {}", authentication.getName(), request.getRequestURI());
-
-        chain.doFilter(request, response);
     }
 }
