@@ -1,6 +1,5 @@
 name: Java CI with Gradle
 
-# main 브랜치에 push, PR 이벤트 발생시 동작 ..
 on:
   push:
     branches: ["main"]
@@ -12,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout
+      - name: Checkout Repository
         uses: actions/checkout@v3
 
       - name: Set up JDK 17
@@ -21,42 +20,37 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
-      - name: Make sure the target directory exists
+      - name: Ensure application.yml exists
         run: |
           mkdir -p ./src/main/resources
+          touch ./src/main/resources/application.yml
+          echo "${{ secrets.APPLICATION_YML }}" > ./src/main/resources/application.yml
 
-      - name: make application.yml
-        run: |
-          cd ./src/main/resources
-          touch ./application.yml
-          echo "${{ secrets.APPLICATION_YML }}" > ./application.yml
-
-      # gradlew 파일에 실행 권한 부여
-      - name: Grant execute permission for gradlew
+      - name: Grant execute permission for Gradlew
         run: chmod +x ./gradlew
 
-      # Spring Boot 어플리케이션 Build (1)
-      - name: Spring Boot Build
-        run: ./gradlew clean build --exclude-task test
+      # ✅ Spring Boot Build (테스트 제외)
+      - name: Build Spring Boot Application
+        run: ./gradlew clean build -x test
 
-      # Docker 이미지 Build (2)
-      - name: Docker Image Build
-        run: docker build -t farmfarm1234/farmfarm-img .
+      # ✅ Docker 이미지 빌드 (캐싱 방지 위해 `--no-cache` 옵션 추가)
+      - name: Build Docker Image
+        run: docker build --no-cache -t farmfarm1234/farmfarm-img .
 
-      # DockerHub Login (3)
-      - name: Docker Login
-        run: echo ${{ secrets.DOCKERHUB_PW }} | docker login -u ${{ secrets.DOCKERHUB_USERNAME }} --password-stdin
+      # ✅ Docker Hub 로그인
+      - name: Login to Docker Hub
+        run: echo "${{ secrets.DOCKERHUB_PW }}" | docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
 
-      # Docker Hub push (4)
-      - name: Docker Hub Push
+      # ✅ Docker Hub Push
+      - name: Push Docker Image to Docker Hub
         run: docker push farmfarm1234/farmfarm-img
 
-      # GET GitHub IP (5)
+      # ✅ GitHub IP 가져오기 (EC2 접근 허용을 위해)
       - name: Get GitHub IP
         id: ip
         uses: haythem/public-ip@v1.2
 
-      # Configure AWS Credentials (6) - AWS 접근 권한 취득(IAM)
+      # ✅ AWS 접근 권한 설정
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
@@ -64,22 +58,17 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ap-northeast-2
 
-      # Add GitHub IP to AWS (7)
-      - name: Add GitHub IP to AWS
+      # ✅ AWS 보안 그룹에 GitHub IP 추가 (SSH 접속 허용)
+      - name: Add GitHub IP to AWS Security Group
         run: |
-          aws ec2 authorize-security-group-ingress --group-id ${{ secrets.AWS_SG_ID }} --protocol tcp --port 22 --cidr ${{ steps.ip.outputs.ipv4 }}/32
+          aws ec2 authorize-security-group-ingress \
+            --group-id ${{ secrets.AWS_SG_ID }} \
+            --protocol tcp \
+            --port 22 \
+            --cidr ${{ steps.ip.outputs.ipv4 }}/32
 
-#      # Upload application.yml to EC2
-#      - name: Upload application.yml to EC2
-#        uses: appleboy/scp-action@v0.1.0
-#        with:
-#          source: "src/main/resources/application.yml"
-#          target: "ubuntu@${{ secrets.EC2_HOST }}:/home/ubuntu/config/application.yml"
-#          key: ${{ secrets.EC2_KEY }}
-#          port: ${{ secrets.EC2_SSH_PORT }}
-
-      # AWS EC2 Server Connect & Docker 명령어 실행 (8)
-      - name: AWS EC2 Connection
+      # ✅ EC2 접속 후 배포 스크립트 실행
+      - name: Deploy to AWS EC2
         uses: appleboy/ssh-action@v0.1.6
         with:
           host: ${{ secrets.EC2_HOST }}
@@ -88,13 +77,29 @@ jobs:
           port: ${{ secrets.EC2_SSH_PORT }}
           timeout: 60s
           script: |
+            echo "🔄 Stopping and Removing existing Docker container..."
             sudo docker stop farmfarm-img || true
             sudo docker rm farmfarm-img || true
-            sudo docker run -d -p 9000:9000 -v /home/ubuntu/config/application.yml:/app/config/application.yml --name farmfarm-img farmfarm1234/farmfarm-img
 
+            echo "🗑️ Removing old Docker images..."
+            sudo docker rmi farmfarm1234/farmfarm-img || true
 
+            echo "🚀 Pulling latest Docker image..."
+            sudo docker pull farmfarm1234/farmfarm-img
 
-      # REMOVE GitHub IP FROM security group (9)
-      - name: Remove IP FROM security group
+            echo "⚙️ Running new Docker container..."
+            sudo docker run -d -p 9000:9000 \
+                -v /home/ubuntu/config/application.yml:/app/config/application.yml \
+                --name farmfarm-img \
+                farmfarm1234/farmfarm-img
+
+            echo "✅ Deployment Completed!"
+
+      # ✅ 배포 완료 후 AWS 보안 그룹에서 GitHub IP 제거
+      - name: Remove GitHub IP from AWS Security Group
         run: |
-          aws ec2 revoke-security-group-ingress --group-id ${{ secrets.AWS_SG_ID }} --protocol tcp --port 22 --cidr ${{ steps.ip.outputs.ipv4 }}/32
+          aws ec2 revoke-security-group-ingress \
+            --group-id ${{ secrets.AWS_SG_ID }} \
+            --protocol tcp \
+            --port 22 \
+            --cidr ${{ steps.ip.outputs.ipv4 }}/32
