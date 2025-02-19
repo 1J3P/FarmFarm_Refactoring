@@ -15,7 +15,7 @@ public class CorsConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowCredentials(true);
-        config.setAllowedOrigins(List.of("https://farm-farm.store", "https://back.farm-farm.store")); // 특정 도메인 허용
+        config.setAllowedOrigins(List.of("https://farm-farm.store", "https://back.farm-farm.store", "http://localhost:3000")); // 특정 도메인 허용
         config.setAllowedHeaders(List.of("Authorization", "Content-Type", "Accept"));
         config.setExposedHeaders(List.of("Authorization")); // 필요한 경우
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS")); // PATCH 추가
