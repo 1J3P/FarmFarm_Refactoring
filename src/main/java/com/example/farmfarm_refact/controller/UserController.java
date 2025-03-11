@@ -20,12 +20,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
-
-
-
-
 import static com.example.farmfarm_refact.apiPayload.code.status.ErrorStatus.TOKEN_EMPTY;
 
+
+@CrossOrigin
 @RestController
 @RequestMapping("/user")
 public class UserController {
