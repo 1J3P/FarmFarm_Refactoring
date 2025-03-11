@@ -77,13 +77,13 @@ public class JwtService {
         return new UsernamePasswordAuthenticationToken(userDetails, token, userDetails.getAuthorities());
     }
 
-    // ✅ refreshAccessToken 추가 ✅
+    // ✅ refreshAccessToken 수정 ✅ (Optional<TokenDto> → Optional<String>)
     public Optional<String> refreshAccessToken(String refreshToken) {
         if (!validateToken(refreshToken)) {
             log.warn("유효하지 않은 Refresh Token입니다.");
             return Optional.empty();
         }
         Long userId = extractUserIdFromToken(refreshToken);
-        return Optional.of(generateAccessToken(userId));
+        return Optional.of(generateAccessToken(userId)); // ✅ accessToken만 반환
     }
 }
