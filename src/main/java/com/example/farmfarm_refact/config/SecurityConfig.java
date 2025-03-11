@@ -7,19 +7,16 @@ import com.example.farmfarm_refact.service.JwtService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.annotation.Order;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
-import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
-import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.web.cors.CorsConfigurationSource;
 
 @Configuration
 @EnableWebSecurity
@@ -28,51 +25,38 @@ public class SecurityConfig {
 
     private final AuthenticationConfiguration authenticationConfiguration;
     private final JwtService jwtService;
-    private final CorsConfig corsConfig;
     private final JwtExceptionFilter jwtExceptionFilter;
+    private final CorsConfigurationSource corsConfigurationSource; // CORS 설정 주입
 
     @Bean
-    @Order(0)
-    public WebSecurityCustomizer webSecurityCustomizer(){
+    public WebSecurityCustomizer webSecurityCustomizer() {
         return web -> web.ignoring()
-                .requestMatchers("/swagger-ui/**", "/swagger/**", "/swagger-resources/**", "/swagger-ui.html", "/test",
-                        "/configuration/ui",  "/v3/api-docs/**", "/user/login/**", "/error/**", "/favicon.ico", "/pay/success/**");
+                .requestMatchers("/swagger-ui/**", "/swagger/**", "/swagger-resources/**", "/swagger-ui.html",
+                        "/test", "/configuration/ui", "/v3/api-docs/**", "/user/login/**", "/error/**",
+                        "/favicon.ico", "/pay/success/**");
     }
 
     @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration authConfiguration) throws Exception {
-        return authConfiguration.getAuthenticationManager();
+    public AuthenticationManager authenticationManager() throws Exception {
+        return authenticationConfiguration.getAuthenticationManager();
     }
 
     @Bean
     protected SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-
         http
-                .csrf(AbstractHttpConfigurer::disable)
-                .formLogin(Customizer.withDefaults())
-                .sessionManagement((sessionManagement) ->
-                        sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .csrf(csrf -> csrf.disable()) // CSRF 비활성화
+                .cors(cors -> cors.configurationSource(corsConfigurationSource)) // CORS 설정 적용
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // 세션 사용 안 함
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll() // OPTIONS 요청 허용
+                        .requestMatchers("/user/login/**", "/favicon.ico", "/error", "/product/**").permitAll()
+                        .anyRequest().authenticated()
                 )
+                .headers(headers -> headers.frameOptions(frameOptions -> frameOptions.sameOrigin())) // iframe 정책 유지
                 .addFilterBefore(new CustomCorsFilter(), JwtAuthenticationFilter.class) // ✅ CORS 필터 추가
-                .addFilter(new JwtAuthenticationFilter(authenticationManager(authenticationConfiguration), jwtService))
-                .authorizeHttpRequests((authorizeRequests) ->
-                        authorizeRequests
-                                .requestMatchers(
-                                        AntPathRequestMatcher.antMatcher("/user/login/**"),
-                                        AntPathRequestMatcher.antMatcher("favicon.ico"),
-                                        AntPathRequestMatcher.antMatcher("/error"),
-                                        AntPathRequestMatcher.antMatcher("/product/**")
-                                ).permitAll()
-                                .anyRequest().authenticated()
-                )
-                .headers(
-                        headersConfigurer ->
-                                headersConfigurer
-                                        .frameOptions(
-                                                HeadersConfigurer.FrameOptionsConfig::sameOrigin
-                                        )
-                )
-                .addFilterBefore(jwtExceptionFilter, JwtAuthenticationFilter.class);
+                .addFilterBefore(new JwtAuthenticationFilter(authenticationManager(), jwtService),
+                        UsernamePasswordAuthenticationFilter.class) // ✅ JWT 인증 필터 추가
+                .addFilterBefore(jwtExceptionFilter, JwtAuthenticationFilter.class); // ✅ JWT 예외 필터 추가
 
         return http.build();
     }

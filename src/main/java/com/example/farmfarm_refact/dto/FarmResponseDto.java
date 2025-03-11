@@ -46,6 +46,7 @@ public class FarmResponseDto {
     public static class FarmListDto {
         private Long fId;
         private String name;
+        private String locationFull;
     }
 
     @Getter
