@@ -1,5 +1,6 @@
 package com.example.farmfarm_refact.config;
 
+import com.example.farmfarm_refact.config.jwt.CustomCorsFilter;
 import com.example.farmfarm_refact.config.jwt.JwtAuthenticationFilter;
 import com.example.farmfarm_refact.config.jwt.JwtExceptionFilter;
 import com.example.farmfarm_refact.service.JwtService;
@@ -18,8 +19,8 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.filter.CorsFilter;
 
-import java.util.Arrays;
 import java.util.List;
 
 @Configuration
@@ -30,6 +31,7 @@ public class SecurityConfig {
     private final AuthenticationConfiguration authenticationConfiguration;
     private final JwtService jwtService;
     private final JwtExceptionFilter jwtExceptionFilter;
+    private final CustomCorsFilter customCorsFilter; // ✅ CORS 필터 추가
 
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
@@ -56,6 +58,7 @@ public class SecurityConfig {
                         .anyRequest().authenticated()
                 )
                 .headers(headers -> headers.frameOptions(frameOptions -> frameOptions.sameOrigin())) // iframe 정책 유지
+                .addFilterBefore(customCorsFilter, CorsFilter.class) // ✅ CustomCorsFilter 추가
                 .addFilterBefore(new JwtAuthenticationFilter(authenticationManager(), jwtService),
                         UsernamePasswordAuthenticationFilter.class) // ✅ JWT 인증 필터 추가
                 .addFilterBefore(jwtExceptionFilter, JwtAuthenticationFilter.class); // ✅ JWT 예외 필터 추가
@@ -67,19 +70,13 @@ public class SecurityConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowCredentials(true);
-
-        // ✅ 프론트엔드의 실제 도메인만 허용 (배포 환경에 따라 변경 필요)
         configuration.setAllowedOrigins(List.of("https://farm-farm.store", "http://localhost:3000"));
-
-        configuration.setAllowedHeaders(List.of("*")); // 모든 헤더 허용
+        configuration.setAllowedHeaders(List.of("*"));
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-
-        // ✅ 클라이언트가 특정 헤더 값을 읽을 수 있도록 설정 (필요 시 추가)
         configuration.setExposedHeaders(List.of("Authorization", "Refresh-Token"));
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return source;
     }
-
 }
