@@ -44,16 +44,15 @@ public class SecurityConfig {
     @Bean
     protected SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
+                .cors(cors -> cors.configurationSource(corsConfigurationSource)) // ✅ CORS 설정 적용 (Security에서 처리)
                 .csrf(csrf -> csrf.disable()) // CSRF 비활성화
-                .cors(cors -> cors.configurationSource(corsConfigurationSource)) // CORS 설정 적용
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // 세션 사용 안 함
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll() // OPTIONS 요청 허용
+                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll() // ✅ OPTIONS 요청 허용
                         .requestMatchers("/user/login/**", "/favicon.ico", "/error", "/product/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .headers(headers -> headers.frameOptions(frameOptions -> frameOptions.sameOrigin())) // iframe 정책 유지
-                .addFilterBefore(new CustomCorsFilter(), JwtAuthenticationFilter.class) // ✅ CORS 필터 추가
                 .addFilterBefore(new JwtAuthenticationFilter(authenticationManager(), jwtService),
                         UsernamePasswordAuthenticationFilter.class) // ✅ JWT 인증 필터 추가
                 .addFilterBefore(jwtExceptionFilter, JwtAuthenticationFilter.class); // ✅ JWT 예외 필터 추가
