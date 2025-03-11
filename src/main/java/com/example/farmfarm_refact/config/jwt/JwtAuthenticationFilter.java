@@ -40,6 +40,7 @@ public class JwtAuthenticationFilter extends BasicAuthenticationFilter {
         }
 
         try {
+
             if (!jwtService.validateToken(token)) {
                 log.warn("유효하지 않은 JWT 토큰입니다: {}", token);
                 response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "유효하지 않은 Access Token입니다.");
