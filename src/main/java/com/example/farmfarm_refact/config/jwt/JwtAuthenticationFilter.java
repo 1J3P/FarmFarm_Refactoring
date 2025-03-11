@@ -12,7 +12,6 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
-
 import java.io.IOException;
 
 @Slf4j
@@ -29,7 +28,6 @@ public class JwtAuthenticationFilter extends BasicAuthenticationFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException {
         log.info("JwtAuthenticationFilter 실행 - 요청 URI: {}", request.getRequestURI());
 
-        // 헤더에서 토큰 가져오기
         String token = resolveToken(request);
         log.info("추출된 토큰: {}", token);
 
@@ -40,7 +38,6 @@ public class JwtAuthenticationFilter extends BasicAuthenticationFilter {
         }
 
         try {
-
             if (!jwtService.validateToken(token)) {
                 log.warn("유효하지 않은 JWT 토큰입니다: {}", token);
                 response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "유효하지 않은 Access Token입니다.");
