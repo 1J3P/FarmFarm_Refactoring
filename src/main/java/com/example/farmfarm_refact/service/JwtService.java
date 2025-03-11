@@ -17,7 +17,6 @@ import org.springframework.stereotype.Service;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 import java.util.Date;
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -32,6 +31,7 @@ public class JwtService {
     private final long ACCESS_TOKEN_VALIDITY = 1000L * 60 * 15; // 15분
     private final long REFRESH_TOKEN_VALIDITY = 1000L * 60 * 60 * 24 * 7; // 7일
 
+    // ✅ accessToken 생성 (generateAccessToken)
     public String generateAccessToken(Long userId) {
         return Jwts.builder()
                 .setSubject(userId.toString())
@@ -41,6 +41,7 @@ public class JwtService {
                 .compact();
     }
 
+    // ✅ refreshToken 생성 (generateRefreshToken)
     public String generateRefreshToken(Long userId) {
         return Jwts.builder()
                 .setSubject(userId.toString())
@@ -50,6 +51,7 @@ public class JwtService {
                 .compact();
     }
 
+    // ✅ 토큰 유효성 검사 (validateToken)
     public boolean validateToken(String token) {
         try {
             Jwts.parserBuilder().setSigningKey(JWT_SECRET.getBytes(StandardCharsets.UTF_8)).build().parseClaimsJws(token);
@@ -63,6 +65,18 @@ public class JwtService {
         }
     }
 
+    // ✅ 토큰에서 사용자 ID 추출 (extractUserIdFromToken)
+    public Long extractUserIdFromToken(String token) {
+        Claims claims = Jwts.parserBuilder()
+                .setSigningKey(JWT_SECRET.getBytes(StandardCharsets.UTF_8))
+                .build()
+                .parseClaimsJws(token)
+                .getBody();
+
+        return Long.parseLong(claims.getSubject());
+    }
+
+    // ✅ JWT 토큰 인증 정보 조회 (getAuthentication)
     public Authentication getAuthentication(String token) {
         Claims claims = Jwts.parserBuilder()
                 .setSigningKey(JWT_SECRET.getBytes(StandardCharsets.UTF_8))
