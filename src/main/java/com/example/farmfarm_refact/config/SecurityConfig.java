@@ -1,5 +1,6 @@
 package com.example.farmfarm_refact.config;
 
+import com.example.farmfarm_refact.config.jwt.CustomCorsFilter;
 import com.example.farmfarm_refact.config.jwt.JwtAuthenticationFilter;
 import com.example.farmfarm_refact.config.jwt.JwtExceptionFilter;
 import com.example.farmfarm_refact.service.JwtService;
@@ -50,22 +51,19 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .formLogin(Customizer.withDefaults())
                 .sessionManagement((sessionManagement) ->
-                                sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-//                        세션을 사용하지 않는다고 설정함
+                        sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
-                .addFilter(new JwtAuthenticationFilter(authenticationManager(authenticationConfiguration),jwtService))
-//                 JwtAuthenticationFilter를 필터에 넣음
+                .addFilterBefore(new CustomCorsFilter(), JwtAuthenticationFilter.class) // ✅ CORS 필터 추가
+                .addFilter(new JwtAuthenticationFilter(authenticationManager(authenticationConfiguration), jwtService))
                 .authorizeHttpRequests((authorizeRequests) ->
                         authorizeRequests
-//                                .requestMatchers(
-//                                        AntPathRequestMatcher.antMatcher("/api/auth/**")
-//                                ).authenticated()
                                 .requestMatchers(
-                                        AntPathRequestMatcher.antMatcher("/user/login/**"), AntPathRequestMatcher.antMatcher( "favicon.ico"), AntPathRequestMatcher.antMatcher("/error"), AntPathRequestMatcher.antMatcher("/product/**")
+                                        AntPathRequestMatcher.antMatcher("/user/login/**"),
+                                        AntPathRequestMatcher.antMatcher("favicon.ico"),
+                                        AntPathRequestMatcher.antMatcher("/error"),
+                                        AntPathRequestMatcher.antMatcher("/product/**")
                                 ).permitAll()
-
                                 .anyRequest().authenticated()
-
                 )
                 .headers(
                         headersConfigurer ->
