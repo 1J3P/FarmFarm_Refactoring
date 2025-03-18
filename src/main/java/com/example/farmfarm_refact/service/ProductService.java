@@ -292,7 +292,12 @@ public class ProductService {
         if (cart == null) {
             cart = new Cart();
             session.setAttribute("cart", cart);
+            System.out.println("새로운 장바구니 세션 생성됨!"); // 디버깅용 로그
         }
+        else {
+            System.out.println("세션에서 기존 장바구니 가져옴!"); // 디버깅용 로그
+        }
+
         if (!(cart.getItemList().isEmpty())){
             if (cart.getItemList().get(0).getProduct().getFarm().getFId() != product.getFarm().getFId())  // 같은 농장 상품인지 확인 필요. 다르다면 X
                 throw new ExceptionHandler(PRODUCT_CART_FARM_DIFF);
