@@ -38,7 +38,7 @@ public class CustomCorsFilter extends GenericFilterBean {
         }
 
         res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
-        res.setHeader("Access-Control-Allow-Headers", "Authorization, Content-Type");
+        res.setHeader("Access-Control-Allow-Headers", "Authorization, Content-Type, pg_token");
         res.setHeader("Access-Control-Expose-Headers", "Authorization, Refresh-Token"); // ✅ 클라이언트가 읽을 수 있는 헤더
 
         log.info("Custom CORS Filter 적용됨: {} {} | Origin: {}", req.getMethod(), req.getRequestURI(), origin);
