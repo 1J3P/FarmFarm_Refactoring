@@ -13,12 +13,15 @@ import com.example.farmfarm_refact.entity.*;
 import com.example.farmfarm_refact.repository.FarmRepository;
 import com.example.farmfarm_refact.repository.FileRepository;
 import com.example.farmfarm_refact.repository.OrderRepository;
+import com.example.farmfarm_refact.repository.ProductRepository;
+import com.example.farmfarm_refact.repository.ReviewRepository;
 
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -32,7 +35,9 @@ public class FarmService {
     @Autowired
     private OrderService orderService;
     @Autowired
-    private UserService userService;
+    private ReviewRepository reviewRepository;
+    @Autowired
+    private ProductRepository productRepository;
     @Autowired
     private ProductService productService;
     @Autowired
@@ -198,5 +203,23 @@ public class FarmService {
         }
         OrderEntity changedOrder = orderRepository.save(order);
         return FarmConverter.toShippingStatusUpdateResponseDto(changedOrder);
+    }
+
+    public void updateFarmRating(FarmEntity farm) {
+        List<ProductEntity> products = productRepository.findByFarm(farm);
+        List<ReviewEntity> allReviews = new ArrayList<>();
+        for (ProductEntity product : products) {
+            allReviews.addAll(reviewRepository.findByPId(product.getPId()));
+        }
+
+        if (allReviews.isEmpty()) return;
+
+        double avg = allReviews.stream()
+            .mapToDouble(ReviewEntity::getFarmStar)
+            .average()
+            .orElse(0.0);
+
+        farm.setRating(avg);
+        farmRepository.save(farm);
     }
 }

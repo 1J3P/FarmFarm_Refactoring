@@ -14,6 +14,8 @@ import com.example.farmfarm_refact.repository.FarmRepository;
 import com.example.farmfarm_refact.repository.FileRepository;
 import com.example.farmfarm_refact.repository.GroupRepository;
 import com.example.farmfarm_refact.repository.ProductRepository;
+import com.example.farmfarm_refact.repository.ReviewRepository;
+
 import jakarta.servlet.http.HttpSession;
 import jakarta.transaction.Transactional;
 import org.hibernate.Hibernate;
@@ -41,6 +43,8 @@ public class ProductService {
     private S3Controller s3Controller;
     @Autowired
     private GroupRepository groupRepository;
+    @Autowired
+    private ReviewRepository reviewRepository;
 
     // 상품 등록
     public ProductResponseDto.ProductCreateResponseDto saveProduct(UserEntity user, ProductRequestDto.ProductCreateRequestDto productCreateRequestDto) {
@@ -336,5 +340,18 @@ public class ProductService {
     public ProductResponseDto.ProductListResponseDto getProductCategory(ProductCategory category) {
         List<ProductEntity> productList = productRepository.findAllByProductCategory(category);
         return ProductConverter.toProductList(productList);
+    }
+
+    public void updateProductRating(ProductEntity product) {
+        List<ReviewEntity> reviews = reviewRepository.findByPId(product.getPId());
+        if (reviews.isEmpty()) return;
+
+        double avg = reviews.stream()
+            .mapToDouble(ReviewEntity::getProductStar)
+            .average()
+            .orElse(0.0);
+
+        product.setRating(avg);
+        productRepository.save(product);
     }
 }

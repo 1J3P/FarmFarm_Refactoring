@@ -29,15 +29,34 @@ public class ReviewService {
     @Autowired
     private OrderDetailRepository orderDetailRepository;
     @Autowired
-    private ProductRepository productRepository;
+    private ProductService productService;
+    @Autowired
+    private FarmService farmService;
+
 
     // 리뷰 등록
     public ReviewResponseDto.ReviewCreateResponseDto saveReview(UserEntity user, Long odId, ReviewRequestDto.ReviewCreateRequestDto reviewDto) {
-        ReviewEntity newReview = new ReviewEntity(reviewDto.getProductStar(), reviewDto.getFarmStar(), reviewDto.getComment(), user, "리뷰등록");
+        ReviewEntity newReview = new ReviewEntity(
+            reviewDto.getProductStar(),
+            reviewDto.getFarmStar(),
+            reviewDto.getComment(),
+            user,
+            "리뷰등록"
+        );
+
         OrderDetailEntity orderDetail = orderDetailRepository.findByOdId(odId);
         newReview.setOrderDetail(orderDetail);
         newReview.setPId(orderDetail.getProduct().getPId());
+
         ReviewEntity review = reviewRepository.save(newReview);
+
+        // ⭐️ 리뷰 저장 후 rating 갱신
+        ProductEntity product = orderDetail.getProduct();
+        productService.updateProductRating(product);
+
+        FarmEntity farm = product.getFarm();
+        farmService.updateFarmRating(farm);
+
         return ReviewConverter.toReviewCreateResponseDto(review);
     }
 
