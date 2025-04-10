@@ -11,5 +11,5 @@ public interface ReviewRepository extends CrudRepository<ReviewEntity, Long> {
     public List<ReviewEntity> findAllByUserAndStatusNotLike(UserEntity user, String status);
     public List<ReviewEntity> findAllBypIdAndStatusNotLike(Long pId, String status);
 
-    public List<ReviewEntity> findByPId(Long pId);
+    public List<ReviewEntity> findBypId(Long pId);
 }
