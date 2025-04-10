@@ -63,6 +63,14 @@ public class UserEntity implements UserDetails {
         this.image = image;
         this.status = status;
     }
+
+    // 로그인 성능테스트용
+    @Builder
+    public UserEntity(String email, String status) {
+        this.email = email;
+        this.status = status;
+    }
+
     public void updateRefreshToken(String refreshToken) {
         this.refreshToken = refreshToken;
         this.refreshTokenExpiresAt = LocalDateTime.now().plusDays(7);

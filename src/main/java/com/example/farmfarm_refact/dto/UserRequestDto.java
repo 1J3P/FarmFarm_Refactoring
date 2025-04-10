@@ -34,4 +34,13 @@ public class UserRequestDto {
     public static class UserFindProfile {
         private String accessToken;
     }
+
+    // 로그인 성능테스트용
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class UserFindEmail {
+        private String email;
+    }
 }

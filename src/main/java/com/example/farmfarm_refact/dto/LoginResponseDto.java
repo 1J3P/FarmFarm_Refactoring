@@ -21,4 +21,5 @@ public class LoginResponseDto {
         this.email = email;
         this.nickname = nickname;
     }
+
 }

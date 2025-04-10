@@ -66,6 +66,25 @@ public class UserService {
         return new LoginResponseDto(newAccessToken, newRefreshToken, user.getEmail(), user.getNickname());
     }
 
+    // 로그인 성능테스트용
+    @Transactional
+    public LoginResponseDto saveUserAndGetTokenTest(String email) {
+        UserEntity user = userRepository.findByEmail(email);
+
+        if (user == null) {
+            user = new UserEntity(email, "테스트");
+            userRepository.save(user);
+        }
+
+        String newAccessToken = jwtService.generateAccessToken(user.getUId());
+        String newRefreshToken = jwtService.generateRefreshToken(user.getUId());
+
+        user.updateRefreshToken(newRefreshToken);
+        userRepository.save(user);
+
+        return new LoginResponseDto(newAccessToken, newRefreshToken, user.getEmail(), null);
+    }
+
     private KakaoProfile findProfile(String accessToken) {
         RestTemplate restTemplate = new RestTemplate();
         ObjectMapper objectMapper = new ObjectMapper();

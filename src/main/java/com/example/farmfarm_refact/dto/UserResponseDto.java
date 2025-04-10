@@ -43,4 +43,5 @@ public class UserResponseDto {
         private String nickname;
         private String image;
     }
+
 }

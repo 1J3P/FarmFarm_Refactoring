@@ -65,6 +65,13 @@ public class UserController {
         return ApiResponse.onSuccess(responseDto);
     }
 
+    // 로그인 성능테스트용
+    @PostMapping("/testlogin/oauth_kakao")
+    public ApiResponse<LoginResponseDto> getTestLogin(@RequestBody UserRequestDto.UserFindEmail user) {
+        LoginResponseDto responseDto = userService.saveUserAndGetTokenTest(user.getEmail());
+        return ApiResponse.onSuccess(responseDto);
+    }
+
     @GetMapping("/me")
     public ApiResponse<UserResponseDto.UserGetResponseDto> getCurrentUser(@AuthenticationPrincipal UserEntity user) {
         return ApiResponse.onSuccess(new UserResponseDto.UserGetResponseDto(user.getUId(), user.getNickname(), user.getEmail(), user.getImage(), user.getFarm().getFId()));
