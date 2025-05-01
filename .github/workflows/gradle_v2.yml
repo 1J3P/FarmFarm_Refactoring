@@ -1,0 +1,104 @@
+name: Java CI with Gradle & Docker
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      # ✅ Gradle 실행 권한 부여
+      - name: Grant execute permission for Gradlew
+        run: chmod +x ./gradlew
+
+      # ✅ Build without test
+      - name: Build Spring Boot App
+        run: ./gradlew clean build -x test
+
+      # ✅ Docker build
+      - name: Build Docker Image
+        run: docker build --no-cache -t farmfarm1234/farmfarm-img .
+
+      # ✅ DockerHub login
+      - name: DockerHub Login
+        run: echo "${{ secrets.DOCKERHUB_PW }}" | docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
+
+      # ✅ DockerHub push
+      - name: Push Docker Image
+        run: docker push farmfarm1234/farmfarm-img
+
+      # ✅ GitHub IP (for Security Group rule)
+      - name: Get GitHub IP
+        id: ip
+        uses: haythem/public-ip@v1.2
+
+      # ✅ AWS credentials
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ap-northeast-2
+
+      # ✅ Add temporary SSH access for GitHub
+      - name: Add GitHub IP to AWS Security Group
+        run: |
+          aws ec2 authorize-security-group-ingress \
+            --group-id ${{ secrets.AWS_SG_ID }} \
+            --protocol tcp \
+            --port 22 \
+            --cidr ${{ steps.ip.outputs.ipv4 }}/32
+
+      # ✅ SSH into EC2 & deploy Docker container
+      - name: Deploy to EC2
+        uses: appleboy/ssh-action@v0.1.6
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ubuntu
+          key: ${{ secrets.EC2_KEY }}
+          port: ${{ secrets.EC2_SSH_PORT }}
+          timeout: 60s
+          script: |
+            echo "🛑 Stopping existing container..."
+            sudo docker stop farmfarm-img || true
+            sudo docker rm farmfarm-img || true
+
+            echo "🧹 Cleaning up old image..."
+            sudo docker rmi farmfarm1234/farmfarm-img || true
+
+            echo "📥 Pulling latest image..."
+            sudo docker pull farmfarm1234/farmfarm-img
+
+            echo "🚀 Starting container..."
+            sudo docker run -d -p 9000:9000 \
+              -e DB_URL=${{ secrets.DB_URL }} \
+              -e DB_USERNAME=${{ secrets.DB_USERNAME }} \
+              -e DB_PASSWORD=${{ secrets.DB_PASSWORD }} \
+              --name farmfarm-img \
+              farmfarm1234/farmfarm-img
+
+            echo "✅ Deployment Done!"
+
+    # ✅ 보안 그룹 해제 (항상 실행)
+    post:
+      - name: Remove GitHub IP from AWS Security Group
+        if: always()
+        run: |
+          aws ec2 revoke-security-group-ingress \
+            --group-id ${{ secrets.AWS_SG_ID }} \
+            --protocol tcp \
+            --port 22 \
+            --cidr ${{ steps.ip.outputs.ipv4 }}/32
