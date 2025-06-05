@@ -209,7 +209,7 @@ public class FarmService {
         List<ProductEntity> products = productRepository.findByFarm(farm);
         List<ReviewEntity> allReviews = new ArrayList<>();
         for (ProductEntity product : products) {
-            allReviews.addAll(reviewRepository.findByPId(product.getPId()));
+            allReviews.addAll(reviewRepository.findBypId(product.getPId()));
         }
 
         if (allReviews.isEmpty()) return;
