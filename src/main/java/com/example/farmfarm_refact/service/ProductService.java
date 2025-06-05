@@ -348,7 +348,7 @@ public class ProductService {
     }
 
     public void updateProductRating(ProductEntity product) {
-        List<ReviewEntity> reviews = reviewRepository.findByPId(product.getPId());
+        List<ReviewEntity> reviews = reviewRepository.findBypId(product.getPId());
         if (reviews.isEmpty()) return;
 
         double avg = reviews.stream()
