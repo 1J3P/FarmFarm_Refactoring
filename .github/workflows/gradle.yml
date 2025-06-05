@@ -87,12 +87,12 @@ jobs:
             --name farmfarm-img \
             farmfarm1234/farmfarm-img
 
-post:
-  - name: Remove GitHub IP from AWS Security Group
-    if: always()
-    run: |
-      aws ec2 revoke-security-group-ingress \
-        --group-id ${{ secrets.AWS_SG_ID }} \
-        --protocol tcp \
-        --port 22 \
-        --cidr ${{ steps.ip.outputs.ipv4 }}/32
+
+      - name: Remove GitHub IP from AWS Security Group
+        if: always()
+        run: |
+          aws ec2 revoke-security-group-ingress \
+            --group-id ${{ secrets.AWS_SG_ID }} \
+            --protocol tcp \
+            --port 22 \
+            --cidr ${{ steps.ip.outputs.ipv4 }}/32
